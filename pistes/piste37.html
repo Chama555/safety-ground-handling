@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 37 - Reverse mentoring sécurité</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 37</div>
+            <div class="document-subtitle">Reverse mentoring sécurité</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        LE JEUNE FORME L'ANCIEN
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Le jeune forme l'ancien aux outils numériques.
+    </p>
+    <p>
+        Notre modèle de transmission est à sens unique. L'ancien forme le jeune, le formateur forme le conducteur, la hiérarchie forme l'équipe. Pourtant, les jeunes possèdent des compétences que les anciens n'ont pas : maîtrise du numérique, réflexes vidéo, créativité, usage des réseaux sociaux, adaptabilité. Ces compétences ne sont jamais transmises aux anciens. Résultat : l'application Safety Hub est sous-utilisée, les jeunes se sentent inutiles, la fracture numérique s'aggrave. La trente-septième piste propose d'inverser le sens de la transmission avec le reverse mentoring, intégré au buddy system (P4) : 3 séances de 30 minutes où le jeune forme l'ancien aux outils numériques.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Notre modèle de transmission est à sens unique.</p>
+    
+    <table>
+        <thead><tr><th>Dispositif</th><th>Sens</th><th>Ce qui circule</th></tr></thead>
+        <tbody>
+            <tr><td>Buddy system (P4)</td><td>Ancien → Jeune</td><td>Expérience, règles, gestes</td></tr>
+            <tr><td>Formation initiale</td><td>Formateur → Conducteur</td><td>Savoir-faire technique</td></tr>
+            <tr><td>Management</td><td>Hiérarchie → Équipe</td><td>Consignes, procédures</td></tr>
+            <tr><td>Retour d'expérience</td><td>Expert → Conducteur</td><td>Analyse d'incidents</td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Ce qui ne circule pas :</strong> Maîtrise du numérique (jeunes), réflexes vidéo/ludiques (Génération Z), créativité, usage des réseaux sociaux, adaptabilité aux interfaces.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> La transmission n'est pas à sens unique. Le jeune a des compétences que l'ancien n'a pas. Le reverse mentoring, c'est reconnaître l'expertise numérique des jeunes, organiser la transmission ascendante, valoriser les jeunes, faire progresser les anciens, créer une relation de réciprocité.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 37) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque générationnel / numérique</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 37</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>NUM 01.1</strong></td>
+                <td>Fracture numérique générationnelle</td>
+                <td>Anciens non formés aux outils digitaux, absence de transmission ascendante</td>
+                <td>Sous-utilisation de l'application Safety Hub (P3), inefficacité, frustration</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>3 séances de reverse mentoring dédiées aux outils numériques, tutoriels personnalisés</td>
+            </tr>
+            <tr>
+                <td><strong>NUM 01.2</strong></td>
+                <td>Non-valorisation des compétences numériques des jeunes</td>
+                <td>Regard uniquement sur l'expérience, ignorance des savoir-faire digitaux</td>
+                <td>Jeunes démotivés, sentiment d'inutilité, turn-over</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Statut de formateur pour le jeune, reconnaissance par le badge "Duo numérique"</td>
+            </tr>
+            <tr>
+                <td><strong>NUM 01.3</strong></td>
+                <td>Rejet des outils innovants par les anciens</td>
+                <td>Complexité perçue, absence de formation adaptée, peur de l'échec</td>
+                <td>Outils de sécurité non utilisés, risques accrus, perte d'efficacité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Formation par les pairs (jeunes), approche bienveillante et progressive</td>
+            </tr>
+            <tr>
+                <td><strong>NUM 01.4</strong></td>
+                <td>Obsolescence des compétences des anciens</td>
+                <td>Pas de mise à jour, absence de formation continue au numérique</td>
+                <td>Décrochage, perte d'autonomie, dépendance aux jeunes pour les tâches simples</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Compétences numériques acquises et validées, anciens autonomes sur l'application</td>
+            </tr>
+            <tr>
+                <td><strong>COM 09.1</strong></td>
+                <td>Incompréhension intergénérationnelle</td>
+                <td>Deux mondes qui ne communiquent pas, langages différents, préjugés</td>
+                <td>Ambiance dégradée, absence de coopération, perte d'efficacité collective</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Binôme réciproque, échange de compétences, création de lien</td>
+            </tr>
+            <tr>
+                <td><strong>COM 09.2</strong></td>
+                <td>Sous-utilisation de l'application Safety Hub</td>
+                <td>Anciens ne maîtrisant pas l'outil, absence de signalements, fonctionnalités ignorées</td>
+                <td>Perte de données, near-miss non remontés, prévention inefficace</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Séance 1 : prise en main complète de l'application (signalement, score, badges, e-learning)</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 10.1</strong></td>
+                <td>Formation descendante uniquement</td>
+                <td>Modèle de transmission à sens unique, pas d'apprentissage mutuel</td>
+                <td>Compétences non partagées, frustration des jeunes, perte d'opportunités</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Transformation du binôme buddy en relation réciproque et symétrique</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 10.2</strong></td>
+                <td>Absence de formation aux outils numériques avancés</td>
+                <td>QR codes, cartographie interactive, notifications, messagerie non maîtrisés</td>
+                <td>Fonctionnalités avancées non utilisées, perte d'efficacité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Séance 2 : outils avancés (QR codes, carto, alertes, messagerie, veille)</td>
+            </tr>
+            <tr>
+                <td><strong>HUM 08.1</strong></td>
+                <td>Sentiment d'inutilité des jeunes conducteurs</td>
+                <td>Rôle passif, pas de contribution reconnue, pas de responsabilité</td>
+                <td>Désengagement, baisse de vigilance, turn-over</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Jeune en position de formateur, valorisation de son expertise, fierté</td>
+            </tr>
+            <tr>
+                <td><strong>BUD 02.1</strong></td>
+                <td>Binôme buddy asymétrique</td>
+                <td>Relation à sens unique, ancien donneur, jeune receveur</td>
+                <td>Déséquilibre, manque de réciprocité, lien moins fort</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Binôme réciproque, chacun apporte ses compétences, relation d'égal à égal</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 01.8</strong></td>
+                <td>Accident lié à la non-maîtrise des outils connectés par un ancien</td>
+                <td>Non-utilisation des alertes, mauvaise manipulation, ignorance des fonctionnalités</td>
+                <td>Accident évitable, perte de chance de prévention</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Certification "Duo numérique", garantie de maîtrise des outils par l'ancien</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Intégré au buddy system (P4), le binôme pratique un échange réciproque : l'ancien forme le jeune à la conduite, aux règles, aux procédures ; le jeune forme l'ancien à l'application Safety Hub, aux QR codes, aux outils digitaux, à la veille technologique. Le binôme devient réciproque, la transmission devient bidirectionnelle.</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong> 3 SÉANCES DE 30 MIN :</strong></p>
+        <ul>
+            <li><strong>Séance 1 :</strong> Prise en main de l'application (connexion, profil, signalement, quiz).</li>
+            <li><strong>Séance 2 :</strong> Outils avancés (QR codes, cartographie, alertes, messagerie, veille).</li>
+            <li><strong>Séance 3 :</strong> Pédagogie et transmission (retour d'expérience, suggestions, engagements, certification "Duo numérique").</li>
+        </ul>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. PROGRAMME DU REVERSE MENTORING -->
+    <!-- ======================================================================== -->
+    <h1>4. PROGRAMME DU REVERSE MENTORING</h1>
+    <ul>
+        <li><strong>Séance 1 (30 min) :</strong> Connexion/profil (5), fonctions de base (5), signaler un near-miss (10), quiz/formation (5), questions/pratique (5). Objectif : autonomie sur l'application.</li>
+        <li><strong>Séance 2 (30 min) :</strong> QR codes (5), cartographie interactive (5), notifications/alertes (5), messagerie/échanges (5), veille technologique (10). Objectif : maîtrise avancée.</li>
+        <li><strong>Séance 3 (30 min) :</strong> Retour d'expérience du jeune (10), suggestions de l'ancien (10), engagements réciproques (5), évaluation/certification (5). Objectif : binôme modèle de coopération.</li>
+    </ul>
+    <p><strong>Supports :</strong> Fiche réflexe "Reverse mentoring" (kit buddy), tutoriel vidéo (5 min, par un jeune ambassadeur), quiz de certification (10 questions), badge "Duo numérique".</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. INTÉGRATION AU BUDDY SYSTEM (P4) -->
+    <!-- ======================================================================== -->
+    <h1>5. INTÉGRATION AU DISPOSITIF BUDDY SYSTEM (P4)</h1>
+    <p>Le parcours buddy de 8 semaines est enrichi de 3 séances de reverse mentoring (S3, S5, S7) sans allonger la durée totale. Le kit buddy est mis à jour (guide, fiche de suivi, check-list, badge évolué).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. FORMATION DES BUDDIES (Module 1h) -->
+    <!-- ======================================================================== -->
+    <h1>6. FORMATION DES BUDDIES AU REVERSE MENTORING</h1>
+    <p>Module complémentaire de 1h : pourquoi le reverse mentoring ? (10), posture du "formé" (15), organisation des séances (15), évaluation réciproque (10), témoignage (10). Support vidéo + fiche. Coût intégré (0 €).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. BUDGET -->
+    <!-- ======================================================================== -->
+    <h1>7. BUDGET</h1>
+    <p><strong>Développement :</strong> Création supports (800€), vidéo (1 500€), badge (200€) → <strong>2 500 €</strong>.<br>
+    <strong>Déploiement (an 1) :</strong> Badges 100 binômes (250€), formation formateurs (500€) → <strong>750 €</strong>. Coût annuel récurrent : 500 € (badges).<br>
+    <strong>BUDGET TOTAL 3 ANS : 8 550 €.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>8. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (3 mois) :</strong> 10 binômes, création supports, vidéo, formation buddies, expérimentation, évaluation. <strong>Budget 3 800 €.</strong></p>
+    <p><strong>PHASE 2 - Déploiement CDG (12 mois) :</strong> Mise à jour formation buddy et kit manager, déploiement 150 binômes, évaluation. <strong>Budget 1 750 €.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Extension Orly et province, évaluation d'impact. <strong>Budget 3 000 €.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 8 550 €.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>9. BÉNÉFICES ATTENDUS</h1>
+    <h2>9.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Binômes formés</strong><span>Cible M36: 500</span></div>
+        <div class="indicator-item"><strong>Anciens à l'aise avec l'application</strong><span>Baseline 32% → Cible 85%</span></div>
+        <div class="indicator-item"><strong>Jeunes se sentant utiles</strong><span>Baseline 35% → Cible 85%</span></div>
+        <div class="indicator-item"><strong>Utilisation hebdo de l'application</strong><span>Baseline 45% → Cible 85%</span></div>
+        <div class="indicator-item"><strong>Satisfaction binôme (note/5)</strong><span>Cible M36: 4,7</span></div>
+    </div>
+    <h2>9.2 Bénéfices qualitatifs</h2>
+    <ul><li>Valorisation des jeunes, progression des anciens, cohésion intergénérationnelle, adoption des outils, réciprocité, fierté.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 10. RETOURS D'EXPÉRIENCE / 11. RISQUES / 12. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>10. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>L'Oréal (Reverse mentoring) :</strong> 1 000 binômes, jeunes mentors de dirigeants, 95% des dirigeants ont appris, 89% des jeunes se sentent légitimes. Leçon : la réciprocité crée du lien.</li>
+        <li><strong>SNCF (Mentorat inversé numérique) :</strong> 500 binômes, -40% tickets d'assistance, +55% utilisation outils, forte adhésion des seniors. Leçon : la formation par les pairs est plus efficace.</li>
+        <li><strong>Aéroport de Munich (Digital buddies) :</strong> 20 binômes, 100% des anciens utilisent l'appli quotidiennement, 85% des jeunes valorisés. Leçon : le numérique est un vecteur de rapprochement.</li>
+    </ul>
+    
+    <h1>11. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Rejet des anciens ("je n'ai pas de leçon à recevoir d'un jeune")</td><td>Élevée</td><td>Critique</td><td>Communication positive (échange, pas leçon), témoignages d'anciens, valorisation de l'expertise métier</td></tr>
+        <tr><td>Malaise du jeune ("oser former son aîné")</td><td>Élevée</td><td>Modérée</td><td>Formation à la posture, scénarios types, accompagnement manager</td></tr>
+        <tr><td>Relation déséquilibrée</td><td>Faible</td><td>Faible</td><td>Cadre clair (3 séances max), rôles définis</td></tr>
+        <tr><td>Oubli dans le temps</td><td>Moyenne</td><td>Faible</td><td>Rappel annuel, certification renouvelable</td></tr>
+    </table>
+    
+    <h1>12. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Volontariat (personne n'est obligé)</li><li>Cadre (3 séances formelles)</li><li>Réciprocité (l'ancien continue de former au métier)</li><li>Valorisation (badge, certification)</li><li>Simplicité (30 min, supports clés en main)</li><li>Égalité (jeune formateur, pas assistant)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Faire du reverse mentoring une corvée → 30 min, 3 séances</li><li>Créer une relation asymétrique → insister sur la réciprocité</li><li>Oublier de former les jeunes à la posture → module 30 min</li><li>Négliger le suivi → évaluation à 1 mois, 3 mois</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 13. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>13. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le reverse mentoring est la piste du respect et de la réciprocité. Ce n'est pas une révolution. C'est une évidence. Les jeunes savent utiliser les outils numériques. C'est un fait. Les anciens ont besoin de ces compétences. C'est une nécessité. Les jeunes ont besoin d'être valorisés. C'est une urgence. Alors pourquoi s'en priver ? Ce que nous proposons, c'est d'arrêter de considérer le buddy system comme une transmission à sens unique. C'est de faire du binôme une véritable équipe. C'est de donner à chaque ancien un "formateur numérique" de 25 ans. Et à chaque jeune, la fierté d'être utile.
+        </p>
+        <p><strong>Le coût ?</strong> 8 550 € sur 3 ans, soit 17 € par binôme. <strong>Le bénéfice ?</strong> Des anciens qui n'ont plus peur de l'application. Des jeunes qui ne se sentent plus inutiles. Des binômes qui deviennent des équipes.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 14. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>14. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Tester sur 10 binômes pilotes (3 800 €).</li>
+        <li>Créer les supports pédagogiques (fiches, tutoriels, quiz).</li>
+        <li>Intégrer le reverse mentoring au parcours buddy standard (P4).</li>
+        <li>Évaluer l'impact sur la maîtrise des outils numériques.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 37 - Reverse mentoring sécurité | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

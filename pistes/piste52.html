@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 52 - Crowdsourcing de propositions sécurité</title>
+    <style>
+        /* Styles généraux pour l'impression - Identique aux autres pistes */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        /* Simulation d'interface d'application */
+        .app-interface {
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .app-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+        }
+        
+        .app-content {
+            background-color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        /* Grille pour les fonctionnalités */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .feature-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .feature-card h4 {
+            margin-top: 0;
+            color: #e67e22;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .badge-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        
+        .badge-card h4 {
+            margin: 5px 0 0 0;
+            color: #e67e22;
+            font-size: 10pt;
+        }
+        
+        .badge-card p {
+            font-size: 9pt;
+            margin: 5px 0 0 0;
+        }
+        
+        .badge-emoji {
+            font-size: 24px;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 52</div>
+            <div class="document-subtitle">Crowdsourcing de propositions sécurité</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        L'INNOVATION VENUE DE TOUS
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Plateforme continue d'innovation ouverte à tous (salariés, retraités, familles) pour capter et déployer les idées du terrain.
+    </p>
+    
+    <p>
+        Les meilleures idées viennent du terrain, mais elles ne sont captées qu'une fois par an, lors du prix de l'idée (P33). 
+        Les conducteurs ont des idées tous les jours, mais elles restent dans les vestiaires, faute d'un dispositif continu. 
+        Cette piste propose de créer un écosystème d'innovation permanent, ouvert à tous (conducteurs, managers, retraités, 
+        familles) via un module dédié dans l'application Safety Hub. L'objectif est de démocratiser l'innovation, de 
+        transformer les "râles" en propositions constructives et de capitaliser sur l'intelligence collective.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Les meilleures idées viennent du terrain... mais une fois par an seulement.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Dispositif</th>
+                <th>Fréquence</th>
+                <th>Participation</th>
+                <th>Délai de déploiement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>P33 - Prix de l'idée</td><td>Annuel</td><td>50-100 idées</td><td>12-18 mois</td></tr>
+            <tr><td>P26 - Comptoir des râleurs</td><td>Continue</td><td>Plaintes, pas solutions</td><td>Variable</td></tr>
+            <tr><td>Boîtes à idées traditionnelles</td><td>Aléatoire</td><td>Faible</td><td>Souvent jamais</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Paradoxe :</strong>
+        <ul>
+            <li>Les conducteurs ont des <strong>idées tous les jours</strong>.</li>
+            <li>Les managers entendent des <strong>suggestions informelles</strong> en permanence.</li>
+            <li>Les solutions potentielles <strong>restent dans les vestiaires</strong>.</li>
+            <li><strong>Nous ne capitalisons pas cette intelligence collective en continu.</strong></li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> L'innovation ne se programme pas, elle se cultive. Une plateforme de crowdsourcing permet de capturer, évaluer et déployer en continu l'intelligence du terrain.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 52) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque informationnel / culturel</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 52</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>CUL 04.1</strong></td>
+                <td>Innovation terrain non capitalisée</td>
+                <td>Absence de canal de collecte continu, les 96 idées non lauréates du P33 sont perdues.</td>
+                <td>Perte d'opportunités d'amélioration, sentiment d'inutilité chez les conducteurs, démotivation.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Plateforme de dépôt continu ouverte à tous.</td>
+            </tr>
+            <tr>
+                <td><strong>COM 02.3</strong></td>
+                <td>Rétention d'idées par manque de feedback</td>
+                <td>Processus de retour absent ou trop lent. Les conducteurs ne savent pas ce que deviennent leurs propositions.</td>
+                <td>Démotivation, arrêt des contributions, perte de confiance dans la démarche participative.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Retour systématique et obligatoire à l'auteur. Statut visible en temps réel sur la plateforme.</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 04.2</strong></td>
+                <td>Élitisme de l'innovation</td>
+                <td>Seules les idées "parfaites" ou venant d'experts sont considérées. Les conducteurs "lambda" ne se sentent pas légitimes.</td>
+                <td>Appauvrissement du vivier d'idées, frustration, renforcement de la hiérarchie implicite.</td>
+                <td>1 (Négligeable)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-green">VERT</td>
+                <td>Évaluation collaborative par les pairs (votes). Comité mensuel avec l'auteur invité.</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 04.3</strong></td>
+                <td>Déconnexion des solutions du terrain</td>
+                <td>Les décisions sont prises sans validation par les pairs ou par les opérationnels.</td>
+                <td>Solutions inadaptées, coûts de déploiement inutiles, résistance au changement.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Vote des pairs pour présélectionner les idées. Comité incluant un représentant métier.</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 04.4</strong></td>
+                <td>Sous-exploitation des compétences externes</td>
+                <td>Les retraités (mémoire) et les familles (regard neuf) ne sont jamais sollicités.</td>
+                <td>Perte d'idées décalées et innovantes, affaiblissement du lien entreprise-famille.</td>
+                <td>1 (Négligeable)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-green">VERT</td>
+                <td>Ouverture de la plateforme aux retraités et familles via un formulaire public dédié.</td>
+            </tr>
+            <tr>
+                <td><strong>COM 02.4</strong></td>
+                <td>Manque de reconnaissance pour les contributeurs</td>
+                <td>La reconnaissance est réservée aux 4 lauréats annuels du P33.</td>
+                <td>Démotivation de la majorité des contributeurs, sentiment que "ça ne sert à rien de participer".</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Gamification (points, badges), reconnaissance systématique, budget de test pour les idées prometteuses.</td>
+            </tr>
+            <tr>
+                <td><strong>PRO 01.1</strong></td>
+                <td>Idées non abouties / trop complexes</td>
+                <td>Formulaire de dépôt trop complexe, pas d'accompagnement.</td>
+                <td>Frustration du porteur de projet, abandon de l'idée, perte de potentiel.</td>
+                <td>1 (Négligeable)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-green">VERT</td>
+                <td>Formulaire ultra-simplifié (5 champs max). Assistant à la rédaction et modèles pré-remplis.</td>
+            </tr>
+            <tr>
+                <td><strong>PRO 01.2</strong></td>
+                <td>Disparition des idées (tunnel sans fin)</td>
+                <td>Absence de workflow de traitement. Les idées déposées sont oubliées.</td>
+                <td>Démotivation massive, perte de confiance définitive dans le dispositif.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Workflow de traitement transparent (Reçue → En vote → À tester → Déployée / Classée).</td>
+            </tr>
+            <tr>
+                <td><strong>PRO 02.1</strong></td>
+                <td>Doublons et idées similaires</td>
+                <td>Plusieurs personnes proposent des idées proches, dispersant les efforts d'évaluation.</td>
+                <td>Inefficacité du traitement, frustration des votants, difficulté à identifier les meilleures idées.</td>
+                <td>1 (Négligeable)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-green">VERT</td>
+                <td>Détection automatique des doublons. Possibilité de fusionner les propositions.</td>
+            </tr>
+            <tr>
+                <td><strong>PRO 02.2</strong></td>
+                <td>Déferlement d'idées hors-sujet</td>
+                <td>Pas de modération, l'espace est inondé de propositions non pertinentes.</td>
+                <td>Perte de lisibilité, difficulté à trouver les bonnes idées, rejet des utilisateurs.</td>
+                <td>1 (Négligeable)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Seuil de likes pour examen. Modération a posteriori des contenus hors-sujet.</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    
+    <h2>3.1 Principe général</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 15px 0;">
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>1. DÉPÔT</strong><br>(2 minutes)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>2. ÉVALUATION</strong><br>(Vote 30 jours)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>3. TRAITEMENT</strong><br>(Comité mensuel)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>4. RETOUR</strong><br>(Statut visible)
+        </div>
+    </div>
+    
+    <h2>3.2 Différenciation avec P33 (Prix de l'idée)</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Critère</th>
+                <th>P33 - Prix de l'idée</th>
+                <th>P52 - Crowdsourcing</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Nature</td><td>Compétition</td><td>Collaboration</td></tr>
+            <tr><td>Fréquence</td><td>Annuelle</td><td>Continue</td></tr>
+            <tr><td>Sélection</td><td>Jury d'experts</td><td>Pairs + experts</td></tr>
+            <tr><td>Récompense</td><td>1 500 € (4 lauréats)</td><td>Reconnaissance systématique</td></tr>
+            <tr><td>Taux de déploiement</td><td>4 idées/an</td><td>Objectif : 30-50 idées/an</td></tr>
+            <tr><td>Public</td><td>Conducteurs</td><td><strong>Tous</strong> (salariés, retraités, familles)</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ======================================================================== -->
+    <!-- 4. PLATEFORME ET GAMIFICATION -->
+    <!-- ======================================================================== -->
+    <h1>4. PLATEFORME DE CROWDSOURCING</h1>
+    
+    <h2>4.1 Intégration dans l'application Safety Hub (P3)</h2>
+    
+    <div class="app-interface">
+        <div class="app-header">📱 MODULE "IDÉES" - APPLICATION SAFETY HUB</div>
+        <div class="app-content">
+            <p><strong>[💡] MA PROPOSITION</strong></p>
+            <p><strong>TITRE :</strong> _________________________________________</p>
+            <p><strong>PROBLÈME :</strong> _________________________________________</p>
+            <p><strong>SOLUTION :</strong> _________________________________________</p>
+            <p><strong>BÉNÉFICES :</strong> _________________________________________</p>
+            <p>[📷 AJOUTER PHOTO] [📎 AJOUTER SCHÉMA]</p>
+            <p><strong>[📤 SOUMETTRE MA PROPOSITION]</strong></p>
+        </div>
+    </div>
+
+    <h2>4.2 Gamification de la participation</h2>
+    
+    <div class="badges-grid">
+        <div class="badge-card">
+            <div class="badge-emoji">💡</div>
+            <h4>Contributeur</h4>
+            <p>50 pts - Dépôt d'une proposition</p>
+        </div>
+        <div class="badge-card">
+            <div class="badge-emoji">🧪</div>
+            <h4>Innovateur</h4>
+            <p>200 pts - Proposition sélectionnée pour test</p>
+        </div>
+        <div class="badge-card">
+            <div class="badge-emoji">🏆</div>
+            <h4>Lauréat</h4>
+            <p>500 pts - Proposition déployée</p>
+        </div>
+        <div class="badge-card">
+            <div class="badge-emoji">👍</div>
+            <h4>Électeur</h4>
+            <p>5 pts - 10 votes / mois</p>
+        </div>
+        <div class="badge-card">
+            <div class="badge-emoji">💬</div>
+            <h4>Expert</h4>
+            <p>10 pts - Commentaire constructif</p>
+        </div>
+        <div class="badge-card">
+            <div class="badge-emoji">👑</div>
+            <h4>Ambassadeur innovation</h4>
+            <p>Atteindre 1 000 pts</p>
+        </div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. BUDGET DÉTAILLÉ</h1>
+    
+    <h2>5.1 Investissement initial</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Détail</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Développement module "Idées" (P3)</td><td>Frontend + backend + workflow</td><td>25 k€</td></tr>
+            <tr><td>Design UX/UI</td><td>Parcours contributeur, visualisation</td><td>8 k€</td></tr>
+            <tr><td>Paramétrage du moteur de vote</td><td>Likes, commentaires, modération</td><td>5 k€</td></tr>
+            <tr><td>Développement espace public</td><td>Familles, retraités</td><td>7 k€</td></tr>
+            <tr><td>Formation des animateurs</td><td>10 comités mensuels</td><td>5 k€</td></tr>
+            <tr><td><strong>TOTAL INVESTISSEMENT</strong></td><td></td><td><strong>50 k€</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <h2>5.2 Coûts annuels de fonctionnement</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Détail</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Maintenance évolutive</td><td>10% du dev initial</td><td>5 k€</td></tr>
+            <tr><td>Animation du comité</td><td>0,2 ETP</td><td>15 k€</td></tr>
+            <tr><td>Budget test/pilote</td><td>10 propositions testées / an</td><td>20 k€</td></tr>
+            <tr><td>Reconnaissance</td><td>Badges, remerciements</td><td>2 k€</td></tr>
+            <tr><td><strong>TOTAL ANNUEL</strong></td><td></td><td><strong>42 k€</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>BUDGET TOTAL 3 ANS : 50 k€ + (3 × 42 k€) = 176 k€</strong></p>
+    <p>Coût par proposition déployée : ~3 500 € (vs 15 000 € pour P33)</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>6. DÉPLOIEMENT PAR PHASES</h1>
+    
+    <h2>Phase 1 - Conception & Pilote (6 mois)</h2>
+    <ul>
+        <li>Groupe de travail (conducteurs, managers) - 2 k€</li>
+        <li>Développement module V1 - 25 k€</li>
+        <li>Sélection entreprise pilote</li>
+        <li>Lancement pilote (100 utilisateurs)</li>
+        <li>Expérimentation (3 mois)</li>
+        <li>Ajustements - 5 k€</li>
+        <li>Évaluation ENAC - 5 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 1 : 37 k€</strong> (Module V1, 50 propositions collectées)</p>
+    
+    <h2>Phase 2 - Déploiement CDG (12 mois)</h2>
+    <ul>
+        <li>Déploiement généralisé P3 - 10 k€</li>
+        <li>Ouverture aux familles - 7 k€</li>
+        <li>Ouverture aux retraités - 5 k€</li>
+        <li>Formation comités mensuels - 5 k€</li>
+        <li>Campagne de communication - 5 k€</li>
+        <li>Évaluation intermédiaire ENAC - 6 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 2 : 38 k€</strong> (Plateforme ouverte, 200 propositions/an)</p>
+    
+    <h2>Phase 3 - Généralisation (24-36 mois)</h2>
+    <ul>
+        <li>Extension Orly - 10 k€</li>
+        <li>Extension province - 15 k€</li>
+        <li>Évolution V2 (IA, matching) - 15 k€</li>
+        <li>Évaluation d'impact à 3 ans ENAC - 8 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 3 : 48 k€</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 123 k€ + 42 k€/an (fonctionnement) = 207 k€</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>7. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>7.1 Bénéfices mesurables</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Indicateur</th>
+                <th>Baseline</th>
+                <th>Cible M12</th>
+                <th>Cible M24</th>
+                <th>Cible M36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Propositions déposées / an</td><td>50 (P33)</td><td>150</td><td>300</td><td>500</td></tr>
+            <tr><td>Propositions déployées / an</td><td>4</td><td>15</td><td>30</td><td>50</td></tr>
+            <tr><td>Contributeurs actifs</td><td>40</td><td>150</td><td>400</td><td>800</td></tr>
+            <tr><td>Délai de traitement</td><td>6 mois</td><td>2 mois</td><td>1 mois</td><td>3 semaines</td></tr>
+            <tr><td>Satisfaction - reconnaissance</td><td>22%</td><td>40%</td><td>55%</td><td>65%</td></tr>
+            <tr><td>Idées issues des familles</td><td>0</td><td>5</td><td>20</td><td>50</td></tr>
+        </tbody>
+    </table>
+    
+    <h2>7.2 Bénéfices qualitatifs</h2>
+    
+    <ul>
+        <li><strong>Démocratie participative :</strong> Chacun peut contribuer, pas seulement les "experts".</li>
+        <li><strong>Innovation ouverte :</strong> Les meilleures idées peuvent venir de l'extérieur.</li>
+        <li><strong>Reconnaissance élargie :</strong> Pas besoin de gagner pour être remercié.</li>
+        <li><strong>Culture de l'amélioration continue :</strong> Proposer devient un réflexe.</li>
+        <li><strong>Lien familles-entreprise :</strong> Les proches deviennent acteurs de la sécurité.</li>
+        <li><strong>Mémoire des anciens :</strong> Capitalisation de l'expérience des retraités.</li>
+    </ul>
+
+    <!-- ======================================================================== -->
+    <!-- 8. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>8. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous avons un concours annuel qui récompense 4 idées. C'est bien. Mais que faisons-nous des 96 autres ? 
+            Le crowdsourcing, ce n'est pas un outil de plus. C'est un changement de regard. C'est admettre que la 
+            meilleure idée ne viendra pas forcément d'un expert, mais de n'importe qui, n'importe quand. Et lui donner une chance.
+        </p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>9. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Développer un module "Idées" simple et intuitif dans l'application Safety Hub.</li>
+        <li>Ouvrir la plateforme à tous (conducteurs, retraités, familles, partenaires).</li>
+        <li>Mettre en place un comité mensuel et un workflow de traitement transparent.</li>
+        <li>Allouer un budget annuel de 20 k€ pour tester les idées les plus prometteuses.</li>
+        <li>Intégrer ce dispositif au Prix de l'idée (P33) pour créer un continuum d'innovation.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 52 - Crowdsourcing de propositions sécurité | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 50 - Blockchain pour traçabilité des incidents</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 50</div>
+            <div class="document-subtitle">Blockchain pour traçabilité des incidents</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        LA CONFIANCE PAR LA PREUVE
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Registre immuable pour certifier l'intégrité des rapports d'incidents (hashs, pas de données personnelles).
+    </p>
+    <p>
+        La confiance dans les données d'incidents est fragile : désaccords entre entreprises (30%), données modifiables a posteriori (25%), absence de preuve objective (40%), silos d'information (100%). Nous collectons des données (P3, P39, P6), nous les analysons (P8, P55), mais nous ne faisons pas confiance aux données elles-mêmes. La cinquantième piste propose d'utiliser la blockchain pour restaurer cette confiance. Un registre immuable, distribué, où seuls les hashs des incidents sont stockés (aucune donnée personnelle, aucun contenu). Horodatage certifié, preuve d'intégrité, résolution des litiges en 5 minutes. Une solution technique à 435 k€ sur 3 ans pour une confiance restaurée.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> La confiance dans les données d'incidents est fragile.</p>
+    
+    <table>
+        <thead><tr><th>Problème</th><th>Conséquence</th><th>Fréquence estimée</th></tr></thead>
+        <tbody>
+            <tr><td>Désaccords entre entreprises</td><td>"Ce n'est pas nous, c'est eux"</td><td>30% des incidents</td></tr>
+            <tr><td>Données modifiables a posteriori</td><td>Contestation des rapports</td><td>25% des enquêtes</td></tr>
+            <tr><td>Absence de preuve objective</td><td>Litiges, méfiance</td><td>40% des cas</td></tr>
+            <tr><td>Silos d'information</td><td>Chaque entreprise garde ses données</td><td>100% des cas</td></tr>
+            <tr><td>Méfiance inter-entreprises</td><td>Frein à la collaboration (P14)</td><td>Élevée</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> La blockchain peut restaurer la confiance dans les données d'incidents. Enregistrer chaque incident dans un registre immuable, horodater de manière infalsifiable, certifier l'intégrité des données, partager en transparence entre entreprises, auditer à tout moment. Ce n'est pas une crypto-monnaie, c'est un registre de confiance distribué.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 50) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque de confiance / juridique</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 50</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>CONF 01.1</strong></td>
+                <td>Données d'incidents modifiables a posteriori</td>
+                <td>Absence de mécanisme de gel, modification possible des rapports</td>
+                <td>Contestation des responsabilités, litiges prolongés (45 jours)</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Enregistrement du hash dans blockchain, toute modification détectée</td>
+            </tr>
+            <tr>
+                <td><strong>CONF 01.2</strong></td>
+                <td>Désaccords inter-entreprises sur les faits (30% des incidents)</td>
+                <td>Absence de preuve objective, versions contradictoires</td>
+                <td>Conflits, perte de temps, dégradation des relations</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Preuve technique partagée (hash, date, type, entreprise déclarante)</td>
+            </tr>
+            <tr>
+                <td><strong>CONF 01.3</strong></td>
+                <td>Absence de preuve fiable en cas de litige</td>
+                <td>Rapports modifiables, absence d'horodatage certifié</td>
+                <td>Litiges non résolus, méfiance durable</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Vérification d'intégrité possible par toute partie à tout moment</td>
+            </tr>
+            <tr>
+                <td><strong>CONF 01.4</strong></td>
+                <td>Méfiance inter-entreprises (frein à P14)</td>
+                <td>Historique de litiges, absence de transparence</td>
+                <td>Collaboration limitée, partage d'information restreint</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Transparence totale des données de preuve, confiance restaurée (cible 85% M36)</td>
+            </tr>
+            <tr>
+                <td><strong>CONF 01.5</strong></td>
+                <td>Silos d'information entre entreprises (100% des cas)</td>
+                <td>Chaque entreprise garde ses données, pas de partage structuré</td>
+                <td>Vision parcellaire des incidents, prévention inefficace</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Base de données partagée des hashs, accessible à tous les membres</td>
+            </tr>
+            <tr>
+                <td><strong>CONF 01.6</strong></td>
+                <td>Risque de non-adoption par les entreprises</td>
+                <td>Complexité perçue, coût, peur de la transparence</td>
+                <td>Échec du dispositif, perte d'investissement</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Phase pilote, bénéfice démontré, obligation contractuelle charte CSCA</td>
+            </tr>
+            <tr>
+                <td><strong>RGPD 02.1</strong></td>
+                <td>Non-conformité RGPD (droit à l'effacement)</td>
+                <td>Stockage de données personnelles dans blockchain</td>
+                <td>Sanctions, rejet du dispositif</td>
+                <td>4 (Catastrophique)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>AUCUNE donnée personnelle, hash uniquement, données sources effaçables</td>
+            </tr>
+            <tr>
+                <td><strong>RGPD 02.2</strong></td>
+                <td>Stockage de données sensibles (images, vidéos)</td>
+                <td>Confusion sur le périmètre de la blockchain</td>
+                <td>Violation de la vie privée, sanctions</td>
+                <td>4 (Catastrophique)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Périmètre strict : hash, date, type, entreprise. Rien d'autre.</td>
+            </tr>
+            <tr>
+                <td><strong>TEC 08.1</strong></td>
+                <td>Complexité technique du déploiement</td>
+                <td>Choix de la technologie, intégration avec SI existants</td>
+                <td>Retards, surcoûts, échec</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Phase d'étude approfondie, prestataire spécialisé, solution existante</td>
+            </tr>
+            <tr>
+                <td><strong>TEC 08.2</strong></td>
+                <td>Performance insuffisante (nombre de transactions)</td>
+                <td>Volume d'incidents trop élevé pour la blockchain</td>
+                <td>Lenteur, inefficacité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>5-10 transactions/minute suffisant, infrastructure dimensionnée</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Enregistrement des incidents (P3, P39, P6, P22) dans un registre immuable via hachage SHA-256. Stockage UNIQUEMENT du hash, date/heure, type, entreprise déclarante (aucune donnée personnelle, aucun contenu). Réseau privé permissionné (CSCA, ADP, handlers). Vérification d'intégrité à tout moment. Résolution des litiges en 5 minutes.</p>
+    
+    <h2>3.2 Architecture technique</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>📱 Couche 1 - Application :</strong> P3, P39, P22.<br>
+        <strong>🔗 Couche 2 - API Hachage :</strong> Calcul SHA-256, format standardisé.<br>
+        <strong>⛓️ Couche 3 - Blockchain :</strong> Réseau privé permissionné (Proof of Authority), nœuds CSCA/ADP/handlers, stockage UNIQUEMENT hashs.<br>
+        <strong>🔍 Couche 4 - Exploitation :</strong> Explorateur de blocs, vérification intégrité, audit trail, API consultation.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>4. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Étude de faisabilité (6 mois) :</strong> GT juridique (RGPD, preuve), entretiens DPO, benchmark solutions (Hyperledger, Ethereum), conception architecture, étude impact, recommandation. <strong>Budget 55 k€.</strong></p>
+    <p><strong>PHASE 2 - Pilote (12 mois) :</strong> Développement réseau 5 nœuds, intégration P3, 3 entreprises pilotes, formation, expérimentation 3 mois, évaluation. <strong>Budget 125 k€.</strong></p>
+    <p><strong>PHASE 3 - Déploiement (24-36 mois) :</strong> Infrastructure 20 nœuds, intégration généralisée (P3, P39, P22), formation, maintenance, évaluation. <strong>Budget 255 k€ + 35 k€/an.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 435 k€</strong> (coût annuel fonctionnement 35 k€).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>5. BÉNÉFICES ATTENDUS</h1>
+    <h2>5.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Incidents enregistrés sur blockchain</strong><span>Cible M36: 2 000</span></div>
+        <div class="indicator-item"><strong>Entreprises participantes</strong><span>Cible M36: 20</span></div>
+        <div class="indicator-item"><strong>Litiges résolus par preuve blockchain</strong><span>Cible M36: 80</span></div>
+        <div class="indicator-item"><strong>Temps de résolution des litiges</strong><span>Baseline 45 jours → Cible 5 jours</span></div>
+        <div class="indicator-item"><strong>Confiance inter-entreprises</strong><span>Baseline 35% → Cible 85%</span></div>
+    </div>
+    <h2>5.2 Bénéfices qualitatifs</h2>
+    <ul><li>Confiance restaurée, litiges réduits, transparence, auditabilité, souveraineté (données aux entreprises), prévention (honnêteté encouragée).</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. RETOURS D'EXPÉRIENCE / 7. RISQUES / 8. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>6. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>IBM/Maersk (TradeLens) :</strong> Plateforme blockchain suivi conteneurs, 100+ acteurs, -40% temps traitement, +99% confiance, mais abandon 2022 (manque adoption). Leçon : la technologie ne suffit pas, l'adoption est le vrai défi.</li>
+        <li><strong>Carrefour (blockchain alimentaire) :</strong> Traçabilité produits, 300 produits, +20% confiance consommateurs. Leçon : outil de confiance, pas de production.</li>
+        <li><strong>Aéroport de Heathrow (Projet Trust) :</strong> Pilote blockchain rapports incidents (2024), 5 entreprises, 200 incidents, 100% litiges résolus <24h, 90% satisfaction. Leçon : valeur démontrée, mais coût frein.</li>
+    </ul>
+    
+    <h1>7. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Complexité technique</td><td>Élevée</td><td>Élevée</td><td>Phase étude approfondie, prestataire spécialisé, solution existante (pas de dev. from scratch)</td></tr>
+        <tr><td>Coût</td><td>Élevée</td><td>Élevée</td><td>Mutualisation CSCA, ROI sur litiges évités, phasage progressif</td></tr>
+        <tr><td>Adoption (entreprises ne jouent pas le jeu)</td><td>Élevée</td><td>Critique</td><td>Obligation contractuelle (charte CSCA), bénéfice démontré, simplicité</td></tr>
+        <tr><td>RGPD (droit à l'effacement)</td><td>Moyenne</td><td>Élevée</td><td>AUCUNE donnée personnelle, hash uniquement, droit à l'effacement des données sources</td></tr>
+        <tr><td>Performance</td><td>Faible</td><td>Modérée</td><td>5-10 transactions/minute suffisant, infrastructure dimensionnée</td></tr>
+    </table>
+    
+    <h1>8. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li>Standardisation (format unique de description des incidents)</li>
+        <li>Simplicité (intégration transparente dans P3, l'utilisateur ne voit rien)</li>
+        <li>Utilité (résolution rapide des litiges = bénéfice immédiat)</li>
+        <li>Obligation (rendre l'enregistrement obligatoire dans charte CSCA)</li>
+        <li>Coût maîtrisé (mutualisation, solution open source)</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Faire de la blockchain un totem → c'est un outil, pas une fin</li>
+        <li>Stocker les données dans la blockchain → UNIQUEMENT les hashs</li>
+        <li>Ignorer le RGPD → aucune donnée personnelle</li>
+        <li>Complexifier l'interface utilisateur → l'utilisateur ne doit rien voir</li>
+        <li>Oublier l'adoption → formation, communication, bénéfices démontrés</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. DÉCISION STRATÉGIQUE -->
+    <!-- ======================================================================== -->
+    <h1>9. DÉCISION STRATÉGIQUE</h1>
+    <p>La blockchain est une solution élégante à un problème qui peut être résolu plus simplement. Recommandation finale :</p>
+    <ul>
+        <li><strong>NON (blockchain) :</strong> 435 k€, 24 mois, preuve infalsifiable, risque élevé.</li>
+        <li><strong>OUI (base sécurisée centralisée) :</strong> 80 k€, 6 mois, preuve d'intégrité, risque faible.</li>
+        <li><strong>OUI (signature électronique) :</strong> 50 k€, 4 mois, preuve juridique, risque faible.</li>
+    </ul>
+    <p>Ce n'est pas le problème qui est mal posé, c'est la solution qui est surdimensionnée. Nous n'avons pas besoin d'une blockchain, mais d'une base de données sécurisée, auditée, horodatée, et d'un engagement contractuel à ne pas la modifier.</p>
+    
+    <h2>PISTE ALTERNATIVE 50B - BASE DE DONNÉES SÉCURISÉE DES INCIDENTS</h2>
+    <p><strong>Concept :</strong> Base de données centralisée, hébergée par la CSCA, avec horodatage certifié, journal d'audit, signatures électroniques pour modifications, consultation par toutes les entreprises. Coût 80 k€ + 15 k€/an, délai 6 mois.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 10. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>10. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous collectons des milliers de données d'incidents. Nous les analysons, nous les partageons, nous les utilisons pour prévenir les accidents. Mais nous n'avons aucun moyen de prouver que ces données n'ont pas été modifiées. La confiance repose sur la bonne foi des uns et des autres. Quand elle est rompue, c'est 3 mois de litiges, des relations dégradées, et au final, personne ne sait plus quelle est la vérité. La blockchain ne résoudra pas tous nos problèmes. Mais elle résoudra CELUI-CI : la preuve infalsifiable de l'intégrité des données. Pour 435 000 € sur 3 ans, nous pouvons mettre fin à 30 ans de méfiance inter-entreprises. Mais une solution plus simple et moins coûteuse (base sécurisée) peut aussi convenir.
+        </p>
+        <p><strong>Le coût ?</strong> 435 k€ (blockchain) ou 80 k€ (base sécurisée). <strong>Le bénéfice ?</strong> Confiance restaurée, litiges résolus en 5 jours.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 11. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>11. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer une étude de faisabilité (55 k€) pour valider la pertinence, le cadre juridique et l'acceptabilité.</li>
+        <li>Ne PAS développer une solution sur-mesure mais utiliser une technologie existante (Hyperledger Fabric).</li>
+        <li>Tester en pilote avec 3 entreprises volontaires (125 k€).</li>
+        <li>N'enregistrer QUE les hashs (aucune donnée personnelle, aucun contenu).</li>
+        <li>Décider de la généralisation sur la base des résultats, en comparant avec l'alternative base sécurisée.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 50 - Blockchain pour traçabilité des incidents | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

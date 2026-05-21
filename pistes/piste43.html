@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 43 - Diagnostic Génération Z</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        /* Style pour les personas */
+        .persona-box {
+            border: 1px solid #2c3e50;
+            background-color: #ecf0f1;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .persona-box h4 {
+            color: #e67e22;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 43</div>
+            <div class="document-subtitle">Diagnostic Génération Z</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        COMPRENDRE AVANT D'AGIR
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Étude sociologique approfondie pour comprendre les attentes, les valeurs et les comportements des conducteurs de moins de 30 ans.
+    </p>
+    <p>
+        Nous déployons des actions sans avoir réellement étudié la génération qui arrive. 25% des conducteurs ont moins de 30 ans, 40% en 2030, turnover de 35% chez les jeunes, accidents en hausse, et 0 € investi pour les comprendre. Nous agissons, nous supposons, nous parlons, mais nous n'écoutons pas. La quarante-troisième piste propose de placer la compréhension au cœur de la stratégie avec un diagnostic Génération Z. Une étude sociologique en 4 phases (exploration, terrain, analyse, recommandations) pour identifier les valeurs, motivations et freins des jeunes conducteurs, construire des personas, et adapter l'ensemble des  pistes à leur profil réel. 35 000 €, soit 0,15% du budget total.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Nous déployons des actions sans avoir réellement étudié la génération qui arrive.</p>
+    
+    <table>
+        <thead><tr><th>Donnée</th><th>Valeur</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr><td>Conducteurs <30 ans à CDG</td><td>~25%</td><td>Estimation RH</td></tr>
+            <tr><td>Conducteurs <30 ans en 2030</td><td>~40%</td><td>Projection</td></tr>
+            <tr><td>Turnover - jeunes conducteurs</td><td>35%</td><td>CSCA</td></tr>
+            <tr><td>Accidents - jeunes conducteurs</td><td>15/an</td><td>Gendarmerie</td></tr>
+            <tr><td>Budget dédié à comprendre les jeunes</td><td>0 €</td><td>-</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Comprendre la Génération Z n'est pas optionnel, c'est un prérequis stratégique. Le diagnostic Génération Z, c'est aller sur le terrain écouter les jeunes, identifier leurs valeurs, motivations, freins, cartographier leurs usages numériques, construire des personas de risque et d'engagement, adapter l'ensemble des pistes à leur profil réel.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 43) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque générationnel</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 43</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>GEN 02.1</strong></td>
+                <td>Méconnaissance des attentes et valeurs de la Génération Z</td>
+                <td>Absence d'étude, actions basées sur des intuitions et stéréotypes</td>
+                <td>Dispositifs de prévention inadaptés, rejet par les jeunes, inefficacité</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Diagnostic approfondi (focus groups, entretiens, observations) pour comprendre les jeunes</td>
+            </tr>
+            <tr>
+                <td><strong>GEN 02.2</strong></td>
+                <td>Turnover élevé des jeunes conducteurs (35%)</td>
+                <td>Manque de reconnaissance, absence de perspective, inadéquation culturelle</td>
+                <td>Perte de compétences, coûts de recrutement, instabilité des équipes</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Identification des leviers de fidélisation (reconnaissance, sens, autonomie)</td>
+            </tr>
+            <tr>
+                <td><strong>GEN 02.3</strong></td>
+                <td>Sous-utilisation des outils numériques par les jeunes</td>
+                <td>Outils conçus sans leur participation, interfaces peu attractives</td>
+                <td>Application Safety Hub (P3) peu utilisée, perte de données</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Analyse des usages numériques, recommandations UX/UI, co-conception</td>
+            </tr>
+            <tr>
+                <td><strong>GEN 02.4</strong></td>
+                <td>Inadéquation des messages de prévention pour les jeunes</td>
+                <td>Communication trop formelle, absence de codes générationnels</td>
+                <td>Messages non compris, non respectés, faible impact</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Création de contenus adaptés aux codes des jeunes (vidéos courtes, quiz, défis)</td>
+            </tr>
+            <tr>
+                <td><strong>GEN 02.5</strong></td>
+                <td>Accidents chez les jeunes conducteurs (15/an)</td>
+                <td>Inexpérience, mais aussi méconnaissance de leurs facteurs de risque spécifiques</td>
+                <td>Blessures, dommages, coûts</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Identification des situations à risque spécifiques aux jeunes, ciblage préventif</td>
+            </tr>
+            <tr>
+                <td><strong>GEN 02.6</strong></td>
+                <td>Fracture intergénérationnelle dans les équipes</td>
+                <td>Incompréhension mutuelle, absence de dialogue, préjugés</td>
+                <td>Conflits, ambiance dégradée, perte d'efficacité collective</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Construction de ponts entre générations (ex: binômes intergénérationnels)</td>
+            </tr>
+            <tr>
+                <td><strong>GEN 02.7</strong></td>
+                <td>Investissements inadaptés (30% du budget risque d'être inefficace)</td>
+                <td>Décisions basées sur des suppositions, non sur des données réelles</td>
+                <td>Gaspillage financier, opportunités manquées</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Audit des  pistes, scoring "compatibilité GenZ", 30-40 modifications ciblées</td>
+            </tr>
+            <tr>
+                <td><strong>GEN 02.8</strong></td>
+                <td>Difficulté à attirer les jeunes talents</td>
+                <td>Image vieillotte du métier, absence de modernité</td>
+                <td>Pénurie de candidats, vieillissement des effectifs</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Plan d'action générationnel pour moderniser l'image et l'expérience collaborateur</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Diagnostic Génération Z : une étude sociologique en 4 phases (exploration, terrain, analyse, recommandations) pour comprendre les valeurs, motivations et freins des jeunes conducteurs, construire des personas, et adapter l'ensemble des  pistes à leur profil réel.</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>📚 PHASE 1 - EXPLORATION (6 semaines) :</strong> Revue littérature, benchmark secteurs, entretiens experts (sociologues). <strong>Budget 8 k€.</strong><br>
+        <strong>🎤 PHASE 2 - TERRAIN (8 semaines) :</strong> Focus groups (4 sessions, 8-10 jeunes), entretiens individuels (20), observations participantes. <strong>Budget 18 k€.</strong><br>
+        <strong>📊 PHASE 3 - ANALYSE (4 semaines) :</strong> Traitement qualitatif, construction de personas (3-4), cartographie des risques et leviers. <strong>Budget 5 k€.</strong><br>
+        <strong>📝 PHASE 4 - RECOMMANDATIONS (4 semaines) :</strong> Audit des  pistes, adaptations ciblées, création contenus, plan d'action générationnel. <strong>Budget 4 k€.</strong></p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. MÉTHODOLOGIE DÉTAILLÉE -->
+    <!-- ======================================================================== -->
+    <h1>4. MÉTHODOLOGIE DÉTAILLÉE</h1>
+    
+    <h3>Phase 1 - Exploration (6 semaines)</h3>
+    <ul>
+        <li>Revue de littérature : 30 études académiques et sectorielles sur la Génération Z au travail.</li>
+        <li>Benchmark : Transport, logistique, BTP, grande distribution.</li>
+        <li>Entretiens experts : 5 sociologues, psychologues du travail.</li>
+    </ul>
+    
+    <h3>Phase 2 - Terrain (8 semaines)</h3>
+    <ul>
+        <li><strong>Focus groups (4 sessions) :</strong> Conducteurs <25 ans (CDI), 25-30 ans (CDI), intérimaires/CDD, en période d'essai. Thèmes : rapport à la règle, usage numérique, motivation, perception des risques, attentes.</li>
+        <li><strong>Entretiens individuels (20) :</strong> Quotas par âge (18-22:5, 23-26:8, 27-30:7), sexe (70/30), statut (12 CDI, 5 CDD, 3 intérim). Durée 45 min.</li>
+        <li><strong>Observations participantes :</strong> Immersion 1/2 journée avec 3 conducteurs volontaires.</li>
+    </ul>
+    
+    <h3>Phase 3 - Analyse (4 semaines)</h3>
+    <ul>
+        <li>Analyse thématique (15-20 thèmes récurrents).</li>
+        <li>Verbatim marquants (50 citations).</li>
+        <li>Construction de 3-4 personas (profils types de jeunes conducteurs).</li>
+        <li>Cartographie des risques par profil et des leviers d'engagement.</li>
+    </ul>
+    
+    <h3>Phase 4 - Recommandations (4 semaines)</h3>
+    <ul>
+        <li>Audit des  pistes (scoring "compatibilité GenZ" 1-5).</li>
+        <li>30-40 modifications ciblées pour les porteurs de projet.</li>
+        <li>Création de contenus adaptés (scripts, visuels, tons, formats pour P3, P5, P10, P31).</li>
+        <li>Plan d'action générationnel 2026-2028.</li>
+    </ul>
+    
+    <h3>Exemples de personas</h3>
+    <div class="persona-box">
+        <h4>👤 PERSONA #1 - "LE CONNECTÉ" (Théo, 23 ans, 1 an d'ancienneté, PUSH)</h4>
+        <p>"La sécurité, c'est important mais chiant. Si c'est ludique, je joue le jeu." Ultra-connecté, les interfaces pauvres. Motivé par les challenges et les badges. Risque : surconfiance technologique. Levier : gamification, reconnaissance visible.</p>
+    </div>
+    <div class="persona-box">
+        <h4>👤 PERSONA #2 - "LE RÉALISTE" (Sarah, 27 ans, 4 ans d'ancienneté, LOADER)</h4>
+        <p>"Je respecte les règles, mais je veux comprendre pourquoi." Utilisation professionnelle du numérique, pas personnelle. A besoin de sens, de pédagogie. Risque : frustration face à l'arbitraire. Levier : transparence, implication, responsabilité.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. BUDGET DÉTAILLÉ</h1>
+    <table>
+        <thead><tr><th>Phase</th><th>Description</th><th>Coût</th></tr></thead>
+        <tbody>
+            <tr><td>Phase 1 - Exploration</td><td>Revue, benchmark, entretiens experts</td><td>8 000 €</td></tr>
+            <tr><td>Phase 2 - Terrain</td><td>Focus groups, entretiens, observations</td><td>18 000 €</td></tr>
+            <tr><td>Phase 3 - Analyse</td><td>Traitement, personas, cartographies</td><td>5 000 €</td></tr>
+            <tr><td>Phase 4 - Recommandations</td><td>Audit, adaptations, plan d'action</td><td>4 000 €</td></tr>
+            <tr><td><strong>TOTAL</strong></td><td></td><td><strong>35 000 €</strong></td></tr>
+        </tbody>
+    </table>
+    <p><strong>Coût par jeune conducteur étudié :</strong> ~1 000 €. <strong>Coût par piste adaptée :</strong> ~800 €. <strong>ROI :</strong> Évitement des erreurs de ciblage .</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. DÉPLOIEMENT (Calendrier) -->
+    <!-- ======================================================================== -->
+    <h1>6. DÉPLOIEMENT</h1>
+    <p><strong>Calendrier (4 mois) :</strong> S1-S6 (Phase 1), S7-S14 (Phase 2), S15-S18 (Phase 3), S19-S22 (Phase 4).</p>
+    <p><strong>Livrable final :</strong> Rapport "Génération Z et sécurité en piste" + Plan d'adaptation des  pistes.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>7. BÉNÉFICES ATTENDUS</h1>
+    <h2>7.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Connaissance des profils jeunes</strong><span>Baseline 0 → 4 personas validés</span></div>
+        <div class="indicator-item"><strong>Pistes adaptées</strong><span> auditées,  modifiées</span></div>
+        <div class="indicator-item"><strong>Satisfaction - jeunes conducteurs</strong><span>Baseline 35% → +20 pts</span></div>
+        <div class="indicator-item"><strong>Adoption des outils numériques</strong><span>Baseline 45% → +25 pts</span></div>
+        <div class="indicator-item"><strong>Turnover - jeunes</strong><span>Baseline 35% → -10 pts</span></div>
+    </div>
+    <h2>7.2 Bénéfices qualitatifs</h2>
+    <ul><li>Arrêt des suppositions, ciblage précis, économies massives (évite investissements inadaptés), légitimité ("ils ont pris le temps de nous comprendre"), agilité, transférabilité.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. POSITIONNEMENT STRATÉGIQUE -->
+    <!-- ======================================================================== -->
+    <h1>8. POSITIONNEMENT STRATÉGIQUE</h1>
+    <h2>8.1 Différenciation avec les approches existantes</h2>
+    <table>
+        <tr><th>Dispositif</th><th>Nature</th><th>Temporalité</th><th>Rôle du jeune</th></tr>
+        <tr><td>P29 - Ambassadeur</td><td>Représentation</td><td>Pendant</td><td>Porte-parole</td></tr>
+        <tr><td>P26 - Comptoir des râleurs</td><td>Expression</td><td>Après</td><td>Plaignant</td></tr>
+        <tr><td>P33 - Prix de l'idée</td><td>Contribution</td><td>Ponctuelle</td><td>Proposant</td></tr>
+        <tr><td><strong>P43 - Diagnostic GenZ</strong></td><td><strong>Compréhension</strong></td><td><strong>AVANT</strong></td><td><strong>Expert de lui-même</strong></td></tr>
+    </table>
+    <p><strong>P43 est le SEUL dispositif qui place le jeune en position d'EXPERT avant toute action.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. RISQUES ET MESURES DE MITIGATION -->
+    <!-- ======================================================================== -->
+    <h1>9. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Biais de sélection (jeunes peu représentatifs)</td><td>Moyenne</td><td>Élevée</td><td>Quotas stricts (âge, sexe, statut, entreprise), diversification des canaux de recrutement</td></tr>
+        <tr><td>Résultats trop génériques</td><td>Moyenne</td><td>Modérée</td><td>Focus sur l'actionnable, livrables concrets (personas, cartes, recommandations précises)</td></tr>
+        <tr><td>Non-appropriation par les équipes</td><td>Moyenne</td><td>Élevée</td><td>Ateliers de restitution, implication des opérationnels dès la phase 4</td></tr>
+        <tr><td>Coût de l'étude</td><td>Faible</td><td>Faible</td><td>35 k€ = 0,15% du budget total, ROI massif</td></tr>
+        <tr><td>Obsolescence rapide</td><td>Faible</td><td>Modérée</td><td>Méthodologie reproductible, veille continue, mise à jour à 3 ans</td></tr>
+    </table>
+    
+    <!-- ======================================================================== -->
+    <!-- 10. CONDITIONS DE RÉUSSITE -->
+    <!-- ======================================================================== -->
+    <h1>10. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li><strong>Humilité :</strong> Accepter que nos intuitions peuvent être fausses.</li>
+        <li><strong>Écoute réelle :</strong> Pas de questionnaire standardisé, de l'humain, du temps.</li>
+        <li><strong>Expertise :</strong> Associer un laboratoire de sociologie (ENAC, Université).</li>
+        <li><strong>Représentativité :</strong> Assurer la diversité des profils (âge, sexe, statut).</li>
+        <li><strong>Action :</strong> Les recommandations doivent être suivies d'effets concrets.</li>
+        <li><strong>Transparence :</strong> Partager les résultats avec les participants.</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Faire une étude "pour la forme" sans volonté de changer.</li>
+        <li>Se contenter de données quantitatives (questionnaires).</li>
+        <li>Négliger la diversité des profils (un seul persona "jeune").</li>
+        <li>Oublier de partager les résultats avec les jeunes participants.</li>
+        <li>Attendre la fin de l'étude pour agir (certaines actions peuvent être lancées en parallèle).</li>
+    </ul>
+    
+
+    
+    <!-- ======================================================================== -->
+    <!-- 11. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>11. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous sommes en train de dépenser des millions d'euros pour déployer  actions de sécurité. Et nous n'avons jamais pris le temps de comprendre à qui nous nous adressons. Nous supposons, nous croyons, nous pensons. Mais nous ne savons pas. La Génération Z n'est pas "les jeunes". C'est une génération avec ses codes, ses valeurs, ses attentes, ses rejets. Ignorer cette réalité, c'est prendre le risque que 30% de nos investissements soient inadaptés, inefficaces, voire contre-productifs. 35 000 € pour comprendre, c'est 0,15% du budget total. C'est le meilleur investissement du projet.
+        </p>
+        <p><strong>Le coût ?</strong> 35 000 €. <strong>Le bénéfice ?</strong> 30% d'efficacité en plus sur 22 millions d'euros. 6,6 millions d'euros d'économies. Et une certitude : nous ne nous sommes pas trompés.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>12. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer le diagnostic immédiatement (avril-juillet 2026).</li>
+        <li>Mobiliser 30 à 40 jeunes conducteurs volontaires.</li>
+        <li>Associer un laboratoire de sociologie (ENAC, Université).</li>
+        <li>Produire des personas actionnables et des recommandations concrètes.</li>
+        <li>Adapter l'ensemble du programme sur la base des résultats.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 43 - Diagnostic Génération Z | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

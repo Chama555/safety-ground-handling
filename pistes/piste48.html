@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 48 - Détecteur de fatigue/somnolence (DFS) temps réel</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 48</div>
+            <div class="document-subtitle">Détecteur de fatigue/somnolence (DFS) temps réel</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        L'ALERTE SILENCIEUSE AVANT L'ACCIDENT
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Caméra infrarouge anonyme détectant les signes de fatigue avec alerte progressive.
+    </p>
+    <p>
+        La fatigue est la première cause d'accidents évitables, mais la dernière à être détectée. 8-12 accidents/an liés à la fatigue à CDG, 62% des conducteurs déclarent un "coup de fatigue" au volant. Pourtant, aucun outil embarqué ne détecte la fatigue en temps réel. La technologie existe, elle est mature, peu coûteuse, non intrusive. La quarante-huitième piste propose de déployer un détecteur de fatigue/somnolence temps réel : une caméra infrarouge miniature analyse en continu le taux de clignement, la direction du regard, la posture, avec un traitement embarqué (aucune image stockée). Alertes progressives (niveau 1 à 4) et intégration charte éthique (aucune sanction, volontariat). Pour protéger, jamais pour contrôler.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> La fatigue est la première cause d'accidents évitables, mais la dernière à être détectée.</p>
+    
+    <table>
+        <thead><tr><th>Donnée</th><th>Valeur</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr><td>Accidents liés à la fatigue (estimation CDG)</td><td>8-12/an</td><td>Gendarmerie</td></tr>
+            <tr><td>Conducteurs déclarant "avoir eu un coup de fatigue au volant"</td><td>62%</td><td>Enquête P11</td></tr>
+            <tr><td>Conducteurs déclarant "s'être endormis au volant"</td><td>15%</td><td>Enquête P11</td></tr>
+            <tr><td>Accidents de nuit</td><td>8/an</td><td>Gendarmerie</td></tr>
+            <tr><td>Accidents en fin de vacation (7e+ heure)</td><td>35%</td><td>Analyse CSCA</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Détecter la fatigue, c'est prévenir l'accident. Le DFS temps réel, c'est analyser en continu les paupières, le regard, la posture ; détecter micro-sommeils, baisse de vigilance ; alerter progressivement (niveau 1 à 4) ; suggérer pause, café, sieste ; protéger sans jamais enregistrer ni identifier.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 48) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque physiologique (fatigue)</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 48</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>FAT 01.1</strong></td>
+                <td>Conduite en état de fatigue (non détectée)</td>
+                <td>Absence de détection temps réel, sous-estimation par le conducteur</td>
+                <td>Baisse de vigilance, temps de réaction allongé, risque d'accident</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Détection en continu des signes de fatigue (clignement, regard, posture)</td>
+            </tr>
+            <tr>
+                <td><strong>FAT 01.2</strong></td>
+                <td>Micro-sommeil au volant</td>
+                <td>Fatigue accumulée, absence d'alerte, non-perception du danger</td>
+                <td>Perte de contrôle, collision, accident grave</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Détection fermeture prolongée (>0.5s), alerte niveau 3/4 avec pause obligatoire</td>
+            </tr>
+            <tr>
+                <td><strong>FAT 01.3</strong></td>
+                <td>Accidents de nuit liés à la fatigue</td>
+                <td>Travail de nuit, rythmes circadiens perturbés, absence de détection</td>
+                <td>8 accidents/an (baseline), blessures, dommages</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Réduction de -50% des accidents de nuit (cible M36)</td>
+            </tr>
+            <tr>
+                <td><strong>FAT 01.4</strong></td>
+                <td>Accidents en fin de vacation (7e+ heure)</td>
+                <td>Cumul d'heures de travail, baisse de vigilance non détectée</td>
+                <td>35% des accidents, risque élevé</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Détection précoce, alerte niveau 2, pause conseillée</td>
+            </tr>
+            <tr>
+                <td><strong>FAT 01.5</strong></td>
+                <td>Auto-évaluation de la fatigue sous-estimée</td>
+                <td>"Je tiens le coup", méconnaissance des signes, absence de feedback objectif</td>
+                <td>Conducteur continue alors qu'il n'est plus vigilant</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Mesure objective par caméra, alerte non stigmatisante</td>
+            </tr>
+            <tr>
+                <td><strong>FAT 01.6</strong></td>
+                <td>Absence d'alerte en cas de somnolence avérée</td>
+                <td>Pas de système embarqué, conducteur seul face au risque</td>
+                <td>Endormissement, accident</td>
+                <td>4 (Catastrophique)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Alerte niveau 3 (sonore forte + message vocal) et niveau 4 (alarme + notification superviseur)</td>
+            </tr>
+            <tr>
+                <td><strong>FAT 01.7</strong></td>
+                <td>Stigmatisation de la fatigue</td>
+                <td>Culture du "je tiens", peur de passer pour faible</td>
+                <td>Non-déclaration, non-gestion du risque</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Déstigmatisation : "Ce n'est pas ma faute, c'est mon corps", charte éthique</td>
+            </tr>
+            <tr>
+                <td><strong>ETH 02.1</strong></td>
+                <td>Craintes liées à la surveillance ("Big Brother")</td>
+                <td>Caméra perçue comme intrusive, peur du fichage</td>
+                <td>Rejet du dispositif, opposition syndicale</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Charte éthique : aucun stockage, aucune identification, aucune sanction, volontariat</td>
+            </tr>
+            <tr>
+                <td><strong>ETH 02.2</strong></td>
+                <td>Risque de sanction liée aux alertes</td>
+                <td>Utilisation des données pour évaluation ou discipline</td>
+                <td>Défiance, non-utilisation, échec du dispositif</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Séparation stricte alerte / sanction, information préalable</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Système embarqué analysant en continu l'état de vigilance via caméra infrarouge : taux de clignement (PERCLOS), fermeture prolongée, direction du regard, posture. Traitement local (edge computing), aucune image stockée. Alertes progressives (niveau 1 à 4).</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>📹 Détection :</strong> Caméra IR, analyse clignement (>25/min), fermeture (>0.5s), regard hors axe (>2s), inclinaison tête (>20°).<br>
+        <strong>🧠 Algorithme :</strong> IA locale, calcul niveau somnolence (1-4), seuils paramétrables.<br>
+        <strong>🔔 Alerte progressive :</strong> N1 (icône café), N2 (alerte sonore douce), N3 (forte + message vocal), N4 (alarme continue + notification superviseur).<br>
+        <strong>✅ Action :</strong> Suggestion pause, proposition café (P18), notification superviseur (option), enregistrement agrégé anonyme.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. TECHNOLOGIE -->
+    <!-- ======================================================================== -->
+    <h1>4. TECHNOLOGIE</h1>
+    <ul>
+        <li><strong>Spécifications :</strong> Caméra infrarouge (jour/nuit), 640x480, 30 ips, traitement embarqué, aucun stockage, algorithme PERCLOS, multi-indicateurs, temps réponse <1s.</li>
+        <li><strong>Indicateurs :</strong> Taux clignement (15-20/min normal, >25 ou <10 alerte), fermeture prolongée (>0.5s micro-sommeil), fermeture complète (>2s endormissement), regard hors axe (>2s), inclinaison tête (>20°).</li>
+        <li><strong>Niveaux d'alerte :</strong> N1: ☕ "Pause café recommandée" (icône, pas de son). N2: ⚠️ "Fatigue détectée" (alerte sonore douce). N3: 🔴 "SOMNOLENCE - PAUSE OBLIGATOIRE 15 MIN" (forte + vocal). N4: ⛔ "DANGER - ARRÊT IMMÉDIAT" (alarme continue + notification superviseur).</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. CHARTE ÉTHIQUE -->
+    <!-- ======================================================================== -->
+    <h1>5. CHARTE ÉTHIQUE</h1>
+    <ul>
+        <li><strong>Principes :</strong> Aucune image stockée, aucune identification, aucune sanction, volontariat (phase pilote), transparence, droit de retrait.</li>
+        <li><strong>Message :</strong> "Cette caméra ne vous filme pas. Elle ne vous reconnaît pas. Elle ne stocke aucune image. Elle détecte la fatigue pour vous protéger. Rien de plus."</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>6. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (6 mois) :</strong> 25 engins (PUSH récents), concertation sociale + charte, acquisition 25 kits DFS, installation, interface alertes, formation, expérimentation 3 mois, évaluation. <strong>Budget 75 k€.</strong></p>
+    <p><strong>PHASE 2 - Extension CDG (12 mois) :</strong> 200 engins nuit prioritaires, acquisition 200 kits, installation, formation e-learning, communication, évaluation. <strong>Budget 388 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> 500 engins supplémentaires, Orly (150), province (300), évolution V2 (intégration P12/P38), évaluation. <strong>Budget 1 602 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 2 065 k€</strong> (coût par engin ~1 600 €).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>7. BÉNÉFICES ATTENDUS</h1>
+    <h2>7.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Engins équipés</strong><span>Cible M36: 1 000</span></div>
+        <div class="indicator-item"><strong>Conducteurs protégés</strong><span>Cible M36: 1 800</span></div>
+        <div class="indicator-item"><strong>Alertes niveau 3+ / mois</strong><span>Cible M36: 600</span></div>
+        <div class="indicator-item"><strong>Pauses obligatoires déclenchées</strong><span>Cible M36: 300/mois</span></div>
+        <div class="indicator-item"><strong>Accidents de nuit</strong><span>Baseline 8/an → Cible -50%</span></div>
+        <div class="indicator-item"><strong>Accidents fin de vacation</strong><span>Baseline 35% → Cible -40%</span></div>
+    </div>
+    <h2>7.2 Bénéfices qualitatifs</h2>
+    <ul><li>Protection active, déstigmatisation, objectivation, prévention immédiate, complémentarité avec P11/P18, innovation sociale.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. RETOURS D'EXPÉRIENCE / 9. RISQUES / 10. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>8. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Transport routier - France :</strong> Détecteurs somnolence obligatoires sur PL neufs depuis 2022, -40% accidents liés fatigue, 85% conducteurs satisfaits. Leçon : technologie éprouvée, acceptation avec information.</li>
+        <li><strong>SNCF (pilote 2024) :</strong> Détection somnolence sur 30 locomotives, 92% conducteurs "plus en sécurité", extension prévue. Leçon : absence de sanction clé de l'acceptation.</li>
+        <li><strong>Aéroport de Munich (Fatigue Alert System) :</strong> Pilote 20 PUSH, 78 alertes niveau 3 en 3 mois, 0 accident nuit, 100% recommandent. Leçon : fatigue massivement sous-estimée.</li>
+    </ul>
+    
+    <h1>9. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Acceptation sociale ("Big Brother")</td><td>Élevée</td><td>Critique</td><td>Charte éthique affichée, aucun stockage, aucune sanction, volontariat phase 1</td></tr>
+        <tr><td>Faux positifs (alertes injustifiées)</td><td>Élevée</td><td>Modérée</td><td>Calibration progressive, seuils adaptables, retour utilisateur</td></tr>
+        <tr><td>Faux négatifs (non-détection)</td><td>Moyenne</td><td>Élevée</td><td>Multi-indicateurs, amélioration continue</td></tr>
+        <tr><td>Coût</td><td>Élevée</td><td>Modérée</td><td>Phasage progressif, priorisation flotte nuit</td></tr>
+        <tr><td>Maintenance</td><td>Moyenne</td><td>Faible</td><td>Garantie 3 ans, contrat maintenance</td></tr>
+    </table>
+    
+    <h1>10. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li>Éthique (aucune image stockée, aucun fichier facial)</li>
+        <li>Volontariat (phase pilote exclusivement sur volontaires)</li>
+        <li>Transparence (information complète sur fonctionnement)</li>
+        <li>Non-sanction (absolue, sans exception)</li>
+        <li>Progressivité (seuils adaptés, alertes graduées)</li>
+        <li>Pédagogie ("cette caméra vous protège")</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Déployer sans concerter → CSE, DPO, conducteurs</li>
+        <li>Lier détection et sanction → séparation stricte</li>
+        <li>Stocker des images → INTERDIT, traitement embarqué uniquement</li>
+        <li>Seuils trop sensibles → 1 mois calibrage progressif</li>
+        <li>Oublier la nuit → caméra infrarouge OBLIGATOIRE</li>
+    </ul>
+    
+ 
+    <!-- ======================================================================== -->
+    <!-- 11. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>11. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le détecteur de fatigue/somnolence est la piste de la protection silencieuse. Ce n'est pas un outil de surveillance. C'est un outil de sollicitude. Il ne juge pas. Il mesure. Il ne sanctionne pas. Il alerte. Il ne remplace pas l'humain. Il l'assiste. Il ne regarde pas qui vous êtes. Il regarde comment vous allez. Ce que nous proposons, c'est de donner aux conducteurs les moyens de savoir quand leur corps fatigue. C'est de remplacer le "je tiens le coup" par "il est temps de faire une pause". C'est d'utiliser la technologie pour protéger, jamais pour contrôler.
+        </p>
+        <p><strong>Le coût ?</strong> 1 600 € par engin. <strong>Le bénéfice ?</strong> -50% accidents de nuit, des conducteurs qui ne s'endorment plus au volant.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>12. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Rédiger une charte éthique avec les représentants du personnel (5 k€).</li>
+        <li>Lancer un pilote sur 25 engins avec conducteurs volontaires (75 k€).</li>
+        <li>Tester pendant 3 mois en mode "alerte uniquement" (pas de sanction, pas de stockage).</li>
+        <li>Évaluer la détection, l'acceptation, l'impact.</li>
+        <li>Décider de l'extension sur la base des résultats.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 48 - Détecteur de fatigue/somnolence (DFS) temps réel | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

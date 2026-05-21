@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 59 - Cybersécurité des engins connectés</title>
+    <style>
+        /* Styles généraux pour l'impression - Standard professionnel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 59</div>
+            <div class="document-subtitle">Cybersécurité des engins connectés</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        L'ANGLE MORT TECHNOLOGIQUE
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Audit et renforcement de la sécurité des systèmes embarqués.
+    </p>
+    
+    <p>
+        Plus nous connectons les engins, plus nous exposons le système. Nous investissons des millions dans la connectivité, 
+        mais zéro euro pour sécuriser ces connexions. Un engin de piste connecté est un objet vulnérable, et un objet vulnérable 
+        est une porte d'entrée vers le système d'information. Cette piste propose de combler cet angle mort technologique avec 
+        un programme de cybersécurité des engins connectés.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Plus nous connectons les engins, plus nous exposons le système.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Dispositif</th>
+                <th>Connectivité</th>
+                <th>Risque cyber</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>P7 - Rétrofit</td><td>Caméras IP, bus CAN</td><td>Piratage des systèmes de vision</td></tr>
+            <tr><td>P38 - Géofencing</td><td>GPS, communication radio</td><td>Usurpation de position, bridage détourné</td></tr>
+            <tr><td>P41 - Badge + PIN</td><td>Authentification réseau</td><td>Vol d'identité, déni de service</td></tr>
+            <tr><td>P48 - Détecteur fatigue</td><td>Caméra embarquée, IA</td><td>Fuite de données biométriques</td></tr>
+            <tr><td>P49 - Capteurs mmWave</td><td>Connectivité 5G</td><td>Interception, brouillage</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Paradoxe :</strong>
+        <ul>
+            <li>Nous investissons des <strong>millions d'euros</strong> dans la connectivité des engins.</li>
+            <li>Nous dépensons <strong>0 €</strong> pour sécuriser ces connexions.</li>
+            <li><strong>AUCUNE des 58 premières pistes n'aborde la cybersécurité. C'est un angle mort critique.</strong></li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> La sécurité des engins connectés est aussi importante que la sécurité physique. 
+        Auditer, chiffrer, authentifier, détecter, isoler : c'est une OBLIGATION de sécurité.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 59) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque informationnel</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque cyber / réglementaire</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 59</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>CYB 01.1</strong></td>
+                <td>Communications non chiffrées (badge/PIN, flux vidéo)</td>
+                <td>Absence de chiffrement, protocoles non sécurisés.</td>
+                <td>Interception des identifiants, usurpation d'identité, vol de données biométriques.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Chiffrement TLS 1.3 de toutes les communications.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 01.2</strong></td>
+                <td>Usurpation de position GPS (GPS spoofing)</td>
+                <td>GPS non authentifié, absence d'anti-spoofing.</td>
+                <td>Contournement du bridage vitesse, navigation falsifiée, collision.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Système anti-spoofing, corrélation de données, authentification GNSS.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 01.3</strong></td>
+                <td>Authentification faible (badge seul, pas de mutuelle)</td>
+                <td>Absence de double facteur, pas d'authentification du serveur.</td>
+                <td>Attaque "homme du milieu", vol d'identifiants, conduite sans habilitation.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Authentification mutuelle (badge + PIN + certificat X.509). NAC (802.1X).</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 01.4</strong></td>
+                <td>Firmware non signé, mises à jour non sécurisées</td>
+                <td>Absence de signature cryptographique, possibilité d'installer des firmwares malveillants.</td>
+                <td>Prise de contrôle à distance de l'engin, désactivation des sécurités.</td>
+                <td>4 (Catastrophique)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-purple">VIOLET</td>
+                <td>Signature des firmwares. Mise à jour sécurisée (Secure Boot).</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 01.5</strong></td>
+                <td>Réseau plat, absence de segmentation</td>
+                <td>Tous les engins sur le même réseau VLAN.</td>
+                <td>Engin compromis = accès à l'ensemble du système, propagation latérale.</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Segmentation réseau (VLAN). Isolation des flux critiques.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 02.1</strong></td>
+                <td>Absence de détection d'intrusion embarquée</td>
+                <td>Pas d'IDS/IPS sur les engins, pas de supervision centralisée.</td>
+                <td>Attaque non détectée, temps de réaction trop long, dégâts étendus.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>IDS/IPS embarqué sur engins critiques. SOC dédié avec supervision 24/7.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 02.2</strong></td>
+                <td>Absence de mode dégradé sécurisé</td>
+                <td>En cas d'attaque, l'engin continue de fonctionner normalement ou s'arrête brutalement.</td>
+                <td>Accident en cas de dysfonctionnement, perte de contrôle.</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Mode dégradé sécurisé : vitesse bridée, refus commandes suspectes, immobilisation en zone sûre.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 03.1</strong></td>
+                <td>Non-conformité RGPD (données biométriques non protégées)</td>
+                <td>Flux vidéo non chiffrés, stockage non sécurisé des données.</td>
+                <td>Sanctions CNIL, perte de confiance des conducteurs, atteinte à l'image.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-purple">VIOLET</td>
+                <td>Chiffrement des flux vidéo. Politique de protection des données. Anonymisation.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 03.2</strong></td>
+                <td>Non-conformité NIS 2 (directive européenne)</td>
+                <td>Absence d'audit, de mesures de cybersécurité, de reporting.</td>
+                <td>Sanctions financières (jusqu'à 10 M€ ou 2% du CA), mise en demeure, image dégradée.</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent - échéance 2027)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Anticipation réglementaire : audit et mise en conformité NIS 2 dès 2026.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 04.1</strong></td>
+                <td>Dépendance aux constructeurs pour les mises à jour</td>
+                <td>Pas de contractualisation des obligations de mise à jour de sécurité.</td>
+                <td>Vulnérabilités non corrigées, obsolescence programmée.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Négociation contractuelle avec constructeurs. Obligation de mise à jour.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 04.2</strong></td>
+                <td>Compétences internes insuffisantes en cybersécurité</td>
+                <td>Pas de formation, pas d'expertise dédiée.</td>
+                <td>Incapacité à gérer une crise, dépendance totale aux prestataires.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Formation des équipes techniques. Recrutement/RFQ prestataire qualifié ANSSI.</td>
+            </tr>
+            <tr>
+                <td><strong>CYB 05.1</strong></td>
+                <td>Attaque ciblée sur le système de bridage (P38)</td>
+                <td>Communication radio non sécurisée, pas d'authentification des commandes.</td>
+                <td>Désactivation du bridage, vitesse excessive non contrôlée, collision.</td>
+                <td>4 (Catastrophique)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Authentification des commandes. Chiffrement des communications radio.</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 01.1</strong></td>
+                <td>Accident causé par une cyberattaque</td>
+                <td>Défaillance système provoquée, manipulation à distance des commandes.</td>
+                <td>Collision, dommages corporels et matériels, responsabilité pénale.</td>
+                <td>4 (Catastrophique)</td>
+                <td>E (Extrêmement rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Réduction de -95% des incidents de cybersécurité (cible M36).</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    
+    <h2>3.1 Principe général</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 15px 0;">
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>1. AUDIT</strong><br>Pentesting
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>2. CORRECTION</strong><br>TLS 1.3, Authentification
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>3. DÉTECTION</strong><br>IDS/IPS, SOC
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>4. GOUVERNANCE</strong><br>Politique, formation
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 4. VECTEURS D'ATTAQUE -->
+    <!-- ======================================================================== -->
+    <h1>4. VECTEURS D'ATTAQUE IDENTIFIÉS</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Vecteur d'attaque</th>
+                <th>Conséquence</th>
+                <th>Impact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>Usurpation de position (GPS spoofing)</td><td>Contournement du bridage vitesse</td><td>Vitesse excessive non détectée</td></tr>
+            <tr><td>2</td><td>Interception du flux badge/PIN</td><td>Usurpation d'identité</td><td>Conduite sans habilitation</td></tr>
+            <tr><td>3</td><td>Modification des paramètres de vitesse</td><td>Désactivation du bridage</td><td>Risque de collision</td></tr>
+            <tr><td>4</td><td>Interception des flux vidéo (P7, P48)</td><td>Vol de données biométriques</td><td>Violation RGPD, sanctions</td></tr>
+        </tbody>
+    </table>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. BUDGET DÉTAILLÉ</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Phase</th>
+                <th>Description</th>
+                <th>Coût</th>
+                <th>Livrable</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Phase 1 (4 mois)</strong></td><td>Audit vulnérabilités, tests d'intrusion, rapport</td><td>55 k€</td><td>Cartographie des risques, plan de correction priorisé</td></tr>
+            <tr><td><strong>Phase 2 (8 mois)</strong></td><td>Correction pilote sur 50 engins, chiffrement, authentification, firmwares, segmentation, évaluation ENAC</td><td>118 k€</td><td>50 engins sécurisés, REX</td></tr>
+            <tr><td><strong>Phase 3 (24-36 mois)</strong></td><td>Généralisation 1000 engins, IDS/IPS, SOC, extension Orly & province, évaluation</td><td>477 k€</td><td>Parc sécurisé, SOC opérationnel</td></tr>
+            <tr><td><strong>TOTAL 3 ANS</strong></td><td></td><td><strong>650 k€</strong></td><td></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Coût annuel de fonctionnement (régime permanent) : 45 k€</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>6.1 Bénéfices mesurables</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Indicateur</th>
+                <th>Baseline</th>
+                <th>Cible M12</th>
+                <th>Cible M24</th>
+                <th>Cible M36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Vulnérabilités critiques corrigées</td><td>0%</td><td>80%</td><td>95%</td><td>100%</td></tr>
+            <tr><td>Communications chiffrées</td><td>0%</td><td>50%</td><td>80%</td><td>100%</td></tr>
+            <tr><td>Authentification mutuelle</td><td>0%</td><td>30%</td><td>70%</td><td>100%</td></tr>
+            <tr><td>Engins supervisés (SOC)</td><td>0</td><td>50</td><td>500</td><td>1 500</td></tr>
+            <tr><td>Incidents de cybersécurité</td><td>?</td><td>-50%</td><td>-80%</td><td>-95%</td></tr>
+        </tbody>
+    </table>
+    
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    
+    <ul>
+        <li><strong>Intégrité des systèmes :</strong> Les commandes ne peuvent pas être falsifiées.</li>
+        <li><strong>Confidentialité des données :</strong> Les flux vidéo et biométriques sont protégés.</li>
+        <li><strong>Continuité d'activité :</strong> Mode dégradé sécurisé en cas d'attaque.</li>
+        <li><strong>Conformité RGPD :</strong> Protection des données personnelles.</li>
+        <li><strong>Confiance :</strong> Les conducteurs savent que leurs données sont protégées.</li>
+        <li><strong>Exemplarité :</strong> CDG précurseur dans la cybersécurité des GSE.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>7. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            La cybersécurité des engins connectés est la piste de l'anticipation et de la responsabilité. Ce n'est pas une option technique. 
+            C'est une obligation légale (NIS 2, RGPD), éthique (protéger les données des conducteurs), opérationnelle (garantir l'intégrité 
+            des systèmes) et commerciale (répondre aux exigences des compagnies).
+        </p>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 8. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>8. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer un audit de cybersécurité complet des systèmes embarqués (55 k€).</li>
+        <li>Identifier les vulnérabilités critiques et établir un plan de correction priorisé.</li>
+        <li>Tester les corrections sur une flotte pilote de 50 engins (118 k€).</li>
+        <li>Généraliser les mesures de sécurité sur l'ensemble du parc.</li>
+        <li>Mettre en place une gouvernance pérenne (veille, audits réguliers, SOC).</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 59 - Cybersécurité des engins connectés | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

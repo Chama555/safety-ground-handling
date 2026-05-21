@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 45 - Conseil Consultatif des Conducteurs</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 45</div>
+            <div class="document-subtitle">Conseil Consultatif des Conducteurs (C3)</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        LA VOIX STRUCTURÉE DU TERRAIN AU CŒUR DE LA DÉCISION
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Commission mensuelle où conducteurs (8-12 élus) co-définissent les actions sécurité avec la direction.
+    </p>
+    <p>
+        La parole des conducteurs existe, mais elle est fragmentée, anonyme ou ponctuelle. Le comptoir des râleurs (P26) collecte la plainte sans dialogue. Le prix de l'idée (P33) est ponctuel. La sécurité collaborative (P14) se déroule au niveau management. Les conducteurs, premiers experts de la piste, subissent les décisions sans pouvoir les influencer. La quarante-cinquième piste propose de créer un espace de dialogue permanent et institutionnalisé : le Conseil Consultatif des Conducteurs (C3). Une commission mensuelle réunissant des conducteurs élus, la direction et des experts, pour analyser, prioriser, proposer, décider et suivre les actions de sécurité. Le maillon manquant entre la stratégie et le terrain.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> La parole des conducteurs existe, mais elle est fragmentée, anonyme ou ponctuelle.</p>
+    
+    <table>
+        <thead><tr><th>Dispositif Existant</th><th>Nature de la Parole</th><th>Limite</th></tr></thead>
+        <tbody>
+            <tr><td>P26 - Comptoir des râleurs</td><td>Anonyme, descendante (collecte de plainte)</td><td>Pas de dialogue, pas de co-construction</td></tr>
+            <tr><td>P33 - Prix de l'idée</td><td>Ponctuelle, individuelle</td><td>Quelques idées/an, pas de suivi continu</td></tr>
+            <tr><td>P14 - Sécurité collaborative</td><td>Inter-entreprises, niveau management</td><td>Les conducteurs n'ont pas de siège</td></tr>
+            <tr><td>Réunions de terrain</td><td>Informelle, non tracée</td><td>Dépendante du manager, pas de vision globale</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> La co-construction des décisions avec les conducteurs est le plus court chemin vers leur adhésion et l'efficacité des mesures. Le C3, c'est donner une voix officielle et permanente aux conducteurs, créer un espace de dialogue direct, coconstruire les actions, transformer les "râleurs" en co-décideurs, assurer une remontée qualifiée.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 45) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque de gouvernance</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 45</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>GOUV 01.1</strong></td>
+                <td>Décisions déconnectées du terrain</td>
+                <td>Absence de représentation des conducteurs dans les instances de décision</td>
+                <td>Mesures inadaptées, inefficaces, rejetées par les équipes</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Intégration de conducteurs élus dans le processus de décision (C3)</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.2</strong></td>
+                <td>Résistance au changement élevée</td>
+                <td>Conducteurs non impliqués en amont, décisions perçues comme imposées</td>
+                <td>Retards dans la mise en œuvre, contournement des mesures</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Co-construction des actions avec les conducteurs, adhésion renforcée</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.3</strong></td>
+                <td>Manque de légitimité des décisions</td>
+                <td>Décisions prises sans consultation, sans retour terrain</td>
+                <td>Contestations, conflits, perte d'autorité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Décisions co-construites et validées par le C3, légitimité accrue</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.4</strong></td>
+                <td>Absence de suivi structuré des actions sécurité</td>
+                <td>Pas d'instance dédiée, dispersion des responsabilités</td>
+                <td>Actions non suivies d'effet, problèmes récurrents</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Suivi mensuel par le C3 de l'avancement des actions décidées</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.5</strong></td>
+                <td>Priorisation inefficace des actions sécurité</td>
+                <td>Pas de vision terrain, décisions basées sur des critères hors-sol</td>
+                <td>Ressources allouées à des actions non prioritaires, risques non traités</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Analyse et priorisation par le C3 des problèmes les plus urgents</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.6</strong></td>
+                <td>Non-remontée des signaux faibles du terrain</td>
+                <td>Pas de canal institutionnalisé, informations perdues</td>
+                <td>Problèmes ignorés jusqu'à l'accident, prévention inefficace</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Remontée qualifiée via le C3, analyse des tendances (P26, P33)</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.7</strong></td>
+                <td>Frustration et désengagement des conducteurs</td>
+                <td>Sentiment de ne pas être écoutés, de ne pas compter</td>
+                <td>Baisse de vigilance, turnover, climat social dégradé</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Conducteurs acteurs de la décision, fierté et engagement renforcés</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.8</strong></td>
+                <td>Risque de "gouvernance alibi" (instance sans pouvoir réel)</td>
+                <td>Mise en place d'un conseil sans lui donner de moyens ou de poids</td>
+                <td>Démotivation des élus, discrédit du dispositif, rejet</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Charte d'engagement direction, décisions traçables et appliquées</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.9</strong></td>
+                <td>Absence de retour vers les non-élus</td>
+                <td>Communication insuffisante sur les travaux du C3</td>
+                <td>Sentiment d'entre-soi, non-adhésion du reste des équipes</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Comptes-rendus diffusés à toutes les équipes, réunions de restitution</td>
+            </tr>
+            <tr>
+                <td><strong>GOUV 01.10</strong></td>
+                <td>Dérive revendicative du conseil</td>
+                <td>Périmètre mal défini, absence d'animateur neutre</td>
+                <td>Conflits, paralysie, dépassement du mandat</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Animateur neutre, périmètre strict (sécurité), règlement intérieur</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Créer une commission mensuelle réunissant des conducteurs élus par leurs pairs, la direction sécurité, et des experts du CSAE, pour co-définir les actions de sécurité.</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>👥 COMPOSITION (12-15 pers.) :</strong> 8-12 conducteurs élus, 2-3 direction (sécurité/exploitation), 1-2 experts (CSAE), 1 animateur neutre (CSCA/prestataire).</p>
+        <p><strong>🎯 MISSIONS (réunion mensuelle - 2h) :</strong> ANALYSER (retour incidents), PRIORISER (problèmes urgents), PROPOSER (solutions, lien P26/P33), DÉCIDER (orientations sécurité), SUIVRE (avancement actions).</p>
+        <p><strong>📄 LIVRABLES :</strong> Compte-rendu détaillé diffusé à toutes les équipes, décisions formelles et plan d'actions, avis consultatif sur projets sécurité.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. MODALITÉS DE FONCTIONNEMENT -->
+    <!-- ======================================================================== -->
+    <h1>4. MODALITÉS DE FONCTIONNEMENT</h1>
+    <ul>
+        <li><strong>Élection et mandat :</strong> 8-12 sièges, représentativité entreprises/métiers. Élection par pairs (vote électronique P3). Mandat 2 ans renouvelable. Critères : volontariat, ancienneté ≥2 ans, 0 accident responsable sur 2 ans.</li>
+        <li><strong>Réunions :</strong> Mensuelles, 2h max, salle dédiée, ordre du jour co-établi (animateur + représentant conducteurs) diffusé 1 semaine avant.</li>
+        <li><strong>Rôle de l'animateur :</strong> Neutre, garant du débat, de la parole de chacun, de la prise de décision, formalisation des comptes-rendus, suivi des actions.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. ARTICULATION AVEC LES AUTRES PISTES -->
+    <!-- ======================================================================== -->
+    <h1>5. ARTICULATION AVEC LES AUTRES PISTES</h1>
+    <ul>
+        <li><strong>P26 (Comptoir des râleurs) :</strong> Le C3 analyse les tendances des "râles" pour identifier des sujets de fond.</li>
+        <li><strong>P33 (Prix de l'idée) :</strong> Le C3 peut pré-sélectionner ou recommander des idées, et suit le déploiement des lauréats.</li>
+        <li><strong>P34 (Boîte à outils du manager) :</strong> Les retours du C3 enrichissent et adaptent les outils.</li>
+        <li><strong>P14 (Sécurité collaborative) :</strong> Le C3 est la version "terrain" de la collaborative ; échanges d'information possibles.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BUDGET ESTIMÉ -->
+    <!-- ======================================================================== -->
+    <h1>6. BUDGET ESTIMÉ</h1>
+    <p><strong>Coûts annuels de fonctionnement :</strong> Indemnités de remplacement (12 conducteurs × 2h/mois) 30 k€, animation/coordination (0,2 ETP ou presta) 10 k€, logistique 3 k€, formation élus 2 k€ → <strong>TOTAL ANNUEL 45 k€</strong>.</p>
+    <p><strong>Investissement initial (pilote 1 entreprise, 6 mois) :</strong> 15 k€ (conception, élection, animation 6 sessions).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>7. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (6 mois) :</strong> 1 entreprise, 8 conducteurs élus, 6 réunions, évaluation. <strong>Budget 15 k€.</strong></p>
+    <p><strong>PHASE 2 - Expansion CDG (12 mois) :</strong> Extension à 5 entreprises, formation animateurs, adaptation, élections. <strong>Budget 45 k€.</strong></p>
+    <p><strong>PHASE 3 - Pérennisation (24-36 mois) :</strong> Conseil unique représentatif CDG, intégration décision CSCA, extension Orly/province. <strong>Budget 45 k€/an.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 15 + 45 + 45 = 105 k€</strong> (hors coûts annuels phase 3).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>8. BÉNÉFICES ATTENDUS</h1>
+    <h2>8.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Conducteurs élus participants</strong><span>Cible M36: 50</span></div>
+        <div class="indicator-item"><strong>Réunions tenues</strong><span>Cible M36: 36</span></div>
+        <div class="indicator-item"><strong>Décisions co-construites</strong><span>Cible M36: 15</span></div>
+        <div class="indicator-item"><strong>Taux de résistance au changement</strong><span>Cible -60%</span></div>
+        <div class="indicator-item"><strong>Adhésion aux nouvelles mesures</strong><span>Cible +80%</span></div>
+    </div>
+    <h2>8.2 Bénéfices qualitatifs</h2>
+    <ul><li>Légitimité des décisions, pertinence des actions, engagement des conducteurs, fluidité du dialogue social, montée en compétence des élus.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. RETOURS D'EXPÉRIENCE / 10. RISQUES / 11. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>9. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Airbus (Conseil de site) :</strong> Instance de dialogue avec représentants des opérateurs, co-construction des actions sécurité, amélioration du climat social. Leçon : l'écoute active réduit les tensions.</li>
+        <li><strong>SNCF (Commission de sécurité de site) :</strong> Réunions mensuelles agents/management, remontée des difficultés terrain, plans d'action conjoints. Leçon : la parole libérée améliore la sécurité.</li>
+        <li><strong>EDF (Comité de pilotage sécurité) :</strong> Intégration d'opérateurs dans les instances de décision, meilleure acceptation des mesures. Leçon : la co-construction est un gage d'efficacité.</li>
+    </ul>
+    
+    <h1>10. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Créer une instance "alibi" sans pouvoir réel</td><td>Élevée</td><td>Critique</td><td>Décisions traçables et prises en compte, charte d'engagement direction</td></tr>
+        <tr><td>Démotivation des non-élus</td><td>Moyenne</td><td>Élevée</td><td>Communication transparente, réunions de restitution dans les équipes</td></tr>
+        <tr><td>Dérive revendicative</td><td>Faible</td><td>Modérée</td><td>Animateur neutre recadre, périmètre strict (sécurité)</td></tr>
+        <tr><td>Coût de remplacement des conducteurs</td><td>Élevée</td><td>Modérée</td><td>Budget dimensionné, investissement dans l'intelligence collective</td></tr>
+    </table>
+    
+    <h1>11. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li>Engagement direction (la charte doit être signée au plus haut niveau)</li>
+        <li>Élection légitime (vote par les pairs)</li>
+        <li>Animation neutre et professionnelle</li>
+        <li>Ordre du jour co-construit</li>
+        <li>Suivi transparent des décisions</li>
+        <li>Retour systématique vers les équipes</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Conseil sans pouvoir → décisions sans suite</li>
+        <li>Élus non représentatifs → quotas respectés</li>
+        <li>Réunions trop longues → 2h max</li>
+        <li>Absence de retour → comptes-rendus diffusés</li>
+        <li>Périmètre trop large → focus sécurité</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>12. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous avons des boîtes à râler, des concours d'idées, des réunions entre experts. Il manque un maillon essentiel : un espace où les conducteurs et la direction s'assoient à la même table pour décider ensemble. Le Conseil Consultatif des Conducteurs, ce n'est pas une énième réunion. C'est le lieu où la parole du terrain devient force de proposition et de décision. C'est le plus court chemin pour transformer la résistance au changement en adhésion. Pour 45 000 € par an, nous pouvons créer cette instance de dialogue et faire de nos 2 000 conducteurs des partenaires de la sécurité, et non plus seulement des exécutants.
+        </p>
+        <p><strong>Le coût ?</strong> 45 k€/an. <strong>Le bénéfice ?</strong> Des décisions légitimes, des actions pertinentes, des conducteurs engagés.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 13. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>13. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer un pilote de 6 mois avec une entreprise volontaire (15 k€).</li>
+        <li>Co-concevoir les règles du jeu (élection, mandat, ordre du jour).</li>
+        <li>Évaluer l'impact sur la qualité des décisions et l'engagement des équipes.</li>
+        <li>Préparer une généralisation à la plateforme CDG sur la base des résultats.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 45 - Conseil Consultatif des Conducteurs (C3) | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

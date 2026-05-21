@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 44 - Charte d'engagement collectif inter-générations</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Styles pour l'affichage de la charte */
+        .charte-box {
+            border: 2px solid #2c3e50;
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .charte-box h4 {
+            color: #e67e22;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 44</div>
+            <div class="document-subtitle">Charte d'engagement collectif inter-générations</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        L'ENGAGEMENT VISIBLE DEVANT SES PAIRS
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Pacte signé collectivement par toute une équipe/entreprise, avec cérémonies publiques.
+    </p>
+    <p>
+        Notre approche de l'engagement est exclusivement individuelle (P1, P23, P25). Pourtant, la pression sociale est l'un des leviers les plus puissants. Un engagement public devant ses pairs multiplie par trois la tenue des promesses. La quarante-quatrième piste propose d'ajouter la dimension collective avec une charte d'engagement collectif inter-générations. Un texte court (5 règles d'or), signé par toute une équipe lors d'une cérémonie trimestrielle avec photo, affichage dans le vestiaire, badge collectif et compteur "Jours sans accident". Un rituel qui soude les équipes et crée une fierté collective. P23 dit "Je m'engage". P44 dit "Nous nous engageons". Les deux sont nécessaires.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Notre approche de l'engagement est exclusivement individuelle.</p>
+    
+    <table>
+        <thead><tr><th>Dispositif</th><th>Nature</th><th>Visibilité</th><th>Sanction</th></tr></thead>
+        <tbody>
+            <tr><td>P1 - Permis à points</td><td>Individuel</td><td>Faible</td><td>Retrait de points</td></tr>
+            <tr><td>P23 - Contrat de confiance</td><td>Individuel</td><td>Faible</td><td>Morale</td></tr>
+            <tr><td>P25 - Joker sécurité</td><td>Individuel</td><td>Faible</td><td>Aucune</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Paradoxe :</strong> La pression sociale est un levier puissant. L'engagement public devant ses pairs multiplie par 3 la tenue des promesses (Cialdini, 2004). La norme sociale est plus forte que la règle formelle.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Un engagement visible devant ses pairs est plus fort qu'un contrat signé seul. La charte d'engagement collectif, c'est un texte court (5 règles d'or) signé par toute une équipe, une cérémonie publique avec photo et affichage, un rappel visible, une pression sociale positive, une fierté collective.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 44) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque culturel / collectif</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 44</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>COL 01.1</strong></td>
+                <td>Absence de dynamique collective autour de la sécurité</td>
+                <td>Approche exclusivement individuelle, pas de rituels d'équipe</td>
+                <td>Chacun travaille dans son coin, pas de pression sociale positive</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Création d'un rituel collectif (cérémonie trimestrielle, signature, photo)</td>
+            </tr>
+            <tr>
+                <td><strong>COL 01.2</strong></td>
+                <td>Engagement individuel insuffisant pour créer une norme de groupe</td>
+                <td>Contrats individuels (P23) non visibles, pas d'effet d'entraînement</td>
+                <td>Norme de sécurité faible, comportements hétérogènes</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Engagement collectif visible (charte affichée, photo d'équipe, badge)</td>
+            </tr>
+            <tr>
+                <td><strong>COL 01.3</strong></td>
+                <td>Manque de fierté collective et d'appartenance</td>
+                <td>Pas de célébration des succès, pas de reconnaissance des équipes</td>
+                <td>Démotivation, turnover, climat social dégradé</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Célébration des paliers, trophée de la meilleure équipe, badge "Équipe engagée"</td>
+            </tr>
+            <tr>
+                <td><strong>COL 01.4</strong></td>
+                <td>Pression sociale inexistante ou négative</td>
+                <td>Absence de levier collectif, tolérance des écarts individuels</td>
+                <td>Comportements à risque non régulés par le groupe</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Pression sociale positive (personne ne veut décevoir ses collègues)</td>
+            </tr>
+            <tr>
+                <td><strong>COL 01.5</strong></td>
+                <td>Dispositifs individuels seuls insuffisants pour la cohésion</td>
+                <td>Focus sur le "je", pas sur le "nous"</td>
+                <td>Équipes peu soudées, entraide limitée</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Complémentarité P23 (individuel) + P44 (collectif)</td>
+            </tr>
+            <tr>
+                <td><strong>COL 01.6</strong></td>
+                <td>Absence de transmission intergénérationnelle formelle</td>
+                <td>Savoirs non partagés, absence de rituel de transmission</td>
+                <td>Perte de mémoire, répétition des erreurs</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Règle n°4 : "À transmettre nos compétences" (anciens forment jeunes, jeunes forment anciens)</td>
+            </tr>
+            <tr>
+                <td><strong>COL 01.7</strong></td>
+                <td>Rituels d'engagement inexistants</td>
+                <td>Pas de moment fort, pas de marqueur symbolique</td>
+                <td>Engagement peu ancré, effet d'annonce sans suite</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Cérémonie trimestrielle solennelle (30 min), "Grande signature" annuelle (P31)</td>
+            </tr>
+            <tr>
+                <td><strong>COM 12.1</strong></td>
+                <td>Invisibilité des engagements pris</td>
+                <td>Contrats confidentiels, pas d'affichage, pas de rappel visuel</td>
+                <td>Engagements oubliés, non-respect</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Affichage permanent de la charte signée et de la photo dans le vestiaire</td>
+            </tr>
+            <tr>
+                <td><strong>COM 12.2</strong></td>
+                <td>Absence de célébration des succès collectifs</td>
+                <td>Focus sur les incidents, pas sur les réussites</td>
+                <td>Démotivation, sentiment que les efforts ne sont pas reconnus</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Compteur "Jours sans accident" collectif, célébration des paliers</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 09.1</strong></td>
+                <td>Accident lié à un manque de cohésion d'équipe</td>
+                <td>Absence d'alerte entre collègues, travail en silo</td>
+                <td>Situation dangereuse non signalée, accident évitable</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Règle n°1 : "Veiller les uns sur les autres" (alerter un collègue, accepter d'être alerté)</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. LE TEXTE - 5 RÈGLES D'OR COLLECTIVES -->
+    <!-- ======================================================================== -->
+    <h1>3. LE TEXTE - 5 RÈGLES D'OR COLLECTIVES</h1>
+    
+    <div class="charte-box">
+        <h4>📜 CHARTE D'ENGAGEMENT COLLECTIF POUR LA SÉCURITÉ</h4>
+        <p><strong>NOUS, ÉQUIPE [NOM], NOUS ENGAGEONS COLLECTIVEMENT :</strong></p>
+        <ol>
+            <li><strong>À VEILLER LES UNS SUR LES AUTRES</strong> : La sécurité est l'affaire de tous. J'alerte un collègue qui se met en danger. J'accepte d'être alerté sans me formaliser.</li>
+            <li><strong>À RESPECTER LES RÈGLES FONDAMENTALES</strong> : Vitesse, angles morts, distances, alcool zéro, stupéfiants zéro, EPI obligatoires.</li>
+            <li><strong>À SIGNALER SANS CRAINTE</strong> : Les near-miss, les dysfonctionnements, les propositions d'amélioration.</li>
+            <li><strong>À TRANSMETTRE NOS COMPÉTENCES</strong> : Les anciens forment les jeunes, les jeunes forment les anciens au numérique.</li>
+            <li><strong>À CÉLÉBRER NOS SUCCÈS</strong> : Chaque jour sans accident est une victoire collective. Nous reconnaissons les comportements exemplaires.</li>
+        </ol>
+        <p><em>"Ensemble, nous sommes plus forts."</em></p>
+    </div>
+    <p><strong>Version équipe personnalisable :</strong> Chaque équipe peut ajouter 1-2 règles (ex: "Nous vérifions systématiquement nos angles morts", "Nous commençons chaque poste par un point sécurité de 2 min").</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. LE RITUEL - CÉRÉMONIE D'ENGAGEMENT -->
+    <!-- ======================================================================== -->
+    <h1>4. LE RITUEL - CÉRÉMONIE D'ENGAGEMENT</h1>
+    <p><strong>Format trimestriel :</strong> 1 fois/trimestre, 30 min, toute l'équipe (10-30 pers.), présence direction.</p>
+    <p><strong>Déroulé type :</strong> Accueil (3) → Lecture charte (5) → Témoignage binôme buddy/jeune (5) → Signature collective (10) → Photo officielle (5) → Affichage (2) → Verre amitié (10).</p>
+    <p><strong>Cérémonie annuelle "Grande signature" (pendant P31) :</strong> Rassemblement de toutes les équipes signataires, remise badge "Équipe engagée", trophée de l'équipe de l'année, renouvellement de la charte.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. LA VISIBILITÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. LA VISIBILITÉ</h1>
+    <ul>
+        <li><strong>Affichage vestiaire :</strong> Charte signée + photo équipe + compteur "Jours sans accident" collectif.</li>
+        <li><strong>Badge collectif magnétique :</strong> 50x50mm, "ÉQUIPE ENGAGÉE ALPHA 2026", 5€/pièce. Couleur or pour équipes >1 an sans accident.</li>
+        <li><strong>Compteur visuel (P13) :</strong> 🟢🟢🟢... avec nombre de jours et prochain palier.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>6. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (4 mois) :</strong> 5 équipes volontaires, GT conception, design supports, cérémonies, fabrication badges, évaluation. <strong>Budget 13,5 k€.</strong></p>
+    <p><strong>PHASE 2 - Déploiement CDG (12 mois) :</strong> Campagne com, 30 équipes supplémentaires, badges, formation animateurs, 1re cérémonie annuelle "Grande signature", évaluation. <strong>Budget 31 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Orly (15 équipes), province (30), évolution V2 (numérique), évaluation. <strong>Budget 32 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 76,5 k€</strong> (coût par équipe ~1 200 €).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>7. BÉNÉFICES ATTENDUS</h1>
+    <h2>7.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Équipes engagées</strong><span>Cible M36: 80</span></div>
+        <div class="indicator-item"><strong>Conducteurs engagés collectivement</strong><span>Cible M36: 1 600</span></div>
+        <div class="indicator-item"><strong>Respect des règles (auto-déclaration)</strong><span>Baseline 65% → Cible 85%</span></div>
+        <div class="indicator-item"><strong>Cohésion d'équipe (satisfaction)</strong><span>Baseline 45% → Cible 75%</span></div>
+        <div class="indicator-item"><strong>Fierté d'appartenance</strong><span>Baseline 40% → Cible 70%</span></div>
+        <div class="indicator-item"><strong>Accidents (effet indirect)</strong><span>Cible -15%</span></div>
+    </div>
+    <h2>7.2 Bénéfices qualitatifs</h2>
+    <ul><li>Pression sociale positive, engagement visible, fierté collective, cohésion, rituel, complémentarité individuel/collectif.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. RETOURS D'EXPÉRIENCE / 9. RISQUES / 10. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>8. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Japon - Toyota :</strong> Chaque équipe a sa charte, cérémonie trimestrielle, affichage atelier, taux engagement >90%, culture amélioration continue. Leçon : l'engagement visible crée une norme sociale puissante.</li>
+        <li><strong>SNCF - Charte d'engagement :</strong> Pilote 10 dépôts, signature collective, affichage compteurs équipe, -18% incidents, +25% satisfaction. Leçon : la fierté collective est un moteur puissant.</li>
+        <li><strong>Aéroport de Munich - Team Pledge :</strong> Pilote 5 équipes, charte personnalisée + photo + badge, 92% fiers de leur équipe, 85% "font plus attention". Leçon : la personnalisation renforce l'appropriation.</li>
+    </ul>
+    
+    <h1>9. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Effet "gadget" (charte décorative)</td><td>Élevée</td><td>Élevée</td><td>Cérémonie solennelle, photo officielle, affichage visible</td></tr>
+        <tr><td>Pression négative (stigmatisation des moins performants)</td><td>Moyenne</td><td>Élevée</td><td>Focus sur le collectif, pas sur les individus ; objectifs de progression, pas de compétition</td></tr>
+        <tr><td>Essoufflement</td><td>Élevée</td><td>Modérée</td><td>Cérémonie trimestrielle, renouvellement annuel, évolution des chartes</td></tr>
+        <tr><td>Coût</td><td>Faible</td><td>Faible</td><td>1 200 € par équipe</td></tr>
+        <tr><td>Dispersion (équipes virtuelles)</td><td>Faible</td><td>Faible</td><td>Version numérique possible</td></tr>
+    </table>
+    
+    <h1>10. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li>Solennité (cérémonie à part)</li>
+        <li>Visibilité (charte affichée, vue, commentée)</li>
+        <li>Personnalisation (chaque équipe ajoute sa règle)</li>
+        <li>Renouvellement (annuel)</li>
+        <li>Reconnaissance (badge, trophée, célébration)</li>
+        <li>Complémentarité avec P23 et P13</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Charte trop longue → 5 règles max</li>
+        <li>Cérémonie bâclée → 30 min dédiées</li>
+        <li>Absence de direction → un représentant présent</li>
+        <li>Oubli du suivi → revue trimestrielle</li>
+        <li>Concurrence malsaine → valoriser la progression, pas le classement</li>
+    </ul>
+    
+
+    <!-- ======================================================================== -->
+    <!-- 11. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>11. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            La charte d'engagement collectif est la piste de la cohésion et de la fierté collective. Ce n'est pas un concurrent du contrat de confiance (P23). C'est son complément naturel. P23 dit : "Je m'engage." P44 dit : "Nous nous engageons." L'un sans l'autre est incomplet. Ce que nous proposons, c'est d'ajouter la dimension collective à notre approche de l'engagement. C'est de créer des rituels qui souderont les équipes autour de la sécurité. C'est de rendre visible, par une photo, une signature, un badge, que cette équipe a fait le choix collectif de la sécurité.
+        </p>
+        <p><strong>Le coût ?</strong> 1 200 € par équipe. <strong>Le bénéfice ?</strong> Des équipes responsables, des conducteurs qui ne veulent pas décevoir leurs collègues, une fierté collective.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>12. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Tester le concept sur 5 équipes volontaires (13,5 k€).</li>
+        <li>Co-concevoir la charte et les supports avec des conducteurs et managers.</li>
+        <li>Organiser les premières cérémonies de signature dans 3 entreprises.</li>
+        <li>Évaluer l'impact sur la cohésion, la fierté, le respect des règles.</li>
+        <li>Déployer progressivement sur CDG, Orly, province.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 44 - Charte d'engagement collectif inter-générations | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

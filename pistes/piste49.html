@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 49 - Capteurs aveugles d'angle mort (3D mmWave)</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 49</div>
+            <div class="document-subtitle">Capteurs aveugles d'angle mort (3D mmWave)</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        VOIR L'INVISIBLE, PROTÉGER L'INATTENDU
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Capteurs millimétriques détectant objets/piétons jusqu'à 15m, sans caméra.
+    </p>
+    <p>
+        Les angles morts sont la deuxième cause d'accidents évitables à CDG : 12 collisions/an, dont 5 avec piétons. Les solutions actuelles (rétroviseurs, caméras 360°, ultrasons) montrent leurs limites. Pourtant, une technologie mature existe : les capteurs mmWave (ondes millimétriques). Ils pénètrent brouillard, pluie, poussière. Ils détectent jusqu'à 15 m dans tous les angles morts. Ils sont non invasifs, ne collectent aucune image (RGPD). La quarante-neuvième piste propose de déployer ces radars intelligents pour créer un sixième sens. Alerte progressive (visuelle, sonore, haptique) et intégration avec P38 (freinage d'urgence). Pour 3 000 € par engin, l'angle mort n'existera plus : il vibrera.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Les angles morts sont la deuxième cause d'accidents évitables à CDG.</p>
+    
+    <table>
+        <thead><tr><th>Donnée</th><th>Valeur</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr><td>Accidents liés aux angles morts (2025)</td><td>12</td><td>Gendarmerie</td></tr>
+            <tr><td>Dont collisions avec piétons</td><td>5</td><td>Gendarmerie</td></tr>
+            <tr><td>Dont collisions entre engins</td><td>7</td><td>Gendarmerie</td></tr>
+            <tr><td>Zones les plus critiques</td><td>Parking T2E, Fret Nord, Catering</td><td>CSCA</td></tr>
+            <tr><td>Conducteurs déclarant "ne pas voir"</td><td>73%</td><td>Enquête terrain</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> La meilleure caméra est celle qui n'a pas besoin d'être regardée. Les capteurs mmWave, c'est détecter tout obstacle dans un rayon de 15m, localiser précisément (distance, angle, vitesse), alerter par signal haptique (volant/siège), intégrer une cartographie 3D temps réel, protéger sans jamais enregistrer, sans caméra, sans identification.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 49) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque technologique</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 49</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>AM 01.1</strong></td>
+                <td>Collision liée à un angle mort (PUSH/LOADER)</td>
+                <td>Visibilité réduite, absence de détection, manœuvre de recul</td>
+                <td>Dommages matériels, blessures</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Détection 360° par 6 capteurs mmWave, alerte progressive (visuelle, sonore, haptique)</td>
+            </tr>
+            <tr>
+                <td><strong>AM 01.2</strong></td>
+                <td>Heurt piéton en angle mort (BUS, LOADER)</td>
+                <td>Piéton non visible, absence d'alerte côté conducteur</td>
+                <td>Blessure grave, décès</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Détection piéton <15m, classification, alerte haptique directionnelle</td>
+            </tr>
+            <tr>
+                <td><strong>AM 01.3</strong></td>
+                <td>Collision lors de manœuvre de recul (BUS, camions)</td>
+                <td>Angle mort arrière, absence de visibilité, absence de détection</td>
+                <td>Écrasement, dommages</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Capteurs arrière dédiés, alerte zone rouge (<3m) avec freinage d'urgence (P38)</td>
+            </tr>
+            <tr>
+                <td><strong>AM 01.4</strong></td>
+                <td>Détection inefficace en conditions dégradées (nuit, pluie, brouillard)</td>
+                <td>Caméras optiques aveugles, ultrasons perturbés</td>
+                <td>Risque persistant par mauvais temps, accidents</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Technologie mmWave indépendante météo (pluie, brouillard, neige, poussière)</td>
+            </tr>
+            <tr>
+                <td><strong>AM 01.5</strong></td>
+                <td>Absence de perception du danger par le conducteur</td>
+                <td>Focus sur tâche principale, non-vigilance, angle mort</td>
+                <td>Non-réaction, collision évitable</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Alerte haptique (vibration volant/siège) : réflexe, pas besoin de regarder</td>
+            </tr>
+            <tr>
+                <td><strong>AM 01.6</strong></td>
+                <td>Saturation d'alertes (faux positifs) menant à l'ignorance</td>
+                <td>Obstacles fixes (barrières, murs) mal filtrés</td>
+                <td>Conducteur ignore les alertes, risque</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Cartographie zones statiques, apprentissage, seuils adaptables</td>
+            </tr>
+            <tr>
+                <td><strong>AM 01.7</strong></td>
+                <td>Collision avec piéton masqué par obstacle</td>
+                <td>Piéton derrière engin, non visible, non détecté</td>
+                <td>Accident grave</td>
+                <td>4 (Catastrophique)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Pénétration mmWave à travers certains matériaux, détection précoce</td>
+            </tr>
+            <tr>
+                <td><strong>AM 01.8</strong></td>
+                <td>Non-détection des petits obstacles (piétons, petits objets)</td>
+                <td>Capteurs basse résolution, mauvaise classification</td>
+                <td>Risque non détecté</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Résolution <10cm, classification (piéton, engin, fixe)</td>
+            </tr>
+            <tr>
+                <td><strong>RGPD 01.1</strong></td>
+                <td>Conformité RGPD et vie privée</td>
+                <td>Utilisation de caméras, images, reconnaissance faciale</td>
+                <td>Rejet, opposition, sanctions légales</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Aucune image, nuage de points anonyme, technologie "aveugle"</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Installation de 4-8 capteurs mmWave (60-80 GHz) autour des engins, portée 0,5-15m, résolution <10cm, rafraîchissement 30 Hz. Fusion de données, calcul trajectoire, prédiction collision, classification (piéton, engin, fixe). Alertes progressives : zone verte (10-15m, icône), jaune (5-10m, son doux), orange (3-5m, son fort + vibration), rouge (<3m, alarme + freinage P38). Interface haptique (vibration volant/siège directionnelle).</p>
+    
+    <h2>3.2 Différenciation avec P7 (Caméras 360°)</h2>
+    <p><strong>P49 :</strong> Radar, toutes conditions, traitement léger, données anonymes, coût 800-1200€, installation simple, maintenance nulle.<br>
+    <strong>P7 :</strong> Optique, limitée météo, traitement lourd, images RGPD sensibles, coût 1500-2500€, installation complexe, nettoyage optique.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>4. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (6 mois) :</strong> 10 PUSH + 10 LOADER, acquisition 20 kits (6 capteurs/engin), installation, développement interface alertes, intégration P12, formation, expérimentation 3 mois, évaluation. <strong>Budget 105 k€.</strong></p>
+    <p><strong>PHASE 2 - Extension CDG (12 mois) :</strong> 400 PUSH/LOADER prioritaires, acquisition 400 kits, installation, déploiement BUS/DÉGIVREUSE (100), formation e-learning, communication, évaluation. <strong>Budget 1 285 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> 600 engins supplémentaires, Orly (200), province (400), intégration P38, évaluation. <strong>Budget 2 465 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 3 855 k€</strong> (coût par engin ~3 000 €).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>5. BÉNÉFICES ATTENDUS</h1>
+    <h2>5.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Engins équipés</strong><span>Cible M36: 1 500</span></div>
+        <div class="indicator-item"><strong>Conducteurs protégés</strong><span>Cible M36: 2 500</span></div>
+        <div class="indicator-item"><strong>Collisions angles morts</strong><span>Baseline 12/an → Cible -80%</span></div>
+        <div class="indicator-item"><strong>Heurts piétons</strong><span>Baseline 5/an → Cible -90%</span></div>
+        <div class="indicator-item"><strong>Alertes zone rouge / mois</strong><span>Cible M36: 2 000</span></div>
+        <div class="indicator-item"><strong>Freinages d'urgence évités</strong><span>Cible M36: 800</span></div>
+    </div>
+    <h2>5.2 Bénéfices qualitatifs</h2>
+    <ul><li>Protection 360°, toutes conditions, alerte intuitive (vibration), zéro RGPD, prévention active, complémentarité avec P7/P12.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. RETOURS D'EXPÉRIENCE / 7. RISQUES / 8. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>6. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Mercedes (PRE-SAFE®) :</strong> Radar mmWave, détection piétons, freinage urgence, -40% collisions arrière, -30% collisions piétons. Leçon : fusion radar/caméra état de l'art.</li>
+        <li><strong>Volvo (poids lourds) :</strong> Détection angle mort par radar obligatoire depuis 2023, -50% collisions piétons/cyclistes, ROI <12 mois. Leçon : technologie industrialisée.</li>
+        <li><strong>Aéroport de Francfort (Smart GSE) :</strong> Pilote 30 PUSH, capteurs mmWave + interface haptique, 0 collision angle mort (4 mois), 92% satisfaction. Leçon : alerte haptique plus rapide que visuelle/sonore.</li>
+    </ul>
+    
+    <h1>7. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Faux positifs (obstacle fixe)</td><td>Élevée</td><td>Modérée</td><td>Cartographie zones statiques, apprentissage automatique, seuils adaptables</td></tr>
+        <tr><td>Coût</td><td>Élevée</td><td>Élevée</td><td>Phasage progressif, priorisation engins critiques, mutualisation achats (P32)</td></tr>
+        <tr><td>Compatibilité parcs</td><td>Moyenne</td><td>Élevée</td><td>Kit universel, installation par intégrateur agréé</td></tr>
+        <tr><td>Maintenance</td><td>Faible</td><td>Faible</td><td>Garantie 3 ans, autodiagnostic</td></tr>
+        <tr><td>Acceptation</td><td>Faible</td><td>Modérée</td><td>Pas de caméra, information transparente</td></tr>
+    </table>
+    
+    <h1>8. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li>Calibration (ajustement précis des zones)</li>
+        <li>Simplicité (interface intuitive, vibration directionnelle)</li>
+        <li>Progressivité (seuils adaptés, alertes graduées)</li>
+        <li>Intégration avec P12 (son) et P38 (bridage)</li>
+        <li>Formation (30 minutes pour comprendre les signaux)</li>
+        <li>Évaluation (mesure continue de l'efficacité)</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Trop d'alertes → calibration fine, zones de non-détection</li>
+        <li>Fausse sécurité → formation "le système est une aide, pas un substitut"</li>
+        <li>Dépendance → rappel que le système est une aide</li>
+        <li>Coût caché → maintenance incluse dans contrat</li>
+        <li>Oubli calibration → vérification annuelle obligatoire</li>
+    </ul>
+    
+     
+    <!-- ======================================================================== -->
+    <!-- 11. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>11. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Les capteurs mmWave sont la piste de la protection absolue et de la liberté. Ce n'est pas une caméra. C'est un radar. Il ne vous filme pas. Il ne sait pas qui vous êtes. Il ne vous juge pas. Il mesure des distances. Il ne vous surveille pas. Il vous protège. Il ne remplace pas votre regard. Il l'augmente. Ce que nous proposons, c'est de donner à chaque conducteur un sixième sens. C'est de rendre les angles morts... morts. C'est une technologie qui fonctionne dans le brouillard, la nuit, la tempête, quand vous avez le plus besoin d'elle.
+        </p>
+        <p><strong>Le coût ?</strong> 3 000 € par engin. <strong>Le bénéfice ?</strong> -80% collisions angles morts, -90% heurts piétons.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>12. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer un pilote sur 20 PUSH/LOADER (105 k€).</li>
+        <li>Tester pendant 3 mois l'efficacité en conditions réelles.</li>
+        <li>Évaluer la détection, l'acceptation, l'impact.</li>
+        <li>Comparer avec la solution caméras 360° (P7).</li>
+        <li>Décider de la stratégie de déploiement (P7, P49, ou les deux).</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 49 - Capteurs aveugles d'angle mort (3D mmWave) | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

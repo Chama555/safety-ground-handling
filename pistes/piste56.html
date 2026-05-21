@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 56 - Séparation physique dynamique véhicules/piétons</title>
+    <style>
+        /* Styles généraux pour l'impression - Standard professionnel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-brown {
+            background-color: #8B4513 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        /* Simulation de zone */
+        .zone-pilote {
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .zone-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .zone-content {
+            background-color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .zone-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #e67e22;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 56</div>
+            <div class="document-subtitle">Séparation physique dynamique véhicules/piétons</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        PROTÉGER PAR L'INFRASTRUCTURE
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Barrières modulaires, passerelles surélevées, sols photoluminescents et zones tampons pour séparer physiquement les flux.
+    </p>
+    
+    <p>
+        Nous avons tout misé sur la technologie embarquée, mais nous avons oublié l'infrastructure. Les caméras dépendent du 
+        regard du conducteur, les détecteurs ne font qu'alerter. Dans une usine, on sépare les robots des humains. Sur une 
+        piste d'aéroport, on mélange des engins de 50 tonnes et des agents à pied. Cette piste propose de protéger par 
+        l'infrastructure, avec une séparation physique dynamique des véhicules et des piétons.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Nous avons tout misé sur la technologie embarquée. Nous avons oublié l'infrastructure.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Dispositif</th>
+                <th>Cible</th>
+                <th>Nature</th>
+                <th>Limite</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>P7 - Rétrofit</td><td>Engin</td><td>Caméras, détecteurs</td><td>Dépend du conducteur</td></tr>
+            <tr><td>P38 - Géofencing</td><td>Engin</td><td>Bridage électronique</td><td>Dépend de l'électronique</td></tr>
+            <tr><td>P40 - Gilet connecté</td><td>Piéton</td><td>Alerte individuelle</td><td>Dépend du port du gilet</td></tr>
+            <tr><td>P49 - Capteurs mmWave</td><td>Engin</td><td>Détection</td><td>Alerte, pas protection</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Paradoxe :</strong>
+        <ul>
+            <li>Dans une usine, on <strong>sépare</strong> physiquement les robots des humains.</li>
+            <li>Sur une piste d'aéroport, on <strong>mélange</strong> engins de 50 tonnes et agents à pied.</li>
+            <li><strong>Nous traitons le symptôme (l'engin), pas la cause (le mélange des flux).</strong></li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> La meilleure protection est celle qui rend le danger physiquement impossible. 
+        Une barrière ne se trompe pas, ne fatigue pas, ne regarde pas son téléphone. Elle protège, point.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 56) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #8B4513;"></div> <strong>Brun</strong> - Risque infrastructure</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 56</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>PIE 01.1</strong></td>
+                <td>Collision piéton/engin en zone de co-activité</td>
+                <td>Mélange des flux, absence de séparation physique, angles morts, inattention.</td>
+                <td>Blessures graves, décès, traumatismes, arrêts de travail.</td>
+                <td>4 (Catastrophique)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Barrières modulaires A-SAFE. Passerelles surélevées. Sols photoluminescents différenciés.</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.2</strong></td>
+                <td>Heurt piéton lors de manœuvre de recul</td>
+                <td>Angle mort non vérifié, absence d'alerte, conducteur pressé.</td>
+                <td>Écrasement, blessures mortelles fréquentes.</td>
+                <td>4 (Catastrophique)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Zones tampons de 2m autour des stands. Balises LED clignotantes.</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.3</strong></td>
+                <td>Traversée de zones d'engins par les piétons</td>
+                <td>Cheminements piétons non matérialisés, absence d'itinéraires dédiés.</td>
+                <td>Exposition au danger, collisions évitables.</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Sols photoluminescents pour matérialiser les cheminements piétons de nuit.</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 02.1</strong></td>
+                <td>Accidents piétons en zone Catering</td>
+                <td>Densité piétonne très élevée, co-activité avec BUS, manœuvres fréquentes.</td>
+                <td>4 accidents en 2 ans, potentiel mortel élevé.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Passerelles surélevées (2 unités). Barrières modulaires (200m). Zones tampons (8 stands).</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 02.2</strong></td>
+                <td>Accidents piétons en zone Fret Nord</td>
+                <td>Co-activité LOADER/piétons, densité élevée, manutention.</td>
+                <td>3 accidents en 2 ans, risques d'écrasement.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Passerelle surélevée (1). Barrières modulaires (150m). Zones tampons (6 stands).</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 02.3</strong></td>
+                <td>Accidents piétons au parking T2E</td>
+                <td>PUSH, équipages, densité élevée lors des vagues AF.</td>
+                <td>2 accidents en 2 ans, risque de collision.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Barrières modulaires (300m). Zones tampons (8 stands).</td>
+            </tr>
+            <tr>
+                <td><strong>INF 01.1</strong></td>
+                <td>Absence de cheminements piétons dédiés</td>
+                <td>Infrastructure non pensée pour les piétons, mélange des flux par défaut.</td>
+                <td>Exposition permanente au risque, accidents récurrents.</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-brown">BRUN</td>
+                <td>Création de zones piétonnes exclusives matérialisées.</td>
+            </tr>
+            <tr>
+                <td><strong>INF 01.2</strong></td>
+                <td>Visibilité nocturne insuffisante des zones piétonnes</td>
+                <td>Éclairage traditionnel insuffisant, zones d'ombre, repères visuels absents.</td>
+                <td>Désorientation, traversées dangereuses, accidents de nuit.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Sols photoluminescents visibles 12h dans le noir. Balises LED.</td>
+            </tr>
+            <tr>
+                <td><strong>INF 02.1</strong></td>
+                <td>Absence de protection autour des stands avions</td>
+                <td>Zones de manœuvre non délimitées, piétons et engins en contact direct.</td>
+                <td>Heurts lors des opérations de poussée et de chargement.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Zones tampons dynamiques activées lors des opérations.</td>
+            </tr>
+            <tr>
+                <td><strong>INF 02.2</strong></td>
+                <td>Conflits aux intersections critiques</td>
+                <td>Croisements piétons/engins non sécurisés, priorités ambiguës.</td>
+                <td>Collisions fréquentes, stress des opérateurs.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Passerelles surélevées aux intersections les plus dangereuses.</td>
+            </tr>
+            <tr>
+                <td><strong>HUM 01.1</strong></td>
+                <td>Dépendance à la vigilance humaine</td>
+                <td>Toute la sécurité repose sur l'attention du conducteur et du piéton.</td>
+                <td>Erreur humaine inévitable, accident.</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-brown">BRUN</td>
+                <td>Barrières physiques infranchissables, indépendantes de la vigilance humaine.</td>
+            </tr>
+            <tr>
+                <td><strong>TEC 01.1</strong></td>
+                <td>Dépendance à l'électronique</td>
+                <td>Capteurs, caméras, alarmes peuvent tomber en panne.</td>
+                <td>Protection défaillante en cas de panne.</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Solutions passives (barrières, passerelles) sans électronique, zéro panne.</td>
+            </tr>
+            <tr>
+                <td><strong>ORG 01.1</strong></td>
+                <td>Gêne opérationnelle perçue des barrières</td>
+                <td>Crainte que les barrières ralentissent les opérations.</td>
+                <td>Résistance au déploiement, contournement des dispositifs.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Co-conception avec exploitants. Solutions modulaires et dynamiques. Évaluation des flux.</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 01.1</strong></td>
+                <td>Accident piéton grave évitable</td>
+                <td>Cumul des défaillances humaines et infrastructurelles.</td>
+                <td>Coût humain, financier et d'image majeur.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Réduction de -80% des collisions piétons/engins (cible M36).</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    
+    <h2>3.1 Principe général</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 15px 0;">
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>1. BARRIÈRES</strong><br>A-SAFE
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>2. SOLS</strong><br>Photoluminescents
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>3. PASSERELLES</strong><br>Surélevées
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>4. ZONES TAMPONS</strong><br>Dynamiques
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 4. ZONE PILOTE - CATERING -->
+    <!-- ======================================================================== -->
+    <h1>4. ZONE PILOTE 2026 - CATERING</h1>
+    
+    <div class="zone-pilote">
+        <div class="zone-header">ZONE PILOTE - CATERING (PRIORITÉ 1)</div>
+        <div class="zone-content">
+            <p class="zone-title">4 accidents piétons en 2 ans</p>
+            <table style="width: 100%; margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Quantité</th>
+                        <th>Coût unitaire</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Passerelle surélevée</td><td>2</td><td>45 000 €</td><td>90 000 €</td></tr>
+                    <tr><td>Barrières modulaires</td><td>200 m</td><td>450 €</td><td>90 000 €</td></tr>
+                    <tr><td>Sol photoluminescent</td><td>500 m²</td><td>120 €</td><td>60 000 €</td></tr>
+                    <tr><td>Zones tampons</td><td>8 stands</td><td>15 000 €</td><td>120 000 €</td></tr>
+                    <tr><td><strong>TOTAL ZONE PILOTE</strong></td><td></td><td></td><td><strong>360 000 €</strong></td></tr>
+                </tbody>
+            </table>
+            <p><strong>+ études, installation, évaluation :</strong> 220 k€ (Phase 1)</p>
+        </div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. BUDGET DÉTAILLÉ</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Phase</th>
+                <th>Zone</th>
+                <th>Actions</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Phase 1 (6 mois)</strong></td><td>Catering</td><td>Études, installation pilote, évaluation ENAC</td><td>220 k€</td></tr>
+            <tr><td><strong>Phase 2 (12 mois)</strong></td><td>Fret Nord + T2E</td><td>Déploiement hotspots prioritaires</td><td>805 k€</td></tr>
+            <tr><td><strong>Phase 3 (24-36 mois)</strong></td><td>Orly + province</td><td>Extension nationale</td><td>735 k€</td></tr>
+            <tr><td><strong>TOTAL 3 ANS</strong></td><td></td><td></td><td><strong>1 760 k€</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Coût pour CDG (Phases 1-2) : 1 025 k€</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>6.1 Bénéfices mesurables</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Indicateur</th>
+                <th>Baseline</th>
+                <th>Cible M12</th>
+                <th>Cible M24</th>
+                <th>Cible M36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Zones équipées</td><td>0</td><td>1</td><td>3</td><td>5</td></tr>
+            <tr><td>Collisions piétons/engins</td><td>8/an</td><td>-40%</td><td>-60%</td><td>-80%</td></tr>
+            <tr><td>Vitesse en zone équipée</td><td>18 km/h</td><td>12 km/h</td><td>10 km/h</td><td>10 km/h</td></tr>
+            <tr><td>Conflits de trajectoire</td><td>-</td><td>-30%</td><td>-50%</td><td>-70%</td></tr>
+            <tr><td>Satisfaction piétons</td><td>35%</td><td>65%</td><td>75%</td><td>85%</td></tr>
+        </tbody>
+    </table>
+    
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    
+    <ul>
+        <li><strong>Protection absolue :</strong> Une barrière physique ne peut être ignorée.</li>
+        <li><strong>Indépendance météo :</strong> Fonctionne pluie, brouillard, nuit.</li>
+        <li><strong>Zéro maintenance électronique :</strong> Pas de batterie, pas de panne.</li>
+        <li><strong>Signalétique naturelle :</strong> Le chemin est ÉVIDENT.</li>
+        <li><strong>Valeur patrimoniale :</strong> Investissement durable (>10 ans).</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>7. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            La séparation physique est la piste de l'évidence et de la protection absolue. Ce n'est pas une innovation 
+            technologique, c'est une innovation d'infrastructure. Une barrière ne peut pas être ignorée. Un chemin dédié 
+            ne peut pas être confondu. Une passerelle ne peut pas être percutée. Ce que nous proposons, c'est de séparer 
+            physiquement ceux qui marchent et ceux qui roulent.
+        </p>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 8. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>8. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer une zone pilote sur la Zone Catering (220 k€).</li>
+        <li>Installer une passerelle surélevée aux deux intersections critiques.</li>
+        <li>Déployer 200 mètres de barrières modulaires pour séparer les flux.</li>
+        <li>Aménager 500 m² de sol photoluminescent pour sécuriser les cheminements nuit.</li>
+        <li>Évaluer l'impact sur les collisions après 3 mois d'expérimentation.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 56 - Séparation physique dynamique véhicules/piétons | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

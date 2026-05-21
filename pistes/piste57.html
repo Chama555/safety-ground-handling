@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 57 - Culture « Juste » (Just Culture) certifiée EUROCONTROL</title>
+    <style>
+        /* Styles généraux pour l'impression - Standard professionnel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        /* Arbre de décision */
+        .decision-tree {
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        
+        .tree-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .tree-content {
+            background-color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .tree-question {
+            font-weight: bold;
+            color: #e67e22;
+            font-size: 11pt;
+        }
+        
+        .tree-answer {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 57</div>
+            <div class="document-subtitle">Culture « Juste » (Just Culture) certifiée EUROCONTROL</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        LE PRÉREQUIS CULTUREL À TOUT REPORTING
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Cadre contractuel garantissant l'absence de sanctions pour les near-miss rapportés volontairement.
+    </p>
+    
+    <p>
+        Nous demandons aux conducteurs de signaler leurs erreurs, mais nous les sanctionnons quand ils le font. 
+        78 % des conducteurs estiment que s'ils signalent, ils vont se faire griller. 71 % préfèrent se taire et 
+        réparer discrètement. Le problème n'est pas technique, il est culturel. Cette piste propose de garantir, 
+        de manière contractuelle et certifiée, que celui qui signale de bonne foi ne sera pas sanctionné, avec une 
+        culture juste certifiée EUROCONTROL.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Nous demandons aux conducteurs de signaler leurs erreurs. Nous les sanctionnons quand ils le font.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Dispositif</th>
+                <th>Ce que nous disons</th>
+                <th>Ce que le conducteur perçoit</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>P3 - Application</td><td>"Signalez les near-miss"</td><td>"Donnez-nous des preuves contre vous"</td></tr>
+            <tr><td>P22 - Débrief</td><td>"Analysons ensemble"</td><td>"Avouez pour qu'on vous juge"</td></tr>
+            <tr><td>P26 - Comptoir des râleurs</td><td>"Libérez votre parole"</td><td>"Dites du mal de vos collègues"</td></tr>
+            <tr><td>P39 - Near-miss IA</td><td>"On détecte pour vous protéger"</td><td>"On vous surveille"</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Ce que disent les conducteurs :</strong>
+        <ul>
+            <li>"Si je signale, je vais me faire griller" - <strong>78%</strong></li>
+            <li>"Je préfère me taire et réparer discrètement" - <strong>71%</strong></li>
+            <li>"J'ai déjà vu un collègue se faire sanctionner après avoir signalé" - <strong>52%</strong></li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Sans garantie explicite de non-sanction, le reporting restera sous-utilisé. 
+        La Just Culture certifiée apporte un cadre contractuel et une classification objective des erreurs.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 57) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque informationnel</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque culturel</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 57</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>CUL 01.1</strong></td>
+                <td>Peur de la sanction (culture punitive)</td>
+                <td>Sanctions historiques après signalement, absence de cadre protecteur.</td>
+                <td>Sous-déclaration massive des near-miss, invisibilité des signaux faibles, accidents évitables.</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-purple">VIOLET</td>
+                <td>Charte Just Culture signée. Garantie contractuelle de non-sanction pour erreurs involontaires.</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 01.2</strong></td>
+                <td>Confusion entre erreur et faute</td>
+                <td>Absence de classification objective, traitement uniforme de tous les écarts.</td>
+                <td>Injustice perçue, démoralisation des conducteurs ayant commis des erreurs involontaires.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Arbre de décision Just Culture. Commission paritaire de classification.</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 01.3</strong></td>
+                <td>Stigmatisation de celui qui signale</td>
+                <td>Culture du "balance", signalé vu comme un fauteur de troubles.</td>
+                <td>Isolement du conducteur, non-réitération des signalements.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Communication positive sur les "héros du signalement". Témoignages de conducteurs.</td>
+            </tr>
+            <tr>
+                <td><strong>REP 01.1</strong></td>
+                <td>Sous-déclaration des near-miss</td>
+                <td>Peur des conséquences, absence de retour sur les signalements, sentiment d'inutilité.</td>
+                <td>Perte de 95% des informations sur les presque-accidents, prévention aveugle.</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Garantie d'immunité. Reporting multiplié par 4 (cible M36).</td>
+            </tr>
+            <tr>
+                <td><strong>REP 01.2</strong></td>
+                <td>Non-détection des tendances systémiques</td>
+                <td>Manque de données fiables sur les causes profondes des incidents.</td>
+                <td>Actions correctives inefficaces, ciblées sur les individus plutôt que sur le système.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Analyse des erreurs signalées pour identifier les causes systémiques.</td>
+            </tr>
+            <tr>
+                <td><strong>REP 02.1</strong></td>
+                <td>Absence de retour sur les signalements</td>
+                <td>Processus de feedback inexistant ou trop lent.</td>
+                <td>Démotivation, arrêt des signalements, perte de confiance.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Intégration avec P3. Retour systématique sur les signalements. Indicateur de confiance.</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 01.1</strong></td>
+                <td>Résistance des managers à la Just Culture</td>
+                <td>Perception de perte d'autorité, formation insuffisante, habitude de sanctionner.</td>
+                <td>Application variable de la charte, contournements, perte de crédibilité du dispositif.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Formation obligatoire des managers (20 sessions). Intégration dans évaluation.</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 01.2</strong></td>
+                <td>Détournement du dispositif (violations déguisées)</td>
+                <td>Absence de contrôle, mauvaise foi des conducteurs.</td>
+                <td>Impunité pour des actes dangereux, discrédit du système.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Commission paritaire de classification. Traçabilité des décisions. Audit externe EUROCONTROL.</td>
+            </tr>
+            <tr>
+                <td><strong>JUR 01.1</strong></td>
+                <td>Opposition des instances représentatives</td>
+                <td>Crainte d'une perte de droits, suspicion sur l'engagement de l'employeur.</td>
+                <td>Blocage social, non-signature de la charte, échec du dispositif.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Co-construction avec les IRP. Commission paritaire intégrée.</td>
+            </tr>
+            <tr>
+                <td><strong>CONF 01.1</strong></td>
+                <td>Défaut de confiance dans la charte</td>
+                <td>Méfiance des conducteurs, peur de représailles informelles.</td>
+                <td>Non-utilisation du dispositif, échec malgré l'existence formelle.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Certification par un tiers (EUROCONTROL). Audits externes. Enquêtes de perception annuelles.</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 01.1</strong></td>
+                <td>Méconnaissance de la classification</td>
+                <td>Managers et représentants du personnel non formés à la grille EUROCONTROL.</td>
+                <td>Décisions arbitraires, inégalité de traitement, perte de crédibilité.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Formation spécifique à la classification. Certification des formateurs.</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 01.1</strong></td>
+                <td>Accident dû à un non-apprentissage collectif</td>
+                <td>Erreurs passées non signalées donc non analysées ni corrigées.</td>
+                <td>Répétition des mêmes types d'accidents, absence de progrès.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Transformation des erreurs en opportunités d'apprentissage collectif.</td>
+            </tr>
+            <tr>
+                <td><strong>NOR 01.1</strong></td>
+                <td>Non-alignement avec les standards internationaux</td>
+                <td>ICAO Annexe 19, référentiel EUROCONTROL non appliqués.</td>
+                <td>Risque de non-conformité réglementaire, image de la plateforme dégradée.</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Certification EUROCONTROL niveau Or (objectif 2029). Alignement avec normes ICAO.</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. ARBRE DE DÉCISION JUST CULTURE -->
+    <!-- ======================================================================== -->
+    <h1>3. LA CLASSIFICATION DE L'ERREUR</h1>
+    
+    <div class="decision-tree">
+        <div class="tree-header">ARBRE DE DÉCISION JUST CULTURE</div>
+        <div class="tree-content">
+            <p><span class="tree-question">❓ L'action était-elle INTENTIONNELLE ?</span></p>
+            <p class="tree-answer">➡️ <strong>NON</strong> → <span style="color: #28a745;">ERREUR INVOLONTAIRE</span></p>
+            <p class="tree-answer" style="margin-left: 40px;">• Formation ? → Formation renforcée</p>
+            <p class="tree-answer" style="margin-left: 40px;">• Procédure ? → Révision procédure</p>
+            <p class="tree-answer" style="margin-left: 40px;">• Fatigue ? → Pause, suivi médical (P11)</p>
+            <p class="tree-answer" style="margin-left: 40px;">• Stress ? → Accompagnement (P53)</p>
+            <p class="tree-answer" style="margin-left: 40px;"><strong>✅ AUCUNE SANCTION</strong></p>
+            
+            <p class="tree-answer">➡️ <strong>OUI</strong> → <span style="color: #dc3545;">ACTION INTENTIONNELLE</span></p>
+            <p class="tree-answer" style="margin-left: 20px;"><span class="tree-question">❓ L'action visait-elle à CAUSER UN DOMMAGE ?</span></p>
+            <p class="tree-answer" style="margin-left: 40px;">➡️ <strong>OUI</strong> → <span style="color: #dc3545;">FAUTE GRAVE</span> (Sanction disciplinaire, procédure légale)</p>
+            <p class="tree-answer" style="margin-left: 40px;">➡️ <strong>NON</strong> → <span style="color: #ffc107;">VIOLATION DÉLIBÉRÉE SANS MALVEILLANCE</span> (Sanction proportionnée)</p>
+        </div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>4. BUDGET DÉTAILLÉ</h1>
+    
+    <h2>4.1 Investissement initial</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Audit initial EUROCONTROL</td><td>15 k€</td></tr>
+            <tr><td>Formation des managers (20 sessions)</td><td>20 k€</td></tr>
+            <tr><td>Accompagnement à la mise en place</td><td>10 k€</td></tr>
+            <tr><td><strong>TOTAL INVESTISSEMENT</strong></td><td><strong>45 k€</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <h2>4.2 Déploiement par phases</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Phase</th>
+                <th>Description</th>
+                <th>Coût</th>
+                <th>Livrable</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Phase 1 (6 mois)</strong></td><td>Pilote 1 entreprise, charte, formation, évaluation ENAC</td><td>23 k€</td><td>Certification Bronze</td></tr>
+            <tr><td><strong>Phase 2 (12 mois)</strong></td><td>Déploiement CDG, audit EUROCONTROL Argent</td><td>56 k€</td><td>CDG certifié Argent</td></tr>
+            <tr><td><strong>Phase 3 (24-36 mois)</strong></td><td>Extension Orly & province, audit Or</td><td>63 k€ + 5 k€/an</td><td>Certification Or</td></tr>
+            <tr><td><strong>TOTAL 3 ANS</strong></td><td></td><td><strong>142 k€</strong></td><td></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Coût annuel de fonctionnement (régime permanent) : 10 k€</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>5. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>5.1 Bénéfices mesurables</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Indicateur</th>
+                <th>Baseline</th>
+                <th>Cible M12</th>
+                <th>Cible M24</th>
+                <th>Cible M36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Conducteurs déclarant "confiance dans le reporting"</td><td>22%</td><td>50%</td><td>70%</td><td>85%</td></tr>
+            <tr><td>Signalements near-miss volontaires</td><td>50/an</td><td>+100%</td><td>+200%</td><td>+300%</td></tr>
+            <tr><td>Délai de signalement</td><td>7 jours</td><td>3 jours</td><td>1 jour</td><td>< 12h</td></tr>
+            <tr><td>Litiges sur classification</td><td>-</td><td>< 5%</td><td>< 3%</td><td>< 1%</td></tr>
+            <tr><td>Entreprises certifiées</td><td>0</td><td>1</td><td>6</td><td>12</td></tr>
+        </tbody>
+    </table>
+    
+    <h2>5.2 Bénéfices qualitatifs</h2>
+    
+    <ul>
+        <li><strong>Confiance restaurée :</strong> Le conducteur n'a plus peur de signaler.</li>
+        <li><strong>Transparence :</strong> Les règles du jeu sont claires pour tous.</li>
+        <li><strong>Justice :</strong> L'erreur involontaire n'est plus punie.</li>
+        <li><strong>Apprentissage :</strong> Les erreurs deviennent des opportunités de progrès.</li>
+        <li><strong>Culture sécurité :</strong> Le signalement est valorisé, pas stigmatisé.</li>
+        <li><strong>Conformité :</strong> Alignement sur les standards ICAO/EUROCONTROL.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>6. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            La Just Culture est la piste de la confiance et de la maturité. Ce n'est pas une piste technique. 
+            Ce n'est pas une piste organisationnelle. C'est une piste CULTURELLE. Elle ne coûte presque rien (45 k€). 
+            Elle peut tout changer (x4 le reporting). Elle est le prérequis à l'efficacité de P3, P22, P26, P39, P52.
+        </p>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 7. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>7. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer un groupe de travail avec 1 entreprise pilote, la direction, les RH et les représentants du personnel.</li>
+        <li>Rédiger une charte Just Culture et l'intégrer au règlement intérieur.</li>
+        <li>Former les managers et les représentants du personnel à la classification des erreurs (grille EUROCONTROL).</li>
+        <li>Tester pendant 3 mois l'impact sur le reporting et la confiance.</li>
+        <li>Préparer la certification EUROCONTROL niveau Argent, puis Or.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 57 - Culture « Juste » (Just Culture) certifiée EUROCONTROL | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

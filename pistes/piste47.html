@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 47 - Mentorship senior / Conduite défensive avancée</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 47</div>
+            <div class="document-subtitle">Mentorship senior / Conduite défensive avancée</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        L'INTELLIGENCE DES ANCIENS AU SERVICE DE LA PRÉVENTION
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Conducteurs >20 ans animent des stages de 4 jours sur l'accident évité et la conduite défensive.
+    </p>
+    <p>
+        Nous perdons 40 ans d'expérience à chaque départ en retraite. 150 départs prévus d'ici 2030, 3 000 années d'expérience cumulée qui s'évanouiront. Ces conducteurs savent, ils ont développé des stratégies d'évitement que personne ne leur a enseignées. Personne ne leur demande de transmettre cette intelligence situationnelle. La quarante-septième piste propose de capturer cette expertise avant qu'elle ne disparaisse, avec un programme de mentorship senior en 5 phases : identification des "sages", capture des savoirs (cas d'école), formation des mentors, déploiement de stages "Conduite défensive avancée", pérennisation. Pour transformer des départs en retraite en transmissions.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Nous perdons 40 ans d'expérience à chaque départ en retraite.</p>
+    
+    <table>
+        <thead><tr><th>Donnée</th><th>Valeur</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr><td>Conducteurs >50 ans à CDG</td><td>~20%</td><td>Estimation RH</td></tr>
+            <tr><td>Départs en retraite prévus (2026-2030)</td><td>150</td><td>Projection</td></tr>
+            <tr><td>Années d'expérience cumulée perdue</td><td>3 000 ans</td><td>Calcul</td></tr>
+            <tr><td>Conducteurs ayant vécu >5 accidents</td><td>45</td><td>Entretiens</td></tr>
+            <tr><td>Conducteurs ayant évité >10 accidents</td><td>Inconnu</td><td>Jamais mesuré</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> L'expertise ne se limite pas à la maîtrise technique. Elle est aussi la capacité à ANTICIPER le danger. Le mentorship senior, c'est identifier les conducteurs à l'intelligence situationnelle exceptionnelle, extraire leurs stratégies d'anticipation, formaliser ces savoirs, transmettre aux jeunes générations, valoriser les seniors comme experts.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 47) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque de transmission</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 47</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>MEM 01.1</strong></td>
+                <td>Perte de l'expertise des seniors à leur départ en retraite</td>
+                <td>Absence de dispositif de transmission, départ massif prévu (150 d'ici 2030)</td>
+                <td>3 000 ans d'expérience perdus, perte de l'intelligence situationnelle</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Phase 1-2 : identification et capture des savoirs (cas d'école) avant départ</td>
+            </tr>
+            <tr>
+                <td><strong>MEM 01.2</strong></td>
+                <td>Non-transmission des stratégies d'anticipation et d'évitement</td>
+                <td>Focus sur les bases du métier (P4), pas sur l'intelligence situationnelle</td>
+                <td>Conducteurs confirmés (1-5 ans) manquent de réflexes défensifs</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Phase 4 : stage "Conduite défensive avancée" pour conducteurs confirmés</td>
+            </tr>
+            <tr>
+                <td><strong>MEM 01.3</strong></td>
+                <td>Accidents chez les conducteurs confirmés (1-5 ans)</td>
+                <td>Excès de confiance, routine, absence de perfectionnement</td>
+                <td>12 accidents/an (baseline), blessures, dommages</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Réduction de -50% des accidents chez les conducteurs 1-3 ans (cible M36)</td>
+            </tr>
+            <tr>
+                <td><strong>MEM 01.4</strong></td>
+                <td>Savoirs informels non capitalisés</td>
+                <td>Connaissances tacites non formalisées, non-dites, non-écrites</td>
+                <td>Perte irrémédiable à chaque départ, non-transmission</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Entretiens d'explicitation, création de 20 cas d'école / an</td>
+            </tr>
+            <tr>
+                <td><strong>MEM 01.5</strong></td>
+                <td>Non-valorisation des seniors</td>
+                <td>Pas de reconnaissance de l'expertise, départ sans gratitude</td>
+                <td>Démotivation des seniors, moins de transmission informelle</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Statut "Mentor Senior", badge, prime 200€/mois, communauté</td>
+            </tr>
+            <tr>
+                <td><strong>MEM 01.6</strong></td>
+                <td>Manque de compétences avancées chez les conducteurs confirmés</td>
+                <td>Formation initiale seulement, pas de perfectionnement</td>
+                <td>Vulnérabilité face aux situations complexes, accidents</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Stage 4 jours (anticipation, évitement, situations complexes, transmission)</td>
+            </tr>
+            <tr>
+                <td><strong>MEM 01.7</strong></td>
+                <td>Défaut d'anticipation des dangers par les conducteurs</td>
+                <td>Absence de formation à la lecture de l'environnement, aux indices faibles</td>
+                <td>Réaction tardive, accidents évitables</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Jour 1 du stage : anticipation (indices faibles, zones à risque)</td>
+            </tr>
+            <tr>
+                <td><strong>MEM 01.8</strong></td>
+                <td>Mauvaise gestion des situations d'urgence</td>
+                <td>Pas d'entraînement aux situations dégradées, stress non maîtrisé</td>
+                <td>Erreurs, accidents</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Jour 3 : situations complexes (co-activité, conditions dégradées, urgences)</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 11.1</strong></td>
+                <td>Formation trop théorique pour les confirmés</td>
+                <td>Cours en salle, pas de mise en pratique des situations avancées</td>
+                <td>Compétences non opérationnelles, accidents</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Alternance théorie / terrain / simulation, cas d'école réels</td>
+            </tr>
+            <tr>
+                <td><strong>RH 05.1</strong></td>
+                <td>Démotivation des seniors en fin de carrière</td>
+                <td>Sentiment d'inutilité, routine, absence de perspective</td>
+                <td>Baisse de vigilance, absentéisme, départs anticipés</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Mission valorisante (transmission), prime, reconnaissance</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Programme en 5 phases : identification des "sages" (3 mois), capture des savoirs (6 mois, 20 cas d'école), formation des mentors (2 mois, 3 jours), déploiement (stages 4 jours, 1/mois), pérennisation (communauté, mise à jour).</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>👑 Phase 1 - Identification :</strong> >20 ans, 0 accident grave, réputation, pédagogie. Jury → 20 mentors.<br>
+        <strong>📚 Phase 2 - Capture :</strong> Entretiens explicitation, recueil "accidents évités", formalisation en cas d'école (20/an).<br>
+        <strong>🎓 Phase 3 - Formation :</strong> 3 jours "Transmettre l'expérience", certification "Mentor Senior", prime 200€/mois.<br>
+        <strong>🗓️ Phase 4 - Déploiement :</strong> Stage 4 jours (8-10 stagiaires, 1/mois) : anticipation, évitement, situations complexes, transmission.<br>
+        <strong>🔄 Phase 5 - Pérennisation :</strong> Communauté mentors, mise à jour cas, recrutement continu.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>4. BUDGET DÉTAILLÉ</h1>
+    <p><strong>Investissement initial :</strong> Identification (8 k€), capture 20 cas (10 k€), formation mentors 20x1500 (30 k€), supports (15 k€), badges (2 k€) → <strong>65 k€</strong>.</p>
+    <p><strong>Coûts annuels de fonctionnement :</strong> Primes mentors 20x200€x12 (48 k€), sessions formation 12x4000 (48 k€), coordination 0,5 ETP (35 k€), mise à jour 10 cas (5 k€) → <strong>136 k€/an</strong>.</p>
+    <p><strong>BUDGET TOTAL 3 ANS : 65 k€ + (3 × 136 k€) = 473 k€</strong> (coût par conducteur formé ~1 200 €). ROI : 12 accidents évités / 3 ans.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (6 mois) :</strong> Identification 20 mentors, capture 20 cas, formation mentors, test stage. <strong>Budget 65 k€.</strong></p>
+    <p><strong>PHASE 2 - Déploiement CDG (12 mois) :</strong> 12 stages (100 conducteurs formés), communauté mentors, ajustements. <strong>Budget 136 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Extension Orly et province, recrutement nouveaux mentors, mise à jour cas. <strong>Budget 272 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 473 k€.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    <h2>6.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Mentors seniors actifs</strong><span>Cible M36: 40</span></div>
+        <div class="indicator-item"><strong>Conducteurs formés / an</strong><span>Cible M36: 200</span></div>
+        <div class="indicator-item"><strong>Cas d'école capitalisés</strong><span>Cible M36: 60</span></div>
+        <div class="indicator-item"><strong>Accidents conducteurs 1-3 ans</strong><span>Baseline 12/an → Cible -50%</span></div>
+        <div class="indicator-item"><strong>Satisfaction stagiaires</strong><span>Cible 92%</span></div>
+        <div class="indicator-item"><strong>Fierté mentors</strong><span>Baseline 45% → Cible 90%</span></div>
+    </div>
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    <ul><li>Capitalisation de l'expérience, transmission avancée, valorisation des seniors, prévention secondaire, mémoire accidentologique, fierté.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. RETOURS D'EXPÉRIENCE / 8. RISQUES / 9. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>7. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Aviation (Commandant de bord instructeur) :</strong> Commandants expérimentés forment copilotes, transmission expérience situationnelle, 0 accident grave depuis 20 ans. Leçon : l'expertise se transmet.</li>
+        <li><strong>EDF (Référent technique) :</strong> Opérateurs seniors formés à la transmission, simulation incidents complexes, capitalisation 40 ans d'expérience. Leçon : l'intelligence situationnelle s'enseigne.</li>
+        <li><strong>Japon - Toyota (sensei) :</strong> Système des maîtres, transmission savoirs tacites, formation longue, excellence opérationnelle. Leçon : le statut de mentor est une reconnaissance sociale forte.</li>
+    </ul>
+    
+    <h1>8. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Élitisme (création d'une caste)</td><td>Moyenne</td><td>Modérée</td><td>Critères transparents, rotation possible, pas de privilèges excessifs</td></tr>
+        <tr><td>Rejet des jeunes ("encore un vieux qui nous parle")</td><td>Élevée</td><td>Élevée</td><td>Pédagogie adaptée, cas concrets, co-animation avec ambassadeurs jeunes (P29)</td></tr>
+        <tr><td>Départ à la retraite des mentors</td><td>Élevée</td><td>Critique</td><td>Anticipation des départs, transmission AVANT, recrutement continu</td></tr>
+        <tr><td>Coût</td><td>Élevée</td><td>Modérée</td><td>ROI démontré (12 accidents évités), mutualisation CSCA</td></tr>
+        <tr><td>Temps disponible</td><td>Élevée</td><td>Élevée</td><td>Dégagement de temps pour les mentors, valorisation de la mission</td></tr>
+    </table>
+    
+    <h1>9. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li>Sélection exigeante (0 accident grave, réputation, pédagogie)</li>
+        <li>Formation solide (3 jours minimum sur la transmission)</li>
+        <li>Reconnaissance forte (badge, prime, statut)</li>
+        <li>Contenu différenciant (intelligence situationnelle, pas les bases)</li>
+        <li>Public ciblé (conducteurs confirmés 1-5 ans)</li>
+        <li>Évaluation (mesure de l'impact sur les accidents)</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Confondre avec le buddy system → public différent, contenu différent</li>
+        <li>Nommer des mentors sans formation → 3 jours obligatoires</li>
+        <li>Oublier de valoriser → prime mensuelle non négociable</li>
+        <li>Stagner → mise à jour annuelle des cas</li>
+        <li>Départs non anticipés → transmission systématique avant retraite</li>
+    </ul>
+    
+    
+    <!-- ======================================================================== -->
+    <!-- 10. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>10. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le mentorship senior est la piste de la mémoire et de l'excellence. Ce n'est pas un buddy system amélioré. C'est un changement de paradigme. Le buddy transmet les bases. Le mentor transmet l'intuition. Le buddy forme les débutants. Le mentor perfectionne les confirmés. Le buddy est un pair. Le mentor est un maître. Ce que nous proposons, c'est de reconnaître que l'expertise ne se limite pas à la maîtrise technique. C'est de créer un statut, une formation, une reconnaissance pour ceux qui ont développé, en 30 ans de métier, une intelligence du danger que nous ne savons même pas nommer. C'est de capturer cette intelligence avant qu'elle ne disparaisse.
+        </p>
+        <p><strong>Le coût ?</strong> 473 000 € sur 3 ans. <strong>Le bénéfice ?</strong> 40 experts reconnus, 200 conducteurs formés/an, 60 leçons, -50% accidents conducteurs confirmés.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 11. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>11. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Identifier les 20 premiers mentors seniors sur CDG (8 k€).</li>
+        <li>Capitaliser 20 cas d'école d'accidents évités (10 k€).</li>
+        <li>Former les mentors à la transmission (30 k€).</li>
+        <li>Déployer le stage "Conduite défensive avancée" (12 sessions/an).</li>
+        <li>Évaluer l'impact sur les accidents des conducteurs confirmés.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 47 - Mentorship senior / Conduite défensive avancée | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

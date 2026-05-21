@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 32 - Le "Parc de véhicules partagés"</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 32</div>
+            <div class="document-subtitle">Le "Parc de véhicules partagés"</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        MUTUALISER LES ENGINS ENTRE ENTREPRISES
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Plateforme de réservation d'engins entre entreprises (mutualisation).
+    </p>
+    <p>
+        Aujourd'hui, chaque handler possède sa propre flotte d'engins de piste. Cette situation engendre des inefficacités majeures : sous-capacité ici, sur-capacité là, investissements redondants, locations coûteuses, et un taux d'utilisation moyen inférieur à 60 % (soit près de 800 engins sous-utilisés sur les 2 500 de CDG). La trente-deuxième piste propose de mutualiser les ressources pour plus d'efficacité et de sécurité : le parc de véhicules partagés. L'idée est simple : un engin utilisé par deux entreprises, c'est un coût divisé par deux. Une plateforme de réservation, c'est de la transparence et de l'optimisation.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Chaque handler possède sa propre flotte, engendrant des inefficacités majeures.</p>
+    
+    <table>
+        <thead><tr><th>Problème</th><th>Conséquence</th></tr></thead>
+        <tbody>
+            <tr><td>Sous-capacité chronique</td><td>Manque d'engins aux heures de pointe</td></tr>
+            <tr><td>Sur-capacité permanente</td><td>Engins immobilisés qui ne servent pas</td></tr>
+            <tr><td>Investissements redondants</td><td>Chaque entreprise achète les mêmes engins</td></tr>
+            <tr><td>Location coûteuse</td><td>Recours à des locations très chères en pic</td></tr>
+            <tr><td>Parc sous-utilisé</td><td>Taux d'utilisation moyen < 60%</td></tr>
+            <tr><td>Hétérogénéité des flottes</td><td>Conducteurs doivent s'adapter</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Paradoxe :</strong> 20+ entreprises, mêmes engins, mêmes pistes, mêmes avions, mais chacune a sa flotte, ses stocks, ses fournisseurs.</p>
+    <p><strong>Résultat :</strong> 2 500 engins, taux d'utilisation 55-65% (~800 engins sous-utilisés), coût d'achat annuel 50-80 M€, coût locations 5-10 M€/an.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> La mutualisation est plus efficace que la possession individuelle. Un engin utilisé par 2 entreprises = coût divisé par 2. Un engin qui roule 80% du temps = ROI accéléré. Un parc commun = moins d'engins pour le même service. Une plateforme de réservation = transparence et optimisation.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 32) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque opérationnel/économique</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 32</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>OPE 02.1</strong></td>
+                <td>Pénurie d'engins en période de pointe</td>
+                <td>Flottes dimensionnées pour le trafic moyen, pas pour les pics</td>
+                <td>Retards, stress, précipitation, accidents</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Accès à un pool mutualisé d'engins disponibles, réservation en ligne</td>
+            </tr>
+            <tr>
+                <td><strong>OPE 02.2</strong></td>
+                <td>Sous-utilisation chronique du parc</td>
+                <td>Flottes surdimensionnées par sécurité, absence de mutualisation</td>
+                <td>Surinvestissement, coûts fixes élevés, rentabilité dégradée</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Augmentation du taux d'utilisation de 60% à 75%, optimisation des ressources</td>
+            </tr>
+            <tr>
+                <td><strong>OPE 02.3</strong></td>
+                <td>Recours à la location spot coûteuse</td>
+                <td>Absence de flexibilité, besoin ponctuel non couvert</td>
+                <td>Surcharges financières, engins parfois moins adaptés</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Tarifs mutualisés 30-50% moins chers, économies 1,5 à 3 M€/an</td>
+            </tr>
+            <tr>
+                <td><strong>OPE 02.4</strong></td>
+                <td>Investissements redondants entre entreprises</td>
+                <td>Achats simultanés non coordonnés, absence de vision commune</td>
+                <td>Dépenses inutiles, parc global surabondant</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Mutualisation des investissements, économies 5 à 10 M€/an</td>
+            </tr>
+            <tr>
+                <td><strong>OPE 02.5</strong></td>
+                <td>Hétérogénéité des flottes et des équipements</td>
+                <td>Pas de standard, chaque entreprise a ses fournisseurs</td>
+                <td>Conducteurs désorientés, risques liés à la méconnaissance des engins</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Standards communs de maintenance et équipement, habilitations P27 requises</td>
+            </tr>
+            <tr>
+                <td><strong>FIN 01.1</strong></td>
+                <td>Coût d'achat excessif pour les petits handlers</td>
+                <td>Pas d'économie d'échelle, investissement lourd pour petites structures</td>
+                <td>Barrière à l'entrée, moins de concurrence, risques de sous-investissement</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Accès à des engins sans investissement via la location mutualisée</td>
+            </tr>
+            <tr>
+                <td><strong>FIN 01.2</strong></td>
+                <td>Risque financier lié à la location ponctuelle</td>
+                <td>Dépendance à des prestataires externes, prix fluctuants</td>
+                <td>Budget non maîtrisé, imprévisibilité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Plateforme avec tarifs transparents et fixes, budget prévisible</td>
+            </tr>
+            <tr>
+                <td><strong>ORG 04.1</strong></td>
+                <td>Absence de coordination inter-entreprises</td>
+                <td>Chacun gère son parc, pas de vision globale, pas d'optimisation collective</td>
+                <td>Inefficacité systémique, coûts globaux plus élevés</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Comité stratégique et opérationnel, coordinateur dédié</td>
+            </tr>
+            <tr>
+                <td><strong>ORG 04.2</strong></td>
+                <td>Concurrence stérile sur les ressources</td>
+                <td>Rétention d'information, peur de donner un avantage</td>
+                <td>Sous-utilisation globale, stress inutile</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Modèle gagnant-gagnant, neutralité de la structure, données confidentielles</td>
+            </tr>
+            <tr>
+                <td><strong>JUR 01.1</strong></td>
+                <td>Complexité juridique du partage inter-entreprises</td>
+                <td>Responsabilité, assurance, contrats à définir</td>
+                <td>Blocage du projet, risque de contentieux</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Convention type CSCA, étude juridique préalable, assistance</td>
+            </tr>
+            <tr>
+                <td><strong>TEC 06.1</strong></td>
+                <td>Absence d'outil de réservation centralisé</td>
+                <td>Gestion manuelle, appels téléphoniques, perte de temps</td>
+                <td>Mutualisation impossible à grande échelle</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Plateforme web/mobile dédiée, réservation en temps réel</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 02.2</strong></td>
+                <td>Accident impliquant un conducteur non formé sur un engin partagé</td>
+                <td>Prêt d'engin sans vérification des compétences</td>
+                <td>Accident, dommages, responsabilité engagée</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Habilitation P27 (brevet tout-terrain) obligatoire pour utiliser la plateforme</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Créer un parc mutualisé d'engins de piste entre entreprises signataires, avec : flotte commune, gouvernance partagée, plateforme de réservation, facturation à l'usage, standards communs, conducteurs habilités (P27).</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>3 MODÈLES :</strong> (1) Flotte dédiée (GIE, investissement 15-20 M€) | (2) Mise en commun (pool, 500 k€) | (3) Plateforme de réservation (150 k€, recommandé pour démarrer).</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. PLATEFORME DE RÉSERVATION -->
+    <!-- ======================================================================== -->
+    <h1>4. LA PLATEFORME DE RÉSERVATION</h1>
+    <p><strong>Fonctionnalités :</strong> Recherche (type, date, dispo), réservation instantanée, contrat électronique, suivi (état, maintenance, retour), facturation auto, évaluation mutuelle.</p>
+    <p><strong>Tarification indicative :</strong> PUSH 25€/h, LOADER 20€/h, BUS 30€/h, DÉGIVREUSE 40€/h. (30-50% moins cher que location classique).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. GOUVERNANCE -->
+    <!-- ======================================================================== -->
+    <h1>5. GOUVERNANCE ET ORGANISATION</h1>
+    <p><strong>Comité stratégique :</strong> 1 rep./entreprise, 2 fois/an, valide investissements/tarifs.<br>
+    <strong>Comité opérationnel :</strong> responsables parc + coordinateur CSCA, 1 fois/mois, gère réservations/maintenance.<br>
+    <strong>Coordinateur dédié :</strong> 1 ETP mutualisé, animation, litiges, reporting.</p>
+    <p><strong>Règles :</strong> Priorité au propriétaire, préavis 7j, annulation gratuite J-1, check-list obligatoire, maintenance propriétaire, carburant identique, propreté, malus.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BUDGET ESTIMÉ -->
+    <!-- ======================================================================== -->
+    <h1>6. BUDGET ESTIMÉ</h1>
+    <p><strong>Investissement initial (Modèle 2) :</strong> Développement plateforme 80 k€, étude juridique 15 k€, coordination 60 k€, communication 10 k€ → <strong>165 k€</strong>.<br>
+    <strong>Fonctionnement annuel :</strong> Maintenance 15 k€, coordinateur 60 k€, frais gestion 10 k€ → <strong>85 k€/an</strong>.<br>
+    <strong>Économies potentielles :</strong> 6,5 à 13 M€/an.<br>
+    <strong>Coût par entreprise (20 adhérents) :</strong> Année 1 : 12 500 €, années 2-3 : 4 250 €/an. <strong>ROI < 3 mois.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>7. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (6 mois) :</strong> Étude juridique, développement V1, 3 entreprises pilotes, 50 engins, évaluation. <strong>Budget 78 k€.</strong></p>
+    <p><strong>PHASE 2 - Déploiement CDG (12 mois) :</strong> Coordinateur, évolution V2, 10 nouvelles entreprises, communication, évaluation. <strong>Budget 91 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Extension Orly, province, évolution V3 (IA), évaluation. <strong>Budget 85 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 254 k€.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>8. BÉNÉFICES ATTENDUS</h1>
+    <h2>8.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Entreprises adhérentes</strong><span>Cible M36: 25</span></div>
+        <div class="indicator-item"><strong>Engins mutualisés</strong><span>Cible M36: 600</span></div>
+        <div class="indicator-item"><strong>Réservations / mois</strong><span>Cible M36: 400</span></div>
+        <div class="indicator-item"><strong>Taux d'utilisation moyen</strong><span>Baseline 60% → Cible 75%</span></div>
+        <div class="indicator-item"><strong>Économies locations</strong><span>Cible M36: 2,5 M€</span></div>
+        <div class="indicator-item"><strong>Satisfaction utilisateurs</strong><span>Cible M36: 90%</span></div>
+    </div>
+    <h2>8.2 Bénéfices qualitatifs</h2>
+    <ul><li>Optimisation des ressources, réduction des coûts, flexibilité, interopérabilité, coopération, durabilité.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. RETOURS D'EXPÉRIENCE / 10. RISQUES / 11. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>9. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Construction (Matériel.net) :</strong> 1 500 engins, 500 entreprises, taux utilisation 82% (+35 pts), ROI 6 mois.</li>
+        <li><strong>Transport (Wint) :</strong> Plateforme B2B véhicules utilitaires, croissance +200%/an, satisfaction 92%.</li>
+        <li><strong>Aéroport de Francfort (GSE Pooling) :</strong> Pool de 150 PUSH/LOADER, -25% engins, -30% coûts, extension prévue.</li>
+    </ul>
+    
+    <h1>10. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Réticence à partager ("c'est MON engin")</td><td>Élevée</td><td>Critique</td><td>Pilote avec volontaires, modèle gagnant-gagnant, démonstration ROI</td></tr>
+        <tr><td>Détérioration des engins</td><td>Moyenne</td><td>Élevée</td><td>Check-list systématique, caution/franchise, notation</td></tr>
+        <tr><td>Disponibilité en tension (même engin au même moment)</td><td>Élevée</td><td>Élevée</td><td>Règle priorité (propriétaire > abonné > ponctuel), réservation J-7, flotte dimensionnée</td></tr>
+        <tr><td>Complexité juridique</td><td>Élevée</td><td>Modérée</td><td>Convention type CSCA, assurance mutualisée, assistance juridique</td></tr>
+        <tr><td>Concurrence (peur de donner un avantage)</td><td>Élevée</td><td>Élevée</td><td>Neutralité structure, données confidentielles, pas d'accès aux stratégies commerciales</td></tr>
+    </table>
+    
+    <h1>11. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Confiance (transparence, neutralité)</li><li>Simplicité (plateforme intuitive, 3 clics)</li><li>Équité (règles identiques)</li><li>Qualité (engins bien entretenus)</li><li>Réactivité (support)</li><li>ROI démontré (gagnant-gagnant)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Lancer sans masse critique → démarrer avec 3 entreprises, 50 engins</li><li>Tarifs trop bas ou trop hauts → étude de marché</li><li>Oublier la maintenance → intégrer le coût</li><li>Complexité juridique → s'inspirer des modèles existants</li><li>Absence de coordinateur → 1 ETP dédié indispensable</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>12. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le parc de véhicules partagés est la piste de l'optimisation et de la coopération. Ce n'est pas une idée généreuse, c'est une idée économique. Moins d'engins = moins d'investissements. Plus d'utilisation = meilleur ROI. Moins de locations = moins de coûts. Plus de flexibilité = moins de stress. Ce que nous proposons, c'est d'arrêter de raisonner en silos. C'est de faire ensemble ce que chacun fait seul, mais moins bien. C'est d'utiliser la technologie pour créer de l'intelligence collective.
+        </p>
+        <p><strong>Le coût ?</strong> 254 000 € sur 3 ans. <strong>Le bénéfice ?</strong> 6,5 à 13 millions d'euros d'économies par an.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 13. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>13. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer un groupe de travail avec 3 handlers volontaires.</li>
+        <li>Financer l'étude juridique et le développement plateforme.</li>
+        <li>Expérimenter avec 50 engins mutualisés.</li>
+        <li>Mesurer les économies et la satisfaction.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 32 - Le "Parc de véhicules partagés" | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

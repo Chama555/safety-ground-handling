@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 40 - Gilet connecté </title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 40</div>
+            <div class="document-subtitle">Gilet connecté </div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        PROTÉGER LES INVISIBLES
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Gilet qui vibre quand un engin s'approche à moins de 5 mètres.
+    </p>
+    <p>
+        Les piétons sont les oubliés de la sécurité en piste. 8 accidents piétons-engins en 2025, dont 3 blessures graves, principalement en zones de catering, fret et maintenance. Le conducteur ne voit pas le piéton (angle mort), le piéton ne voit pas l'engin (bruit ambiant). Aucune alerte ne protège le piéton, toute la prévention étant concentrée sur l'engin. La quarantième piste propose de rendre le piéton acteur de sa propre sécurité avec le gilet connecté  : une balise UWB dans le gilet, des récepteurs sur les engins, créant une bulle de sécurité de 5 mètres autour de chaque agent. Alerte par vibration (discrète) et sonore, et alerte conducteur par message vocal. Pour 300 € par agent, on protège enfin les invisibles.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Les piétons sont les oubliés de la sécurité en piste.</p>
+    
+    <table>
+        <thead><tr><th>Donnée</th><th>Valeur</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr><td>Accidents piétons/engins (2025)</td><td>8</td><td>Gendarmerie</td></tr>
+            <tr><td>Dont blessures graves</td><td>3</td><td>Gendarmerie</td></tr>
+            <tr><td>Zones les plus exposées</td><td>Catering, Fret, Maintenance</td><td>CSCA</td></tr>
+            <tr><td>Causes principales</td><td>Angle mort, recul, inattention</td><td>Analyse</td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Mais aujourd'hui :</strong> Conducteur ne voit pas le piéton, piéton ne voit pas l'engin, aucune alerte sur le piéton, gilet passif insuffisant, co-activité intense.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Protéger le piéton, c'est l'équiper activement. Le gilet connecté , c'est détecter la présence d'un engin, alerter le piéton (vibration + son), alerter le conducteur (message vocal), créer une bulle de sécurité de 5m, réduire le risque de collision.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 40) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque piéton</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 40</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>PIE 01.1</strong></td>
+                <td>Collision engin/piéton en zone catering</td>
+                <td>Angle mort du conducteur, piéton non visible, absence d'alerte</td>
+                <td>Blessure grave, décès, traumatisme</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Détection UWB <5m, vibration gilet, alerte conducteur, réduction -60% heurts</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.2</strong></td>
+                <td>Heurt piéton lors de manœuvre de recul (BUS, LOADER)</td>
+                <td>Angle mort arrière, absence de visibilité, piéton non averti</td>
+                <td>Écrasement, blessures graves</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Alerte mutuelle à <5m, vibration gilet, alerte sonore recul (P12)</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.3</strong></td>
+                <td>Piéton heurté par engin en zone de co-activité intense</td>
+                <td>Distraction du piéton, bruit ambiant, absence de perception du danger</td>
+                <td>Accident, blessures</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Vibration discrète (plus efficace que son dans le bruit), alerte progressive</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.4</strong></td>
+                <td>Accident piéton en zone fret (chariots élévateurs, chargeurs)</td>
+                <td>Visibilité réduite, manœuvres complexes, absence de communication</td>
+                <td>Blessures, incapacité</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Bulle de sécurité 5m, alerte mutuelle, priorité aux agents équipés</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.5</strong></td>
+                <td>Conducteur ne percevant pas la présence d'un piéton (angle mort)</td>
+                <td>Absence de détection, technologie concentrée sur l'engin</td>
+                <td>Collision non évitée, accident</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Alerte conducteur : message vocal "Piéton à 5 mètres", voyant tableau de bord</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.6</strong></td>
+                <td>Piéton non conscient du danger (distraction, fatigue)</td>
+                <td>Bruit ambiant, inattention, absence de retour sensoriel</td>
+                <td>Piéton ne réagit pas à temps, accident</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Vibration progressive (intensité croissante), signal sonore si bruit fort</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.7</strong></td>
+                <td>Absence d'équipement de protection active pour les piétons</td>
+                <td>Déséquilibre historique : tout l'effort sur les engins, rien sur les piétons</td>
+                <td>Vulnérabilité persistante, accidents évitables</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Premier dispositif actif pour piétons, correction du déséquilibre</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.8</strong></td>
+                <td>Gilet haute visibilité passif insuffisant</td>
+                <td>Ne protège que la visibilité, pas l'attention, pas d'alerte</td>
+                <td>Fausse sécurité, accidents malgré le port du gilet</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Gilet actif avec électronique embarquée (balise, moteur, buzzer)</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.9</strong></td>
+                <td>Risque en zone non couverte par les capteurs d'engin</td>
+                <td>Zones sans caméras ni détecteurs, piétons non protégés</td>
+                <td>Accidents dans les zones d'ombre de la prévention technique</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Balises sur engins, bulle de sécurité qui suit le piéton, pas de zone non couverte</td>
+            </tr>
+            <tr>
+                <td><strong>PIE 01.10</strong></td>
+                <td>Manque de réactivité des piétons face à un danger imminent</td>
+                <td>Temps de réaction humain, distraction, délai de perception</td>
+                <td>Évitement impossible, collision</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Alerte précoce à 5-10m, temps de réaction augmenté de -40% à -60%</td>
+            </tr>
+            <tr>
+                <td><strong>TEC 07.1</strong></td>
+                <td>Défaut de communication entre gilet et engin</td>
+                <td>Panne batterie, interférences, mauvaise calibration</td>
+                <td>Absence d'alerte, risque non détecté</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Autonomie 12h, stations charge, calibration régulière, redondance sonore</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 06.1</strong></td>
+                <td>Accident piéton grave évitable</td>
+                <td>Cumul de défaillances : non-détection, non-alerte, absence de protection</td>
+                <td>Blessure grave, décès, conséquences judiciaires et médiatiques</td>
+                <td>4 (Catastrophique)</td>
+                <td>E (Extrêmement rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Réduction de -60% des heurts piétons/engins (cible M36)</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Système de communication bidirectionnelle piéton-engin : balise UWB dans le gilet, récepteurs sur engins. Détection en temps réel, seuils d'alerte (5-10m alerte discrète, 3-5m alerte renforcée, <3m danger).</p>
+    
+    <h2>3.2 Architecture technique</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>👷 Côté piéton :</strong> Gilet HV, balise UWB, moteur vibration, buzzer, batterie 12h, poids <300g.<br>
+        <strong>🚛 Côté engin :</strong> Récepteur UWB, calculateur distance, interface P12, affichage/alerte vocale.<br>
+        <strong>🏢 Côté infrastructure (option) :</strong> Balises fixes hotspots, stats fréquentation.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. LES ZONES ET PUBLICS PRIORITAIRES -->
+    <!-- ======================================================================== -->
+    <h1>4. LES ZONES ET PUBLICS PRIORITAIRES</h1>
+    <ul>
+        <li><strong>🔴 Priorité 1 :</strong> Agents catering (~400, co-activité intense, recul camions), agents fret (~600, chariots élévateurs, chargeurs), agents maintenance (~300, intervention zone active).</li>
+        <li><strong>🟠 Priorité 2 :</strong> Agents piste avitaillement (~200).</li>
+        <li><strong>🟡 Priorité 3 :</strong> Conducteurs en descente d'engin (tous).</li>
+    </ul>
+    <p><strong>Zones prioritaires :</strong> Catering (4 accidents), Fret Nord (3 accidents), Maintenance (1), Parking T2E (1).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (6 mois) :</strong> 50 agents (catering/fret), 20 balises engins, formation, expérimentation 3 mois, évaluation. <strong>Budget 33 k€.</strong></p>
+    <p><strong>PHASE 2 - Extension CDG (12 mois) :</strong> Déploiement catering (150), fret (200), maintenance (100), 200 balises supplémentaires, formation continue, évaluation. <strong>Budget 231 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Orly (200 gilets), province (300), équipement engins (300 balises), évolution V2 (intégration P12), évaluation. <strong>Budget 330 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 594 k€</strong> (gilet 250-300€, balise 350-400€).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    <h2>6.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Agents équipés</strong><span>Cible M36: 950</span></div>
+        <div class="indicator-item"><strong>Engins équipés</strong><span>Cible M36: 520</span></div>
+        <div class="indicator-item"><strong>Heurts piétons/engins</strong><span>Baseline 8/an → Cible -60%</span></div>
+        <div class="indicator-item"><strong>Agents "se sentir plus en sécurité"</strong><span>Baseline 35% → Cible 85%</span></div>
+        <div class="indicator-item"><strong>Temps de réaction piéton</strong><span>Gain -40% à -60%</span></div>
+    </div>
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    <ul><li>Protection active, bulle de sécurité 5m, discrétion (vibration), confiance, complémentarité avec P7/P12, innovation sociale.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. RETOURS D'EXPÉRIENCE / 8. RISQUES / 9. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>7. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>BTP - Vinci :</strong> 500 gilets connectés sur chantiers, alerte vibration, -70% heurts, 92% satisfaction. Leçon : calibration essentielle.</li>
+        <li><strong>Logistique - Amazon :</strong> Équipement caristes/piétons, alerte mutuelle (vibration+son), -60% accidents, ROI <12 mois. Leçon : vibration plus efficace que son.</li>
+        <li><strong>Aéroport de Munich (Safe Walk) :</strong> Pilote 30 agents catering, 0 heurt en 4 mois, 87% souhaitent continuer. Leçon : acceptation forte si explication.</li>
+    </ul>
+    
+    <h1>8. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Confort / poids</td><td>Élevée</td><td>Élevée</td><td>Modèle <300g, ergonomique, respirant, test utilisateur</td></tr>
+        <tr><td>Autonomie batterie</td><td>Élevée</td><td>Élevée</td><td>Batterie >12h, station charge dédiée, interchangeable</td></tr>
+        <tr><td>Fausse sécurité (délégation)</td><td>Élevée</td><td>Critique</td><td>Formation "le gilet ne remplace pas la vigilance", message clair</td></tr>
+        <tr><td>Faux positifs</td><td>Moyenne</td><td>Modérée</td><td>Calibration fine, seuils ajustables</td></tr>
+        <tr><td>Hygiène</td><td>Moyenne</td><td>Modérée</td><td>Gilet individuel, lavable, option sur-gilet</td></tr>
+        <tr><td>Coût</td><td>Moyenne</td><td>Modérée</td><td>Phasage progressif, priorisation zones critiques</td></tr>
+    </table>
+    
+    <h1>9. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Confort (<300g, respirant, ergonomique)</li><li>Autonomie (12h minimum, charge rapide)</li><li>Discrétion (vibration préférée au son)</li><li>Fiabilité (seuils calibrés, pas de faux positifs)</li><li>Pédagogie (formation obligatoire)</li><li>Volontariat (phase pilote)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Équipement trop lourd → test utilisateur</li><li>Alerte trop fréquente → seuils adaptés à la zone</li><li>Oubli de recharge → station visible, procédure</li><li>Sous-équipement des engins → balises obligatoires</li><li>Effet "gadget" → communication sérieuse</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 10. POSITIONNEMENT STRATÉGIQUE -->
+    <!-- ======================================================================== -->
+    <h1>10. POSITIONNEMENT STRATÉGIQUE</h1>
+    <h2>10.1 Différenciation avec les dispositifs existants</h2>
+    <table>
+        <tr><th>Dispositif</th><th>Cible</th><th>Nature</th><th>Alerte</th></tr>
+        <tr><td>P7 - Rétrofit</td><td>Engin</td><td>Caméras, détecteurs</td><td>Sur l'engin</td></tr>
+        <tr><td>P12 - Alerte sonore</td><td>Engin</td><td>Sons intelligents</td><td>Sur l'engin</td></tr>
+        <tr><td>P39 - Near-miss IA</td><td>Infrastructure</td><td>Analyse vidéo</td><td>Post-événement</td></tr>
+        <tr><td>P40 - Gilet </td><td>Piéton</td><td>Vibration</td><td>Sur le piéton</td></tr>
+    </table>
+    <p><strong>Complémentarité :</strong> P7/P12 protègent le conducteur, P40 protège le piéton, P39 analyse les situations à risque. Les 4 sont nécessaires.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 11. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>11. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le gilet connecté  est la piste de l'équité et de la protection active. Ce n'est pas un gadget. Ce n'est pas un luxe. Ce n'est pas une option. C'est la reconnaissance que les piétons ont droit à la même technologie que les conducteurs. C'est la correction d'un déséquilibre historique. Ce que nous proposons, c'est d'arrêter de protéger uniquement ceux qui sont assis dans une cabine. C'est d'étendre la bulle de sécurité à ceux qui marchent, qui portent, qui livrent. C'est de faire de chaque agent un nœud actif du réseau de sécurité.
+        </p>
+        <p><strong>Le coût ?</strong> 300 € par agent. <strong>Le bénéfice ?</strong> -60% d'heurts piétons/engins, agents protégés, valorisés.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>12. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer un pilote sur 50 agents de catering ou fret (33 k€).</li>
+        <li>Équiper 20 engins de la zone de balises réceptrices.</li>
+        <li>Tester pendant 3 mois en conditions réelles.</li>
+        <li>Évaluer l'acceptation, le confort, l'efficacité.</li>
+        <li>Préparer un déploiement CDG sur la base des résultats.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 40 - Gilet connecté  | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

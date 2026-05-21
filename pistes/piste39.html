@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 39 - Near-miss automatique par caméras IA</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 39</div>
+            <div class="document-subtitle">Near-miss automatique par caméras IA</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        CAPTURER L'ACCIDENT QUI N'A PAS EU LIEU
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Caméras intelligentes détectant automatiquement les quasi-collisions.
+    </p>
+    <p>
+        La théorie de Heinrich l'établit : pour un accident grave, il existe entre 100 et 300 situations dangereuses qui auraient pu y mener. À CDG, seuls 50 near-miss sont déclarés chaque année, alors que le nombre réel est estimé à plus de 5 000. Le taux de sous-déclaration dépasse 95%. La trente-neuvième piste propose de contourner ces freins en automatisant la détection des near-miss : des caméras intelligentes analysent en temps réel les flux vidéo pour identifier automatiquement les quasi-collisions, génèrent un clip anonymisé, et l'envoient aux conducteurs concernés via l'application Safety Hub (P3) avec un module e-learning associé. Le tout encadré par une charte éthique stricte.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> 95% des situations dangereuses ne sont jamais signalées.</p>
+    
+    <table>
+        <thead><tr><th>Donnée</th><th>Valeur</th><th>Source</th></tr></thead>
+        <tbody>
+            <tr><td>Near-miss estimés par accident</td><td>100 à 300</td><td>Théorie de Heinrich</td></tr>
+            <tr><td>Near-miss déclarés à CDG (2025)</td><td>50</td><td>CSCA</td></tr>
+            <tr><td>Near-miss réels estimés</td><td>>5 000</td><td>Projection</td></tr>
+            <tr><td>Taux de sous-déclaration</td><td>>95%</td><td>Estimation</td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Pourquoi les near-miss ne sont-ils pas signalés ?</strong> "Ce n'est pas grave" (45%), "Pas le temps" (30%), "Je ne veux pas créer de problème" (15%), "Je ne sais pas comment faire" (10%).</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Si le conducteur ne signale pas le near-miss, c'est la machine qui doit le faire. Le near-miss automatique par caméras IA, c'est détecter automatiquement, analyser, générer un clip, envoyer un feedback immédiat, capitaliser les données. Transformer l'invisible en visible, le non-dit en apprentissage, le presque-accident en leçon.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 39) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque informationnel</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 39</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>NM 01.1</strong></td>
+                <td>Sous-déclaration massive des near-miss (>95%)</td>
+                <td>Manque de temps, absence de culture de signalement, peur de la sanction</td>
+                <td>Perte d'information critique sur les presque-accidents, prévention inefficace</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Détection automatique par caméras IA, contournement des freins humains</td>
+            </tr>
+            <tr>
+                <td><strong>NM 01.2</strong></td>
+                <td>Non-détection des situations de quasi-collision récurrentes</td>
+                <td>Absence de suivi, pas de remontée, phénomènes invisibles</td>
+                <td>Répétition des mêmes situations dangereuses, risque d'accident</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Cartographie dynamique des hotspots, identification des tendances</td>
+            </tr>
+            <tr>
+                <td><strong>NM 01.3</strong></td>
+                <td>Retard dans le feedback après un near-miss</td>
+                <td>Signalement trop tardif, analyse différée, perte de mémoire</td>
+                <td>Apprentissage non immédiat, risque de récidive</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Feedback < 1h, clip vidéo, notification push, module e-learning associé</td>
+            </tr>
+            <tr>
+                <td><strong>NM 01.4</strong></td>
+                <td>Absence de preuve objective des near-miss</td>
+                <td>Déclarations subjectives, absence de vidéo, litiges</td>
+                <td>Désaccords, non-reconnaissance du problème, inaction</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Clip vidéo automatique (anonymisé), distance calculée, horodatage</td>
+            </tr>
+            <tr>
+                <td><strong>NM 01.5</strong></td>
+                <td>Risque de collision non perçu par les conducteurs</td>
+                <td>Angle mort, distraction, fatigue, situation complexe</td>
+                <td>Conducteur non conscient du danger couru, pas de correction</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Notification personnalisée avec visualisation de l'événement</td>
+            </tr>
+            <tr>
+                <td><strong>NM 01.6</strong></td>
+                <td>Manque de données pour l'analyse prédictive</td>
+                <td>Pas de remontée systématique, données insuffisantes</td>
+                <td>Impossibilité d'anticiper les hotspots futurs (P55)</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Base de données des near-miss, alimentation des modèles prédictifs</td>
+            </tr>
+            <tr>
+                <td><strong>ETH 01.1</strong></td>
+                <td>Dérive sécuritaire / sentiment de surveillance</td>
+                <td>Caméras perçues comme intrusives, absence de garde-fous</td>
+                <td>Rejet du dispositif, défiance, non-coopération</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Charte éthique, anonymisation, données effacées après 30 jours, transparence</td>
+            </tr>
+            <tr>
+                <td><strong>ETH 01.2</strong></td>
+                <td>Risque de sanction liée à la détection</td>
+                <td>Lien entre détection et discipline, peur des conducteurs</td>
+                <td>Rejet, contournement, opposition syndicale</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Principe d'aucune sanction, séparation stricte des systèmes</td>
+            </tr>
+            <tr>
+                <td><strong>COM 10.1</strong></td>
+                <td>Absence de retour sur les near-miss détectés</td>
+                <td>Données non exploitées, pas de communication</td>
+                <td>Conducteurs non informés, apprentissage nul</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Dashboard de suivi (P13), cartographie des hotspots, communication régulière</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 05.1</strong></td>
+                <td>Accident sur zone où des near-miss récurrents étaient ignorés</td>
+                <td>Non-détection des signaux faibles, absence d'action préventive</td>
+                <td>Accident grave, conséquences humaines et matérielles</td>
+                <td>4 (Catastrophique)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Réduction de -40% des accidents sur zones équipées (cible M36)</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Système de détection vidéo intelligente sur zones critiques : détection automatique des quasi-collisions (<1m, freinage urgence, trajectoire anormale), analyse locale (edge computing), génération clip anonymisé, feedback sur application P3 (<1h), capitalisation en base de données.</p>
+    
+    <h2>3.2 Architecture technique</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>📹 4 COUCHES :</strong> Capteurs (caméras 4K, processeur IA, 5G) | Traitement (algo détection collision, tracking, calcul distance) | Feedback (génération clips, anonymisation, intégration P3) | Analyse (base données, dashboard, cartographie hotspots).</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. FONCTIONNEMENT DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>4. FONCTIONNEMENT DÉTAILLÉ</h1>
+    <ul>
+        <li><strong>Détection :</strong> Quasi-collision (<1m + >5 km/h) 🔴, freinage urgence (>5 m/s²) 🟠, distance insuffisante (<2m >3s) 🟡, trajectoire anormale (>30°) 🟡, piéton à risque (<2m engin) 🔴.</li>
+        <li><strong>Feedback :</strong> Notification P3 avec localisation, distance, engins, conducteurs, facteurs, module e-learning associé.</li>
+        <li><strong>Règles d'or éthiques :</strong> Aucune sanction, anonymisation, données effacées 30 jours, transparence, proportionnalité (zones à risque), non-substitution (valorisation).</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (6 mois) :</strong> 5 stands Parking T2E, concertation sociale + charte, acquisition 5 caméras IA, développement algo, intégration P3, expérimentation 3 mois, évaluation. <strong>Budget 115 k€.</strong></p>
+    <p><strong>PHASE 2 - Extension CDG (12 mois) :</strong> 20 hotspots prioritaires, 20 caméras supplémentaires, installation, amélioration algo V2, feedback personnalisé, formation/communication, évaluation. <strong>Budget 223 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> 50 caméras supplémentaires, extension Orly (15), province (30), évolution IA prédictive, intégration jumeau numérique (P6), évaluation. <strong>Budget 815 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 1 153 k€</strong> (coût par caméra ~8 500 €).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    <h2>6.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Caméras déployées</strong><span>Cible M36: 75</span></div>
+        <div class="indicator-item"><strong>Near-miss détectés / mois</strong><span>Cible M36: 800</span></div>
+        <div class="indicator-item"><strong>Taux de sous-déclaration résiduel</strong><span>Baseline 95% → Cible 30%</span></div>
+        <div class="indicator-item"><strong>Délai de feedback</strong><span>Cible M36: <1 min</span></div>
+        <div class="indicator-item"><strong>Conducteurs exposés au feedback</strong><span>Cible M36: 2 000</span></div>
+        <div class="indicator-item"><strong>Accidents sur zones équipées</strong><span>Cible M36: -40%</span></div>
+    </div>
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    <ul><li>Visibilité de l'invisible (95% situations), feedback immédiat, objectivité, prévention proactive, cartographie dynamique, culture de transparence.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. RETOURS D'EXPÉRIENCE / 8. RISQUES / 9. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>7. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Industrie automobile - Renault :</strong> Caméras IA sur lignes production, +340% near-miss détectés, -60% accidents en 2 ans, 92% opérateurs satisfaits. Leçon : le feedback immédiat est plus efficace que la formation différée.</li>
+        <li><strong>Aéroport de Munich (Smart Stand) :</strong> Pilote 5 stands, 112 near-miss détectés en 3 mois (0 signalés), 15 situations critiques identifiées. Leçon : l'ampleur du near-miss était très largement sous-estimée.</li>
+        <li><strong>SNCF (Vidéosurveillance intelligente) :</strong> Détection comportements à risque en gare, -45% incidents, temps de réaction divisé par 5. Leçon : la détection automatique est plus fiable que l'œil humain.</li>
+    </ul>
+    
+    <h1>8. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Acceptation sociale ("Big Brother")</td><td>Élevée</td><td>Critique</td><td>Charte éthique affichée, anonymisation stricte, concertation préalable, aucune sanction liée</td></tr>
+        <tr><td>Faux positifs (alertes inutiles)</td><td>Élevée</td><td>Modérée</td><td>Calibration progressive, seuils paramétrables, retour utilisateur</td></tr>
+        <tr><td>Coût</td><td>Élevée</td><td>Élevée</td><td>Phasage progressif, priorisation hotspots, mutualisation</td></tr>
+        <tr><td>Maintenance</td><td>Moyenne</td><td>Modérée</td><td>Contrat maintenance, garantie 5 ans</td></tr>
+        <tr><td>Dérive sécuritaire (surveillance généralisée)</td><td>Faible</td><td>Élevée</td><td>Périmètre strict (zones à risque), pas de caméras dans cabines, audit éthique annuel</td></tr>
+    </table>
+    
+    <h1>9. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Charte éthique (rédigée AVANT déploiement)</li><li>Anonymisation (visages floutés)</li><li>Non-sanction (absolue)</li><li>Feedback immédiat (<1h)</li><li>Pédagogie ("ces caméras sont là pour vous protéger")</li><li>Transparence (information sur zones et données)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Déployer sans concerter → CSE, DPO, conducteurs</li><li>Lier détection et sanction → séparation stricte</li><li>Oublier l'information → campagne avant/pendant/après</li><li>Zones trop vastes → commencer par hotspots les plus accidentogènes</li><li>Délai de feedback trop long → automatisation complète</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 10. POSITIONNEMENT STRATÉGIQUE -->
+    <!-- ======================================================================== -->
+    <h1>10. POSITIONNEMENT STRATÉGIQUE</h1>
+    <h2>10.1 Différenciation avec les dispositifs existants</h2>
+    <table>
+        <tr><th>Dispositif</th><th>Nature</th><th>Détection</th><th>Feedback</th><th>Sanction</th></tr>
+        <tr><td>P3 - Application</td><td>Déclarative</td><td>Manuelle</td><td>48h</td><td>Non</td></tr>
+        <tr><td>P8 - IA prédictive</td><td>Comportementale</td><td>Automatique</td><td>Temps réel</td><td>Non</td></tr>
+        <tr><td>P22 - Débrief</td><td>Collective</td><td>Manuelle</td><td>48h</td><td>Non</td></tr>
+        <tr><td>P39 - Near-miss IA</td><td>Scénique</td><td>Automatique</td><td><1h</td><td>Non (charte)</td></tr>
+    </table>
+    <p><strong>Complémentarité :</strong> P3 (volontaire), P39 (invisible), P8 (prédictif), P22 (collectif).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 11. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>11. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le near-miss automatique par caméras IA est la piste de la transparence et de l'apprentissage. Ce n'est pas un outil de surveillance. C'est un outil de prévention. Il ne sanctionne pas. Il informe. Il ne juge pas. Il analyse. Il ne stocke pas. Il efface. Il ne remplace pas l'humain. Il l'assiste. Ce que nous proposons, c'est de faire de chaque presque-accident une leçon instantanée. C'est de sortir de l'ornière de la sous-déclaration. C'est de donner à chaque conducteur la possibilité de voir ses erreurs avant qu'elles ne deviennent des drames.
+        </p>
+        <p><strong>Le coût ?</strong> 8 500 € par caméra. <strong>Le bénéfice ?</strong> -40% d'accidents sur zones équipées, feedback en temps réel, hotspots identifiés en dynamique.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>12. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Rédiger une charte éthique avec les représentants du personnel (5 k€).</li>
+        <li>Lancer un pilote sur 5 stands du Parking T2E (115 k€).</li>
+        <li>Tester pendant 3 mois en mode "feedback uniquement" (pas de sanction, pas de stockage long).</li>
+        <li>Évaluer la détection, l'acceptation, l'impact.</li>
+        <li>Décider de l'extension sur la base des résultats.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 39 - Near-miss automatique par caméras IA | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

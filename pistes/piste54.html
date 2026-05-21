@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 54 - Cérémonie de deuil & Mémorial</title>
+    <style>
+        /* Styles généraux pour l'impression - Standard professionnel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-grey {
+            background-color: #808080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-brown {
+            background-color: #8B4513 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        /* Simulation d'interface d'application */
+        .app-interface {
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .app-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+        }
+        
+        .app-content {
+            background-color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        /* Grille pour les fonctionnalités */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .feature-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .feature-card h4 {
+            margin-top: 0;
+            color: #e67e22;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 54</div>
+            <div class="document-subtitle">Cérémonie de deuil & Mémorial</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        HONORER LA MÉMOIRE, SOUTENIR LES VIVANTS
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Protocole de deuil, cérémonie collective et jardin mémoriel pour honorer les conducteurs disparus.
+    </p>
+    
+    <p>
+        Nous ne savons pas faire face à l'irréparable. Lorsqu'un accident mortel survient, nous menons une enquête, 
+        nous communiquons de manière factuelle, nous indemnisons la famille, puis nous passons à autre chose. Mais nous 
+        n'avons aucun rituel pour honorer la mémoire du conducteur disparu, aucun espace pour recueillir la douleur des 
+        collègues, aucun dispositif pour accompagner la famille dans la durée. Cette piste propose de combler ce vide 
+        avec un protocole de deuil structuré, une cérémonie collective et un mémorial durable.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Nous ne savons pas faire face à l'irréparable.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Situation</th>
+                <th>Ce que nous faisons</th>
+                <th>Ce qui manque</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Accident mortel</td><td>Enquête, communication interne factuelle</td><td>Rituel de deuil collectif</td></tr>
+            <tr><td>Famille du conducteur</td><td>Indemnisation, assurances</td><td>Accompagnement, reconnaissance</td></tr>
+            <tr><td>Collègues de l'équipe</td><td>Message du manager, cellule psychologique ponctuelle</td><td>Deuil collectif, mémoire</td></tr>
+            <tr><td>Communauté des conducteurs</td><td>Information, silence</td><td>Hommage, transmission</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Paradoxe :</strong>
+        <ul>
+            <li>Nous célébrons les <strong>succès</strong> (records, anniversaires, promotions).</li>
+            <li>Nous ignorons les <strong>tragédies</strong>.</li>
+            <li>Les familles restent seules face à leur douleur.</li>
+            <li>La mémoire de l'accident devient un <strong>tabou</strong>, pas une <strong>leçon</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Un deuil non accompagné est une blessure qui ne guérit pas. Honorer la mémoire, 
+        c'est aussi soutenir les vivants et transformer la tragédie en mémoire collective.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 54) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #808080;"></div> <strong>Gris</strong> - Risque mémoriel / culturel</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #8B4513;"></div> <strong>Brun</strong> - Risque psycho-social (deuil)</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 54</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>DEU 01.1</strong></td>
+                <td>Deuil non accompagné des familles</td>
+                <td>Absence de protocole de soutien, relations uniquement administratives.</td>
+                <td>Détresse prolongée, sentiment d'abandon, perte de confiance en l'entreprise, risques psychologiques graves.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Référent famille dédié et formé. Suivi psychologique (P53) et accompagnement durable.</td>
+            </tr>
+            <tr>
+                <td><strong>DEU 01.2</strong></td>
+                <td>Deuil non accompagné des collègues</td>
+                <td>Absence de rituel collectif, retour rapide à la normale, non-dit.</td>
+                <td>Culpabilité du survivant, stress post-traumatique, démotivation, baisse de vigilance collective, accident secondaire.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-brown">BRUN</td>
+                <td>Cérémonie de deuil collective. Cellule psychologique (P53). Groupe de parole. Adaptation poste si nécessaire.</td>
+            </tr>
+            <tr>
+                <td><strong>DEU 01.3</strong></td>
+                <td>Tabou de l'accident mortel</td>
+                <td>Non-dit institutionnel, communication trop factuelle, absence de mémoire.</td>
+                <td>L'accident n'est pas une leçon apprise. Risque de répétition. Culture de l'omerta.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Mémorial durable (plaque, arbre). Page dédiée dans l'espace mémoire (P28). Commémoration annuelle.</td>
+            </tr>
+            <tr>
+                <td><strong>DEU 01.4</strong></td>
+                <td>Perte de la mémoire accidentologique humaine</td>
+                <td>Départ des témoins directs, absence de transmission orale des drames passés.</td>
+                <td>Les nouvelles générations ignorent les accidents graves, ne mesurent pas les conséquences réelles.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-grey">GRIS</td>
+                <td>Témoignages des anciens (P28). Intégration des histoires dans les formations et le musée de la sécurité.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 01.3</strong></td>
+                <td>Syndrome du survivant / Culpabilité</td>
+                <td>Conducteur impliqué dans un accident mortel, absence de soutien psychologique spécifique.</td>
+                <td>Stress post-traumatique sévère, incapacité à reprendre le travail, risque de suicide.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Lien direct avec le programme de rédemption (P46) et le soutien psychologique d'urgence (P53).</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 02.1</strong></td>
+                <td>Anxiété collective post-accident</td>
+                <td>Climat de peur dans l'équipe, sentiment d'insécurité, non-dit.</td>
+                <td>Baisse de performance, évitement des tâches, absentéisme, turnover.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Cérémonie collective pour clore le chapitre. Retour à un fonctionnement normal facilité.</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 01.1</strong></td>
+                <td>Désincarnation de la sécurité</td>
+                <td>La sécurité est abstraite (chiffres, graphiques), déconnectée des histoires humaines.</td>
+                <td>Faible adhésion aux mesures de sécurité, perte de sens.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Le mémorial et la cérémonie rappellent que derrière chaque accident, il y a un humain.</td>
+            </tr>
+            <tr>
+                <td><strong>COM 01.1</strong></td>
+                <td>Communication inappropriée après un décès</td>
+                <td>Manque de protocole, annonce par téléphone, détails sensibles divulgués.</td>
+                <td>Aggravation du traumatisme des proches et collègues, image dégradée de l'entreprise.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Protocole d'urgence strict : annonce en personne, message sobre et respectueux.</td>
+            </tr>
+            <tr>
+                <td><strong>COM 01.2</strong></td>
+                <td>Instrumentalisation médiatique d'un accident</td>
+                <td>Absence de garde-fou, communication externe non maîtrisée.</td>
+                <td>Douleur des familles exposée, image de l'aéroport dégradée.</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Cérémonie et communication interne uniquement. Pas d'ouverture à la presse.</td>
+            </tr>
+            <tr>
+                <td><strong>RH 01.1</strong></td>
+                <td>Turnover post-traumatique</td>
+                <td>Collègues quittent l'entreprise après un accident grave, incapables de supporter l'ambiance.</td>
+                <td>Perte de compétences, coûts de recrutement, déstabilisation des équipes.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Accompagnement durable des collègues. Suivi psychologique (P53) pour prévenir les départs.</td>
+            </tr>
+            <tr>
+                <td><strong>MEM 01.1</strong></td>
+                <td>Disparition de la mémoire des accidents</td>
+                <td>Absence de trace durable. Les accidents sont oubliés après quelques années.</td>
+                <td>Les mêmes causes produisent les mêmes effets. L'histoire ne sert pas de leçon.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-grey">GRIS</td>
+                <td>Plaque commémorative, arbre mémoriel, page intranet dédiée. Cérémonie annuelle du souvenir.</td>
+            </tr>
+            <tr>
+                <td><strong>ADM 01.1</strong></td>
+                <td>Abandon administratif des familles</td>
+                <td>Familles livrées à elles-mêmes pour les démarches après le décès.</td>
+                <td>Sentiment d'abandon, détresse ajoutée à la douleur.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Référent famille accompagne les démarches (administratives, juridiques, assurances).</td>
+            </tr>
+            <tr>
+                <td><strong>JUR 01.1</strong></td>
+                <td>Contentieux avec les familles aggravé par le manque d'humanité</td>
+                <td>Gestion purement administrative et juridique du décès, absence de contact humain.</td>
+                <td>Procès, médiatisation, coûts, image dégradée.</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Le lien humain via le référent famille apaise les relations et peut éviter des contentieux.</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    
+    <h2>3.1 Principe général</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 15px 0;">
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>1. URGENCE</strong><br>(H+24 à H+72)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>2. CÉRÉMONIE</strong><br>(J+7 à J+15)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>3. MÉMORIAL</strong><br>(M+1)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>4. SUIVI</strong><br>(M+1 à M+12)
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 4. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>4. BUDGET DÉTAILLÉ</h1>
+    
+    <h2>4.1 Coût par événement</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Détail</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Cérémonie</td><td>Sonorisation, fleurs, impression</td><td>2 000 €</td></tr>
+            <tr><td>Plaque commémorative</td><td>Gravure, installation</td><td>1 500 €</td></tr>
+            <tr><td>Arbre mémoriel</td><td>Plantation, plaque</td><td>800 €</td></tr>
+            <tr><td>Accompagnement psychologique</td><td>Forfait famille + équipe</td><td>3 000 €</td></tr>
+            <tr><td>Communication</td><td>Annonce, page mémoire</td><td>500 €</td></tr>
+            <tr><td><strong>TOTAL PAR ÉVÉNEMENT</strong></td><td></td><td><strong>7 800 €</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <h2>4.2 Budget annuel de fonctionnement</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Détail</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Provision pour événement</td><td>1 à 2 par an (statistiques)</td><td>15 000 €</td></tr>
+            <tr><td>Entretien mémorial</td><td>Arbres, plaques</td><td>3 000 €</td></tr>
+            <tr><td>Mise à jour espace mémoire</td><td>Intranet / P28</td><td>2 000 €</td></tr>
+            <tr><td>Formation référents famille</td><td>5 personnes / an</td><td>5 000 €</td></tr>
+            <tr><td><strong>TOTAL ANNUEL</strong></td><td></td><td><strong>25 000 €</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>BUDGET ANNUEL MOYEN : 25 000 €</strong><br><strong>Coût sur 3 ans : 75 000 €</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT PAR PHASES</h1>
+    
+    <h2>Phase 1 - Conception du protocole (3 mois)</h2>
+    <ul>
+        <li>Groupe de travail (RH, direction, CSE, psychologues) - 3 k€</li>
+        <li>Rédaction du protocole (procédure, rôles, messages)</li>
+        <li>Formation des 5 premiers référents famille - 5 k€</li>
+        <li>Création espace mémoire (P28) - 5 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 1 : 13 k€</strong></p>
+    
+    <h2>Phase 2 - Déploiement CDG (6 mois)</h2>
+    <ul>
+        <li>Communication aux managers - 2 k€</li>
+        <li>Information aux équipes</li>
+        <li>Déploiement du protocole</li>
+        <li>Création espace mémoriel (jardin) - 8 k€</li>
+        <li>Évaluation (après 1er événement) ENAC - 4 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 2 : 14 k€</strong></p>
+    
+    <h2>Phase 3 - Généralisation (24-36 mois)</h2>
+    <ul>
+        <li>Formation référents Orly - 3 k€</li>
+        <li>Déploiement Orly - 5 k€</li>
+        <li>Formation référents province - 5 k€</li>
+        <li>Déploiement province (aéroports pilotes) - 10 k€</li>
+        <li>Évaluation d'impact ENAC - 6 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 3 : 29 k€</strong></p>
+    
+    <p><strong>BUDGET TOTAL 3 ANS : 56 k€ + provision événements (45 k€) = 101 k€</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>6.1 Bénéfices humains</h2>
+    <ul>
+        <li><strong>Dignité :</strong> La victime n'est pas réduite à un rapport d'accident.</li>
+        <li><strong>Respect :</strong> La famille est accompagnée, soutenue, reconnue.</li>
+        <li><strong>Deuil :</strong> Les collègues ont un espace et un temps pour faire leur deuil.</li>
+        <li><strong>Mémoire :</strong> La communauté professionnelle garde une trace.</li>
+        <li><strong>Sens :</strong> La tragédie n'est pas vaine, elle est honorée.</li>
+        <li><strong>Résilience :</strong> Le collectif se reconstruit après l'épreuve.</li>
+    </ul>
+    
+    <h2>6.2 Bénéfices pour l'entreprise</h2>
+    <ul>
+        <li><strong>Humanité :</strong> L'entreprise prouve qu'elle est capable de pleurer les siens.</li>
+        <li><strong>Confiance :</strong> Les salariés savent qu'ils ne seront pas oubliés.</li>
+        <li><strong>Attractivité :</strong> Une entreprise qui prend soin des familles attire.</li>
+        <li><strong>Fidélisation :</strong> Les conducteurs se sentent appartenir à une communauté.</li>
+        <li><strong>Culture :</strong> La sécurité n'est plus une abstraction.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>7. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            La cérémonie de deuil et le mémorial est la piste de l'humanité et de la dignité. Ce n'est pas un dispositif 
+            de sécurité. C'est un dispositif de respect. Il ne prévient pas l'accident. Il est trop tard. Il n'analyse pas 
+            les causes. D'autres le font. Il ne forme pas les vivants. Pas directement. Mais il fait quelque chose d'essentiel : 
+            Il dit que la personne disparue comptait.
+        </p>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 8. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>8. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Rédiger un protocole de deuil clair (procédure, rôles, messages).</li>
+        <li>Former 5 référents famille sur CDG.</li>
+        <li>Créer un espace mémoriel (jardin, arbres, plaques).</li>
+        <li>Organiser une cérémonie annuelle du souvenir.</li>
+        <li>Intégrer cet espace au Musée de la sécurité (P28).</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 54 - Cérémonie de deuil & Mémorial | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

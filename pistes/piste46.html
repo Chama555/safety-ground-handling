@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 46 - Programme de rédemption post-accident</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 46</div>
+            <div class="document-subtitle">Programme de rédemption post-accident</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        TRANSFORMER UN COUPABLE EN EXPERT
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Parcours individualisé de retour sécurisé après accident (psychologue, VR, buddy rédemption, suivi).
+    </p>
+    <p>
+        Aujourd'hui, un conducteur accidenté entre dans un parcours de sanction, pas de reconstruction. 22% de récidive à 1 an, 0 suivi psychologique. Nous traitons le problème comme une faute, pas comme une opportunité d'apprentissage. La quarante-sixième piste propose un programme de rédemption post-accident en 5 phases : soutien immédiat (psychologue), compréhension (analyse systémique 5M), formation ciblée (VR spécifique), réintégration (buddy "rédemption"), transmission (témoignage, badge "Expert par l'expérience"). Pour transformer un coupable en expert.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Aujourd'hui, un conducteur qui a un accident entre dans un parcours de sanction, pas de reconstruction.</p>
+    
+    <table>
+        <thead><tr><th>Étape</th><th>Ce qui se passe</th><th>Ce qui manque</th></tr></thead>
+        <tbody>
+            <tr><td>J+1</td><td>Rapport d'incident, enquête</td><td>Accompagnement psychologique</td></tr>
+            <tr><td>J+7</td><td>Convocation hiérarchique</td><td>Explication, pas jugement</td></tr>
+            <tr><td>J+15</td><td>Sanction (avertissement, suspension)</td><td>Parcours de progrès</td></tr>
+            <tr><td>J+30</td><td>Retour à la normale sans suivi</td><td>Prévention de la récidive</td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Chiffres clés :</strong> 35 conducteurs accidentés (2025), taux de récidive à 1 an 22%, 0 suivi psychologique, 5% formation post-accident, 2% témoignage.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Un accident n'est pas une fin de carrière, c'est un tournant. Le programme de rédemption, c'est accompagner le choc psychologique, analyser les causes systémiques, former à ne pas reproduire l'erreur, réintégrer progressivement, transformer l'expérience en expertise partagée.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 46) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque psychologique</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 46</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>PSY 02.1</strong></td>
+                <td>Stress post-traumatique non traité après accident</td>
+                <td>Absence de suivi psychologique, isolement, culpabilité</td>
+                <td>Anxiété de conduite, hypervigilance, évitement, risque de récidive</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Phase 1 : soutien immédiat (psychologue <72h, confidentialité absolue)</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 02.2</strong></td>
+                <td>Dépression réactionnelle post-accident</td>
+                <td>Traumatisme non traité, sentiment de culpabilité, isolement</td>
+                <td>Désengagement, baisse de vigilance, risque d'accident</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Orientation médecine du travail, suivi spécialisé</td>
+            </tr>
+            <tr>
+                <td><strong>REC 01.1</strong></td>
+                <td>Récidive d'accident chez conducteur accidenté (22%)</td>
+                <td>Absence d'analyse approfondie, pas de formation ciblée, retour sans suivi</td>
+                <td>Nouvel accident, aggravation des conséquences</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Réduction du taux de récidive à 5% (cible M36)</td>
+            </tr>
+            <tr>
+                <td><strong>REC 01.2</strong></td>
+                <td>Non-correction des causes profondes de l'erreur</td>
+                <td>Analyse superficielle, focus sur l'erreur humaine, pas sur le système</td>
+                <td>Répétition de la même erreur par le même conducteur ou d'autres</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Phase 2 : analyse systémique 5M (milieu, matériel, méthode, main-d'œuvre, management)</td>
+            </tr>
+            <tr>
+                <td><strong>REC 01.3</strong></td>
+                <td>Absence de pédagogie adaptée post-accident</td>
+                <td>Retour à la conduite sans formation, pas d'apprentissage de l'erreur</td>
+                <td>Conducteur non préparé, risque de reproduire l'erreur</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Phase 3 : module VR spécifique (replay + simulation + débrief)</td>
+            </tr>
+            <tr>
+                <td><strong>REC 01.4</strong></td>
+                <td>Perte de confiance du conducteur après accident</td>
+                <td>Choc psychologique, peur de conduire, sentiment d'incompétence</td>
+                <td>Hésitations, erreurs, risque accru</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Phase 4 : buddy "rédemption" (0 accident >5 ans), accompagnement 8 semaines</td>
+            </tr>
+            <tr>
+                <td><strong>REC 01.5</strong></td>
+                <td>Absence de suivi post-retour</td>
+                <td>Retour à la normale sans contrôle, pas d'évaluation</td>
+                <td>Difficultés non détectées, récidive</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Suivi mensuel (manager, expert sécurité, auto-évaluation, RH)</td>
+            </tr>
+            <tr>
+                <td><strong>REC 01.6</strong></td>
+                <td>Non-capitalisation de l'expérience de l'accidenté</td>
+                <td>Savoir issu de l'erreur non partagé, perte pour le collectif</td>
+                <td>Autres conducteurs ne bénéficient pas de la leçon</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Phase 5 : témoignage en formation, badge "Expert par l'expérience"</td>
+            </tr>
+            <tr>
+                <td><strong>REC 01.7</strong></td>
+                <td>Stigmatisation du conducteur accidenté</td>
+                <td>Regard négatif des pairs, étiquette "accidenté"</td>
+                <td>Isolement, démotivation, départ de l'entreprise</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Badge valorisant ("expert"), communication positive, volontariat témoignage</td>
+            </tr>
+            <tr>
+                <td><strong>REC 01.8</strong></td>
+                <td>Confusion entre programme de rédemption et procédure disciplinaire</td>
+                <td>Manque de séparation, défiance des conducteurs</td>
+                <td>Refus du programme, non-utilisation, échec</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Séparation stricte des processus, information préalable, confidentialité absolue</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Programme en 5 phases : soutien immédiat (J+1-15), compréhension (J+15-45), formation ciblée (J+45-90), réintégration (J+90-180), transmission (J+180+). Rupture culturelle : de "tu as fait une faute" à "tu as vécu une expérience".</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>🧠 Phase 1 - Soutien immédiat :</strong> Psychologue <72h, 1h30, confidentiel, pas de lien disciplinaire.<br>
+        <strong>🔍 Phase 2 - Compréhension :</strong> Débrief expert sécurité, analyse 5M, plan de progrès individualisé.<br>
+        <strong>🎮 Phase 3 - Formation ciblée :</strong> Module VR spécifique à l'accident (replay + simulation), validation acquis.<br>
+        <strong>🤝 Phase 4 - Réintégration :</strong> Buddy "rédemption" (0 accident >5 ans), accompagnement 8 semaines, suivi mensuel.<br>
+        <strong>📢 Phase 5 - Transmission :</strong> Témoignage en formation, badge "Expert par l'expérience".</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>4. BUDGET DÉTAILLÉ</h1>
+    <p><strong>Investissement initial :</strong> Convention psychologues (10 k€), développement 5 modules VR (15 k€), formation 20 buddies rédemption (12 k€), supports (8 k€) → <strong>45 k€</strong>.</p>
+    <p><strong>Coûts annuels de fonctionnement (base 35 conducteurs/an) :</strong> Psychologue (4 200 €), formation VR (1 750 €), prime buddies (14 000 €), coordination (15 000 €), badges (175 €) → <strong>35 125 €/an</strong>.</p>
+    <p><strong>BUDGET TOTAL 3 ANS : 45 k€ + (3 × 35 k€) = 150 k€</strong> (coût par conducteur ~4 300 €). ROI : <3 accidents évités par an.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (6 mois) :</strong> 1 entreprise, 5 conducteurs, test des 5 phases, ajustements. <strong>Budget 25 k€.</strong></p>
+    <p><strong>PHASE 2 - Déploiement CDG (12 mois) :</strong> Généralisation à tous les conducteurs accidentés, formation buddies, déploiement modules VR. <strong>Budget 70 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Extension Orly et province, intégration au parcours standard. <strong>Budget 55 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 150 k€.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    <h2>6.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Conducteurs accompagnés</strong><span>Cible M36: 120</span></div>
+        <div class="indicator-item"><strong>Taux de récidive à 1 an</strong><span>Baseline 22% → Cible 5%</span></div>
+        <div class="indicator-item"><strong>Délai de retour à la normale</strong><span>Cible 60 jours (qualité)</span></div>
+        <div class="indicator-item"><strong>Satisfaction conducteurs</strong><span>Cible 90%</span></div>
+        <div class="indicator-item"><strong>Témoignages en formation</strong><span>Baseline 2% → Cible 70%</span></div>
+    </div>
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    <ul><li>Humanisation, apprentissage collectif, fidélisation, confiance, culture de transparence, récidive divisée par 4.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. RETOURS D'EXPÉRIENCE / 8. RISQUES / 9. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>7. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Air France :</strong> Programme soutien psychologique post-accident, confidentialité absolue, retour progressif, taux de récidive <5%, 100% des pilotes accompagnés. Leçon : l'accompagnement psychologique est une nécessité.</li>
+        <li><strong>EDF (nucléaire) :</strong> Parcours de "remédiation" post-incident, formation simulateur, doublement supervision, 0 récidive grave depuis 15 ans. Leçon : la sanction sans accompagnement est inefficace.</li>
+        <li><strong>SNCF (Conducteur ressource) :</strong> Pilote 2023, anciens accidentés devenus formateurs, 92% impact positif sur apprenants. Leçon : l'expérience négative devient expertise positive.</li>
+    </ul>
+    
+    <h1>8. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Stigmatisation ("l'accidenté")</td><td>Élevée</td><td>Critique</td><td>Badge valorisant ("expert"), communication positive, volontariat témoignage</td></tr>
+        <tr><td>Confusion avec le disciplinaire</td><td>Élevée</td><td>Critique</td><td>Séparation stricte des processus, information préalable, confidentialité absolue</td></tr>
+        <tr><td>Suroccupation (pas assez de psychologues)</td><td>Moyenne</td><td>Modérée</td><td>Convention cadre avec professionnels, téléconsultation possible</td></tr>
+        <tr><td>Coût</td><td>Moyenne</td><td>Faible</td><td>ROI démontré (3 accidents évités)</td></tr>
+        <tr><td>Refus du conducteur</td><td>Élevée</td><td>Faible</td><td>Volontariat, pas d'obligation</td></tr>
+    </table>
+    
+    <h1>9. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li>Séparation stricte (programme ≠ sanction)</li>
+        <li>Confidentialité absolue</li>
+        <li>Volontariat du conducteur</li>
+        <li>Progressivité (retour en 6 étapes)</li>
+        <li>Valorisation (badge "expert")</li>
+        <li>Pédagogie (formation des managers)</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Faire du psychologue un enquêteur → confidentialité absolue</li>
+        <li>Rendre le programme obligatoire → volontariat uniquement</li>
+        <li>Raccourcir les délais → 6 mois minimum</li>
+        <li>Oublier la famille → intégrer P60</li>
+        <li>Sanctionner après le programme → incohérence = rejet</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 10. POSITIONNEMENT STRATÉGIQUE -->
+    <!-- ======================================================================== -->
+    <h1>10. POSITIONNEMENT STRATÉGIQUE</h1>
+    <p>P46 est le chaînon manquant entre la sanction (P1) et la réintégration (P4). Il s'articule avec P4 (buddy rédemption), P10 (VR), P11 (fatigue), P22 (débrief 360°), P23 (contrat de confiance), P47 (mentorship senior), P53 (EAP), P54 (cérémonie de deuil).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 11. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>11. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le programme de rédemption post-accident est la piste de l'humanité et de l'intelligence. Ce n'est pas de la compassion. C'est de la stratégie. 22% de récidive : c'est inacceptable. 5% de récidive : c'est atteignable. 45 000 € par accident grave : c'est l'économie. Un expert formé par l'expérience : c'est la ressource. Ce que nous proposons, c'est d'arrêter de traiter les conducteurs accidentés comme des délinquants. C'est de les traiter comme des professionnels qui ont vécu une expérience difficile et qui peuvent en tirer des leçons. C'est de transformer chaque accident en opportunité d'apprentissage.
+        </p>
+        <p><strong>Le coût ?</strong> 150 000 € sur 3 ans. <strong>Le bénéfice ?</strong> Des conducteurs plus forts, plus vigilants, plus engagés. Des équipes qui apprennent des erreurs. Une culture où l'erreur est partagée.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>12. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Mettre en place une convention avec 2 psychologues du travail (10 k€).</li>
+        <li>Développer 5 modules VR spécifiques aux accidents les plus fréquents (15 k€).</li>
+        <li>Former 20 buddies "rédemption" (12 k€).</li>
+        <li>Lancer un pilote sur 10 conducteurs volontaires.</li>
+        <li>Évaluer l'impact sur la récidive, la confiance, la fidélisation.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 46 - Programme de rédemption post-accident | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

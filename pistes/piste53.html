@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 53 - Programme d'aide aux conducteurs fragilisés (EAP Airport)</title>
+    <style>
+        /* Styles généraux pour l'impression - Standard professionnel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        /* Simulation d'interface d'application */
+        .app-interface {
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .app-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+        }
+        
+        .app-content {
+            background-color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        /* Grille pour les fonctionnalités */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .feature-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .feature-card h4 {
+            margin-top: 0;
+            color: #e67e22;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 53</div>
+            <div class="document-subtitle">Programme d'aide aux conducteurs fragilisés (EAP Airport)</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        PRENDRE SOIN DE CEUX QUI NOUS PROTÈGENT
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Service confidentiel, gratuit et accessible 24/7 de soutien psychologique et social.
+    </p>
+    
+    <p>
+        Nous avons des dispositifs pour les accidents, mais rien pour les fragilités silencieuses. Un conducteur dépressif 
+        a quatre fois plus de risques d'accident. Un conducteur en burn-out a six fois plus de risques d'erreur. Pourtant, 
+        nous n'avons aucun programme pour les aider. Cette piste propose de créer un filet de sécurité pour ceux qui vont mal, 
+        avec un programme d'aide aux conducteurs fragilisés (EAP Airport) : un service confidentiel, gratuit et accessible 24/7.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Nous avons des dispositifs pour les accidents, rien pour les fragilités silencieuses.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Situation</th>
+                <th>Dispositif actuel</th>
+                <th>Prise en charge</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Accident grave</td><td>P22 - Débrief, enquête</td><td> Partielle</td></tr>
+            <tr><td>Fatigue passagère</td><td>P11 - Observatoire</td><td> Partielle</td></tr>
+            <tr><td>Stress post-traumatique</td><td><strong>AUCUN</strong></td><td> Aucune</td></tr>
+            <tr><td>Dépression</td><td><strong>AUCUN</strong></td><td> Aucune</td></tr>
+            <tr><td>Addictions (hors dépistage)</td><td><strong>AUCUN</strong></td><td> Aucune</td></tr>
+            <tr><td>Burn-out</td><td><strong>AUCUN</strong></td><td> Aucune</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Paradoxe :</strong>
+        <ul>
+            <li>Un conducteur dépressif a <strong>4 fois plus de risques d'accident</strong>.</li>
+            <li>Un conducteur en burn-out a <strong>6 fois plus de risques d'erreur</strong>.</li>
+            <li><strong>Nous n'avons aucun programme pour les aider.</strong></li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Prendre soin de la santé mentale, c'est prévenir les accidents. Un service confidentiel, gratuit et réactif permet de traiter les fragilités avant qu'elles ne deviennent des crises.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 53) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque psycho-social (spécifique)</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 53</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>PSY 01.1</strong></td>
+                <td>Stress post-traumatique non traité après accident</td>
+                <td>Accident grave, absence de suivi psychologique, culpabilité du conducteur.</td>
+                <td>Anxiété de conduite, hypervigilance, évitement des situations similaires, risque de récidive.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Intervention psychologique d'urgence (<72h). Soutien post-traumatique spécialisé.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 01.2</strong></td>
+                <td>Dépression non diagnostiquée</td>
+                <td>Isolement, problèmes personnels, absence de dépistage, stigmatisation.</td>
+                <td>Baisse de concentration, ralentissement, absentéisme, risque accidentel x4.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-purple">VIOLET</td>
+                <td>Accès à un psychologue (6-12 séances/an). Écoute bienveillante et non-jugeante.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 01.3</strong></td>
+                <td>Burn-out / Épuisement professionnel</td>
+                <td>Surcharge de travail, pression temporelle, conflits, manque de reconnaissance.</td>
+                <td>Erreurs multiples, absentéisme long, turnover, risque accidentel x6.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-purple">VIOLET</td>
+                <td>Coach professionnel, accompagnement à la réinsertion progressive. Adaptation temporaire du poste.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 01.4</strong></td>
+                <td>Addictions (alcool, stupéfiants, médicaments)</td>
+                <td>Mécanisme d'adaptation au stress, addiction, problèmes personnels.</td>
+                <td>Conduite sous emprise, accidents graves, perte d'emploi, problèmes de santé.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Consultation addictologue confidentielle. Orientation vers structures de soin.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 01.5</strong></td>
+                <td>Détresse financière / Surendettement</td>
+                <td>Difficultés personnelles, accidents de la vie, absence de soutien.</td>
+                <td>Stress chronique, perte de concentration, absentéisme, dépression.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Assistant social pour soutien financier et administratif. Orientation vers aides sociales.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 01.6</strong></td>
+                <td>Problèmes familiaux / Séparation</td>
+                <td>Conflits conjugaux, garde d'enfants, solitude.</td>
+                <td>Inattention, rumination, fatigue, erreurs de jugement.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Soutien psychologique et social. Médiation familiale si besoin.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 02.1</strong></td>
+                <td>Stress chronique lié au travail</td>
+                <td>Pression temporelle, co-activité dangereuse, manque de reconnaissance.</td>
+                <td>Irritabilité, baisse de vigilance, conflits, absentéisme.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Groupes de parole, ateliers de gestion des émotions. Soutien psychologique.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 02.2</strong></td>
+                <td>Anxiété de performance</td>
+                <td>Peur de l'échec, pression hiérarchique, évaluations.</td>
+                <td>Blocage, erreurs, évitement des situations complexes.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Coaching individuel, soutien psychologique pour restaurer la confiance.</td>
+            </tr>
+            <tr>
+                <td><strong>PSY 03.1</strong></td>
+                <td>Stigmatisation de la fragilité</td>
+                <td>Culture du "je tiens", peur du jugement, absence de confidentialité.</td>
+                <td>Sous-déclaration des difficultés, aggravation des problèmes, non-recours à l'aide.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Communication déstigmatisante. Confidentialité absolue garantie.</td>
+            </tr>
+            <tr>
+                <td><strong>SOC 01.1</strong></td>
+                <td>Isolement social et professionnel</td>
+                <td>Turnover élevé, travail de nuit, absence de collectif.</td>
+                <td>Démotivation, perte de sens, dépression.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Lien avec les ambassadeurs jeunes (P29) et le buddy system (P4).</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 01.1</strong></td>
+                <td>Accident lié à un état de détresse mentale</td>
+                <td>Dépression, burn-out, stress post-traumatique non traités.</td>
+                <td>Accident corporel ou matériel grave, conséquences humaines et financières.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Prévention par le traitement des fragilités en amont.</td>
+            </tr>
+            <tr>
+                <td><strong>RH 01.1</strong></td>
+                <td>Turnover élevé lié au mal-être</td>
+                <td>Épuisement, manque de reconnaissance, climat social dégradé.</td>
+                <td>Perte de compétences, coûts de recrutement, surcharge des équipes en place.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Réduction du turnover de -15% (cible M36). Fidélisation par l'accompagnement.</td>
+            </tr>
+            <tr>
+                <td><strong>RH 01.2</strong></td>
+                <td>Absentéisme lié à la santé mentale</td>
+                <td>Burn-out, dépression, stress chronique.</td>
+                <td>Désorganisation, surcharge des collègues, coûts indirects.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Réduction de l'absentéisme de -20% (cible M36). Retour au travail accompagné.</td>
+            </tr>
+            <tr>
+                <td><strong>CONF 01.1</strong></td>
+                <td>Défaut de confiance dans les dispositifs d'aide</td>
+                <td>Crainte de fuite d'informations vers l'employeur, peur des représailles.</td>
+                <td>Non-utilisation des services, aggravation silencieuse des fragilités.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Prestataire externe indépendant. Audit annuel de confidentialité. Aucun accès employeur.</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    
+    <h2>3.1 Principe général</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 15px 0;">
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>1. ACCÈS</strong><br>(24/7 - multicanal)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>2. ÉVALUATION</strong><br>(< 48h)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>3. ACCOMPAGNEMENT</strong><br>(durée variable)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>4. SUIVI</strong><br>(prévention)
+        </div>
+    </div>
+
+    <h2>3.2 Différenciation avec les dispositifs existants</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Dispositif</th>
+                <th>Objet</th>
+                <th>Limite</th>
+                <th>Complémentarité</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Médecine du travail</td><td>Visite périodique</td><td>Ponctuelle, formelle</td><td><strong>AMONT</strong></td></tr>
+            <tr><td>P11 - Fatigue</td><td>Sommeil, vigilance</td><td>Physique</td><td><strong>CÔTÉ</strong></td></tr>
+            <tr><td>P18 - Miroir à émotions</td><td>Bien-être immédiat</td><td>Superficiel</td><td><strong>CÔTÉ</strong></td></tr>
+            <tr><td>P46 - Rédemption</td><td>Post-accident</td><td>Réactif</td><td><strong>AVAL</strong></td></tr>
+            <tr><td><strong>P53 - EAP</strong></td><td>Santé mentale</td><td><strong>PRÉVENTIF</strong></td><td><strong>CŒUR</strong></td></tr>
+        </tbody>
+    </table>
+
+    <!-- ======================================================================== -->
+    <!-- 4. SERVICES PROPOSÉS -->
+    <!-- ======================================================================== -->
+    <h1>4. SERVICES PROPOSÉS</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Professionnel</th>
+                <th>Problématiques</th>
+                <th>Modalités</th>
+                <th>Budget</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Psychologue du travail</td><td>Stress, anxiété, dépression, trauma</td><td>6-12 séances/an, urgence 24h</td><td>80 €/séance</td></tr>
+            <tr><td>Assistant social</td><td>Finances, logement, famille, droits</td><td>Accompagnement, médiation</td><td>60 €/heure</td></tr>
+            <tr><td>Addictologue</td><td>Alcool, stupéfiants, médicaments</td><td>Évaluation, orientation, suivi</td><td>90 €/consultation</td></tr>
+            <tr><td>Coach professionnel</td><td>Burn-out, reconversion, conflits</td><td>Accompagnement long</td><td>100 €/séance</td></tr>
+        </tbody>
+    </table>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. BUDGET DÉTAILLÉ</h1>
+    
+    <h2>5.1 Investissement initial</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Détail</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Sélection du prestataire</td><td>Appel d'offres, négociation</td><td>10 k€</td></tr>
+            <tr><td>Déploiement numéro vert</td><td>Mise en service, communication</td><td>8 k€</td></tr>
+            <tr><td>Développement module P3</td><td>Chat, prise de rendez-vous</td><td>15 k€</td></tr>
+            <tr><td>Aménagement local</td><td>Espace confidentiel CDG + Orly</td><td>12 k€</td></tr>
+            <tr><td>Campagne de lancement</td><td>Affichage, flyers, réunions</td><td>10 k€</td></tr>
+            <tr><td><strong>TOTAL INVESTISSEMENT</strong></td><td></td><td><strong>55 k€</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <h2>5.2 Coûts annuels de fonctionnement</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Détail</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Forfait annuel prestataire</td><td>Jusqu'à 2 000 bénéficiaires</td><td>120 k€</td></tr>
+            <tr><td>Psychologue (0,2 ETP)</td><td>Coordination interne</td><td>20 k€</td></tr>
+            <tr><td>Communication continue</td><td>Mise à jour supports</td><td>5 k€</td></tr>
+            <tr><td>Formation managers (repérage)</td><td>10 sessions/an</td><td>10 k€</td></tr>
+            <tr><td>Évaluation / reporting</td><td>Suivi qualitatif</td><td>5 k€</td></tr>
+            <tr><td><strong>TOTAL ANNUEL</strong></td><td></td><td><strong>160 k€</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>BUDGET TOTAL 3 ANS : 55 k€ + (3 × 160 k€) = 535 k€</strong></p>
+    <p>Coût par conducteur (2 000 conducteurs) : <strong>80 €/an</strong><br>Coût d'un burn-out : 45 000 € | ROI : 12 burn-out évités sur 3 ans = 540 k€ d'économies</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>6. DÉPLOIEMENT PAR PHASES</h1>
+    
+    <h2>Phase 1 - Conception & Pilote (6 mois)</h2>
+    <ul>
+        <li>Groupe de travail (RH, médecine, CSE) - 3 k€</li>
+        <li>Appel d'offres prestataire EAP - 5 k€</li>
+        <li>Sélection entreprise pilote</li>
+        <li>Déploiement pilote (200 bénéficiaires) - 40 k€</li>
+        <li>Développement module P3 (chat, RDV) - 15 k€</li>
+        <li>Formation managers pilote - 3 k€</li>
+        <li>Expérimentation (3 mois)</li>
+        <li>Évaluation ENAC - 8 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 1 : 74 k€</strong></p>
+    
+    <h2>Phase 2 - Déploiement CDG (12 mois)</h2>
+    <ul>
+        <li>Extension à 5 entreprises - 80 k€</li>
+        <li>Déploiement local Orly (permanence) - 12 k€</li>
+        <li>Formation généralisée managers - 10 k€</li>
+        <li>Campagne de communication - 8 k€</li>
+        <li>Évaluation intermédiaire ENAC - 8 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 2 : 118 k€</strong></p>
+    
+    <h2>Phase 3 - Généralisation (24-36 mois)</h2>
+    <ul>
+        <li>Généralisation CDG (tous handlers) - 160 k€</li>
+        <li>Extension Orly (tous) - 40 k€</li>
+        <li>Extension province (3 aéroports pilotes) - 60 k€</li>
+        <li>Évaluation d'impact à 3 ans ENAC - 15 k€</li>
+    </ul>
+    <p><strong>BUDGET PHASE 3 : 275 k€</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 467 k€</strong> (optimisation)</p>
+
+    <!-- ======================================================================== -->
+    <!-- 7. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>7. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>7.1 Bénéfices mesurables</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Indicateur</th>
+                <th>Baseline</th>
+                <th>Cible M12</th>
+                <th>Cible M24</th>
+                <th>Cible M36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Bénéficiaires</td><td>0</td><td>200</td><td>800</td><td>2 000</td></tr>
+            <tr><td>Taux d'utilisation</td><td>-</td><td>5%</td><td>8%</td><td>12%</td></tr>
+            <tr><td>Délai de prise en charge</td><td>45 jours</td><td>5 jours</td><td>3 jours</td><td>2 jours</td></tr>
+            <tr><td>Satisfaction bénéficiaires</td><td>-</td><td>85%</td><td>90%</td><td>92%</td></tr>
+            <tr><td>Absentéisme</td><td>5%</td><td>-10%</td><td>-15%</td><td>-20%</td></tr>
+            <tr><td>Turnover</td><td>25%</td><td>-5%</td><td>-10%</td><td>-15%</td></tr>
+            <tr><td>Accidents liés à la santé mentale</td><td>-</td><td>-15%</td><td>-25%</td><td>-35%</td></tr>
+        </tbody>
+    </table>
+    
+    <h2>7.2 Bénéfices qualitatifs</h2>
+    
+    <ul>
+        <li><strong>Humanisation :</strong> L'entreprise prend soin de ses employés.</li>
+        <li><strong>Déstigmatisation :</strong> "Ce n'est pas grave de ne pas aller bien".</li>
+        <li><strong>Prévention :</strong> Agir avant la crise, avant l'accident.</li>
+        <li><strong>Confiance :</strong> Un service confidentiel, pas un outil de contrôle.</li>
+        <li><strong>Attractivité :</strong> CDG devient un employeur qui "prend soin".</li>
+        <li><strong>Fidélisation :</strong> Les conducteurs accompagnés restent.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>8. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous avons des caméras sur les engins, des détecteurs dans les angles morts, des algorithmes pour prédire les accidents. 
+            Nous n'avons rien pour détecter la détresse silencieuse d'un conducteur qui va mal. Le programme d'aide aux conducteurs 
+            fragilisés, ce n'est pas de la philanthropie. C'est de la prévention.
+        </p>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 9. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>9. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer un appel d'offres pour sélectionner un prestataire EAP spécialisé.</li>
+        <li>Tester le service sur une entreprise pilote (200 conducteurs) pendant 6 mois.</li>
+        <li>Développer le module d'accès dans l'application Safety Hub (chat + RDV).</li>
+        <li>Évaluer l'impact sur l'absentéisme, le turnover et la satisfaction.</li>
+        <li>Garantir une confidentialité absolue via un prestataire externe.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 53 - Programme d'aide aux conducteurs fragilisés (EAP Airport) | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

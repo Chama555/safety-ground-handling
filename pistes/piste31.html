@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 31 - La "Semaine sécurité thématique"</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 31</div>
+            <div class="document-subtitle">La "Semaine sécurité thématique"</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        CRÉER UN ÉVÉNEMENT ANNUEL FÉDÉRATEUR
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Événement annuel fédérateur sur toute la plateforme.
+    </p>
+    <p>
+        La sécurité est aujourd'hui traitée au fil de l'eau, sans moment fort, sans émulation collective, sans visibilité. Pas de rendez-vous annuel, pas de visibilité sur les efforts déployés, pas d'émulation entre entreprises, pas de fierté collective. Pourtant, 5 000 engins de piste, 2 millions de mouvements par an, des milliers de conducteurs et des progrès considérables méritent d'être célébrés. La trente et unième piste propose de créer un événement annuel fédérateur : la semaine sécurité thématique. Une semaine par an, dédiée à la sécurité, avec un thème renouvelé, des animations, des conférences, des défis, et une cérémonie de remise des prix, pour rassembler tous les acteurs de la plateforme autour d'une dynamique positive.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> La sécurité est traitée au fil de l'eau, sans moment fort, sans émulation collective, sans visibilité.</p>
+    
+    <table>
+        <thead><tr><th>Problème</th><th>Conséquence</th></tr></thead>
+        <tbody>
+            <tr><td>Pas de rendez-vous annuel</td><td>La sécurité est noyée dans le quotidien</td></tr>
+            <tr><td>Pas de visibilité</td><td>Les conducteurs ne voient pas les efforts déployés</td></tr>
+            <tr><td>Pas d'émulation</td><td>Chaque entreprise travaille dans son coin</td></tr>
+            <tr><td>Pas de fierté collective</td><td>"La sécurité, c'est des contraintes"</td></tr>
+            <tr><td>Pas de mémoire</td><td>On oublie ce qui a été fait l'an dernier</td></tr>
+            <tr><td>Pas de communication externe</td><td>Le grand public ignore nos progrès</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Paradoxe :</strong> Les compagnies aériennes organisent des salons, les aéroports communiquent sur leur développement durable. Les handlers, eux, restent invisibles. Pourtant, 5 000 engins, 2 M de mouvements, des milliers de conducteurs, des progrès considérables. Rien n'est montré, célébré, partagé.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Un événement annuel fédérateur change la perception de la sécurité. En interne, elle devient un moment de fierté. Entre entreprises, un sujet de coopération. Vers l'extérieur, un argument d'attractivité. La semaine sécurité thématique, c'est 1 fois par an, 1 thème fédérateur, 5 jours d'animations, de formations, de défis, tous les acteurs réunis.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 31) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque de communication/culture</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 31</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>CUL 06.1</strong></td>
+                <td>Absence de culture sécurité positive</td>
+                <td>Sécurité perçue uniquement comme contrainte, pas de célébration des réussites</td>
+                <td>Démotivation, désengagement, non-respect des règles</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Semaine dédiée, mise en avant des succès, fierté collective</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 06.2</strong></td>
+                <td>Invisibilité des progrès accomplis</td>
+                <td>Absence de communication sur les améliorations, focus sur les incidents</td>
+                <td>Sentiment de stagnation, "on n'avance pas", perte de sens</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Exposition du musée, chronologie des progrès, communication sur les avancées</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 06.3</strong></td>
+                <td>Absence de mémoire collective</td>
+                <td>Pas de capitalisation des actions passées, pas de transmission</td>
+                <td>Répétition des erreurs, réinvention de solutions existantes</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Espace mémoire, témoignages d'anciens, rappel des actions des années précédentes</td>
+            </tr>
+            <tr>
+                <td><strong>COM 06.1</strong></td>
+                <td>Communication sécurité inefficace</td>
+                <td>Messages noyés dans le quotidien, absence de moment fort</td>
+                <td>Faible mémorisation, non-application des consignes</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Semaine dédiée, thème annuel fort, communication avant/pendant/après</td>
+            </tr>
+            <tr>
+                <td><strong>COM 06.2</strong></td>
+                <td>Absence de partage inter-entreprises</td>
+                <td>Chacun travaille dans son silo, pas d'émulation, pas de partage des bonnes pratiques</td>
+                <td>Doublons, inefficacité, progression plus lente</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Challenge inter-entreprises, village sécurité, rencontres entre pairs</td>
+            </tr>
+            <tr>
+                <td><strong>COM 06.3</strong></td>
+                <td>Faible mobilisation des équipes sur la sécurité</td>
+                <td>Sujet perçu comme lointain, pas d'implication personnelle</td>
+                <td>Baisse de vigilance, non-respect des règles</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Défis, compétitions, récompenses, implication active des équipes</td>
+            </tr>
+            <tr>
+                <td><strong>COM 06.4</strong></td>
+                <td>Manque de reconnaissance des conducteurs exemplaires</td>
+                <td>Pas de visibilité sur les bons comportements, absence de valorisation</td>
+                <td>Démotivation, perte de repères</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Remise des labels, trophées, badges, "héros du mois"</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 06.1</strong></td>
+                <td>Manque de formation aux nouvelles technologies</td>
+                <td>Innovations peu connues, pas de démonstration</td>
+                <td>Sous-utilisation des équipements de sécurité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Démonstrations VR, stands fournisseurs, ateliers "nouveaux équipements"</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 06.2</strong></td>
+                <td>Absence de sensibilisation des jeunes générations</td>
+                <td>Messages non adaptés, absence de relais</td>
+                <td>Non-appropriation de la culture sécurité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Atelier "ambassadeurs jeunes", vidéos courtes, formats adaptés</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 03.1</strong></td>
+                <td>Manque d'implication des managers</td>
+                <td>Sécurité déléguée, pas d'animation d'équipe</td>
+                <td>Équipes peu sensibilisées, accidents</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Formation des managers pendant la semaine, implication dans les défis</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 01.6</strong></td>
+                <td>Accidents liés à un thème non maîtrisé (ex: angles morts)</td>
+                <td>Manque de sensibilisation spécifique, absence de rappel</td>
+                <td>Accidents évitables par une campagne ciblée</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Thème annuel priorisé, actions de sensibilisation renforcées, réduction ciblée</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Organiser <strong>1 semaine par an</strong> dédiée à la sécurité sur l'ensemble de la plateforme, avec : thème annuel, animations terrain, conférences, village sécurité, compétitions, cérémonie de remise des prix, communication interne et externe.</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>🗓️ PROGRAMME TYPE :</strong> J1 (Lancement, village sécurité) → J2 (Formation, sensibilisation) → J3 (Défis, compétitions) → J4 (Retour d'expérience, transmission) → J5 (Clôture, remise des prix).</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. LES THÈMES ANNUELS -->
+    <!-- ======================================================================== -->
+    <h1>4. LES THÈMES ANNUELS</h1>
+    <p><strong>Rotation sur 5 ans :</strong> 2026 Angles morts ("Vu, pas vu") | 2027 Vitesse ("Ralentir, c'est protéger") | 2028 Fatigue ("Bien dormir pour mieux conduire") | 2029 Co-activité ("Ensemble, en sécurité") | 2030 Innovation ("La sécurité de demain").</p>
+    <p><strong>Déclinaison pour 2026 (Angles morts) :</strong> Maquette géante PUSH, formation express 15 min, défi "1000 vérifications", conférence témoignage, démo caméras 360°, quiz.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. PROGRAMME DÉTAILLÉ (Résumé) -->
+    <!-- ======================================================================== -->
+    <h1>5. PROGRAMME DÉTAILLÉ TYPE</h1>
+    <ul>
+        <li><strong>J1 - Lancement :</strong> Discours, village sécurité (15 stands), buffet.</li>
+        <li><strong>J2 - Formation :</strong> Conférences, ateliers (angles morts, fatigue, équipements), formations flash (20 min).</li>
+        <li><strong>J3 - Défis :</strong> Challenge inter-entreprises (5 épreuves), équipes de 5, trophées et dotations (1 000€, 500€, 300€).</li>
+        <li><strong>J4 - REX & transmission :</strong> Table ronde anciens, ateliers buddies/ambassadeurs, formation managers, espace mémoire (P28).</li>
+        <li><strong>J5 - Clôture :</strong> Résultats, remise labels (P9), prix innovation (P33), trophée buddy, cocktail.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. MOYENS NÉCESSAIRES -->
+    <!-- ======================================================================== -->
+    <h1>6. MOYENS NÉCESSAIRES</h1>
+    <ul>
+        <li><strong>Équipe organisatrice :</strong> 30 personnes (chef de projet, logistique, com, animateur, hôtes, techniciens, bénévoles).</li>
+        <li><strong>Infrastructure :</strong> 17 000 € (espace, stands, sono, mobilier, signalétique, badges).</li>
+        <li><strong>Récompenses :</strong> 8 800 € (trophées, dotations).</li>
+        <li><strong>Restauration :</strong> 16 500 € (buffets, cocktail, collations).</li>
+        <li><strong>Communication :</strong> 7 500 € (création, impressions, vidéos, presse).</li>
+        <li><strong>Prestataires + imprévus :</strong> 16 000 €.</li>
+        <li><strong>TOTAL PAR SEMAINE : 65 800 €.</strong></li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>7. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (9 mois) :</strong> 1re édition CDG, thème Angles morts, organisation, évaluation. <strong>Budget 68 800 €.</strong></p>
+    <p><strong>PHASE 2 - Pérennisation CDG (12 mois) :</strong> 2e édition améliorée, processus rodé. <strong>Budget 73 800 €.</strong></p>
+    <p><strong>PHASE 3 - Extension (24-36 mois) :</strong> 3e édition CDG, édition Orly allégée, édition province (3 aéroports). <strong>Budget 161 800 €.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 304 400 €.</strong> (Coût annuel régime permanent ~70 000 €).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>8. BÉNÉFICES ATTENDUS</h1>
+    <h2>8.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Participants (cumul)</strong><span>Cible M36: 1 000</span></div>
+        <div class="indicator-item"><strong>Entreprises participantes</strong><span>Cible M36: 25</span></div>
+        <div class="indicator-item"><strong>Conducteurs sensibilisés</strong><span>Cible M36: 1 000</span></div>
+        <div class="indicator-item"><strong>Défis / compétitions</strong><span>Cible M36: 7</span></div>
+        <div class="indicator-item"><strong>Prix remis</strong><span>Cible M36: 12</span></div>
+        <div class="indicator-item"><strong>Satisfaction globale</strong><span>Cible M36: 92%</span></div>
+        <div class="indicator-item"><strong>Notoriété interne du thème</strong><span>Baseline 35% → Cible 85%</span></div>
+    </div>
+    <h2>8.2 Bénéfices qualitatifs</h2>
+    <ul><li>Fierté collective, cohésion inter-entreprises, visibilité des progrès, mobilisation générale, innovation, rayonnement.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. RETOURS D'EXPÉRIENCE / 10. RISQUES / 11. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>9. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Aéroport de Munich (Safety Days) :</strong> 3 jours/an, thème annuel, 500 participants, 95% satisfaction, -20% accidents sur le thème suivant.</li>
+        <li><strong>Airbus (Safety Week) :</strong> 1 semaine/an, 10 000 participants, culture sécurité renforcée, innovations identifiées.</li>
+        <li><strong>Vinci (Journée sécurité) :</strong> Arrêt total d'activité, formation, sensibilisation, mobilisation exceptionnelle.</li>
+    </ul>
+    
+    <h1>10. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Faible participation (contraintes production)</td><td>Élevée</td><td>Critique</td><td>Mobilisation direction, inscription par quotas, sessions multiples</td></tr>
+        <tr><td>Coût élevé</td><td>Élevée</td><td>Élevée</td><td>Mutualisation CSCA (70 k€/an), partenariats fournisseurs, sponsoring</td></tr>
+        <tr><td>Essoufflement (lassitude après 2-3 éditions)</td><td>Moyenne</td><td>Élevée</td><td>Thème annuel renouvelé, nouveautés chaque année, rotation organisateurs</td></tr>
+        <tr><td>Événement trop "corporate"</td><td>Moyenne</td><td>Modérée</td><td>Co-conception avec conducteurs, ateliers concrets, pas de discours</td></tr>
+        <tr><td>Exclusion des équipes de nuit</td><td>Élevée</td><td>Critique</td><td>Sessions dédiées nuit, horaires adaptés</td></tr>
+    </table>
+    
+    <h1>11. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Thème fédérateur (1 sujet clair)</li><li>Participation active (co-construction)</li><li>Équilibre sérieux/convivial (apprendre ET s'amuser)</li><li>Présence direction (managers visibles)</li><li>Retombées concrètes (actions post-événement)</li><li>Communication (avant, pendant, après)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Trop de discours, pas assez d'ateliers → ratio 30/70</li><li>Exclure les opérationnels → quotas conducteurs</li><li>Oublier les équipes de nuit → horaires adaptés</li><li>Événement unique sans suite → plan d'actions</li><li>Communication trop institutionnelle → ton direct</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>12. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            La semaine sécurité thématique est la piste de la fierté et du rassemblement. Ce n'est pas une formation de plus, ni une procédure supplémentaire, ni un contrôle déguisé. C'est une fête, une célébration, un rendez-vous. Ce que nous proposons, c'est d'arrêter de ne parler sécurité que dans les moments graves. C'est d'en faire un moment joyeux, collectif, attendu. C'est donner à chaque conducteur, chaque manager, chaque entreprise, une occasion de montrer ce qu'ils font de bien.
+        </p>
+        <p><strong>Le coût ?</strong> 70 000 € par an, soit 14 € par conducteur. <strong>Le bénéfice ?</strong> Des conducteurs qui, pendant une semaine, parlent sécurité avec fierté. Et qui, le reste de l'année, continuent d'en parler.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 13. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>13. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Organiser la 1re édition en octobre 2026 (semaine 42).</li>
+        <li>Thème 2026 : "Angles morts".</li>
+        <li>Mobiliser toutes les entreprises de la plateforme.</li>
+        <li>Préparer un village sécurité avec stands et démonstrations.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 31 - La "Semaine sécurité thématique" | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

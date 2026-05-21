@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 51 - Prime dynamique sans accident (insurance-linked)</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 51</div>
+            <div class="document-subtitle">Prime dynamique sans accident (insurance-linked)</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        LA SÉCURITÉ RENTABLE
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Prime mensuelle (50-150 €) basée sur le comportement sécuritaire, co-financée par assureur.
+    </p>
+    <p>
+        La sécurité rapporte, mais à l'entreprise, pas au conducteur. Un conducteur exemplaire (10 ans sans accident) n'a jamais été récompensé, alors qu'il a fait économiser des centaines de milliers d'euros. La cinquante et unième piste propose de créer un lien direct entre comportement sécuritaire et récompense financière individuelle avec une prime dynamique sans accident. Calcul mensuel basé sur des indicateurs objectifs (jours sans accident, signalements near-miss, vérifications angles morts, formations) avec trois niveaux (50, 100, 150 €) + part collective. Modèle économique autofinancé via baisse de sinistralité et partenariat assureur. Une étude de faisabilité de 45 k€ pour valider le cadre juridique et économique avant un éventuel déploiement.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> La sécurité rapporte... à l'entreprise, pas au conducteur.</p>
+    
+    <table>
+        <thead><tr><th>Acteur</th><th>Bénéfice d'un accident évité</th><th>Incitation directe</th></tr></thead>
+        <tbody>
+            <tr><td>Compagnie aérienne</td><td>Vol à l'heure, pas de retard</td><td>✅ Élevée</td></tr>
+            <tr><td>Handler</td><td>Pas d'immobilisation, pas de pénalités</td><td>✅ Élevée</td></tr>
+            <tr><td>Assureur</td><td>Pas d'indemnisation</td><td>✅ Élevée</td></tr>
+            <tr><td>Conducteur</td><td>Pas de blessure, pas de sanction</td><td>❌ AUCUNE</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Ce qui est récompensé est reproduit. La prime dynamique sans accident, c'est mesurer objectivement la performance sécurité, calculer une prime mensuelle basée sur des critères transparents, verser une récompense financière directe et visible, motiver durablement les comportements vertueux, associer les assureurs pour autofinancement.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 51) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque social / économique</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 51</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>INC 01.1</strong></td>
+                <td>Absence de reconnaissance financière pour conducteurs exemplaires</td>
+                <td>Dispositifs existants symboliques (P5) ou liés à qualification (P27), pas au comportement</td>
+                <td>Démotivation des meilleurs, sentiment d'injustice, perte d'exemplarité</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Prime mensuelle 50-150€ basée sur comportement, reconnaissance financière directe</td>
+            </tr>
+            <tr>
+                <td><strong>INC 01.2</strong></td>
+                <td>Absence de lien entre performance sécurité et rémunération</td>
+                <td>Salaire fixe, pas de variable lié à la sécurité</td>
+                <td>Comportements sécuritaires non encouragés financièrement</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Création d'un lien direct, mensuel, visible (ligne dédiée sur fiche de paie)</td>
+            </tr>
+            <tr>
+                <td><strong>INC 01.3</strong></td>
+                <td>Sentiment d'injustice (ceux qui font bien ne sont pas récompensés)</td>
+                <td>Seules les sanctions sont visibles, pas les récompenses</td>
+                <td>Baisse de motivation, désengagement, turnover</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Justice : récompenser ceux qui font bien, objectiver les critères</td>
+            </tr>
+            <tr>
+                <td><strong>INC 01.4</strong></td>
+                <td>Manque d'attractivité du métier pour les profils sécuritaires</td>
+                <td>Pas de valorisation financière de l'exemplarité</td>
+                <td>Difficulté à recruter et fidéliser les meilleurs</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Avantage compétitif pour attirer talents, réduction turnover (cible 19% M36)</td>
+            </tr>
+            <tr>
+                <td><strong>INC 01.5</strong></td>
+                <td>Risque de dérive individualiste</td>
+                <td>Focus uniquement sur prime individuelle, perte de solidarité</td>
+                <td>Compétition malsaine, non-entraide, risques collectifs</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Part collective (10-30€) liée aux objectifs d'équipe (75% atteints)</td>
+            </tr>
+            <tr>
+                <td><strong>JUR 02.1</strong></td>
+                <td>Opposition syndicale ("primes au mérite")</td>
+                <td>Dispositif perçu comme individualiste, discriminant, arbitraire</td>
+                <td>Conflit social, blocage, échec du projet</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Concertation sociale amont, négociation collective, critères objectifs, phase 1 étude faisabilité</td>
+            </tr>
+            <tr>
+                <td><strong>JUR 02.2</strong></td>
+                <td>Contentieux sur le calcul de la prime</td>
+                <td>Règles floues, calcul opaque, erreurs de traitement</td>
+                <td>Litiges individuels, défiance, abandon</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Transparence totale (règles publiées), algorithme simple, commission de recours</td>
+            </tr>
+            <tr>
+                <td><strong>ECO 02.1</strong></td>
+                <td>Coût non maîtrisé de la prime</td>
+                <td>Absence de plafond, dérive des effectifs, surestimation des économies</td>
+                <td>Charge financière non prévue, déséquilibre budgétaire</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Plafond 150€/mois, seuils ajustables, révision annuelle, modèle autofinancé</td>
+            </tr>
+            <tr>
+                <td><strong>ECO 02.2</strong></td>
+                <td>Effet d'aubaine (ceux déjà exemplaires)</td>
+                <td>Prime perçue comme un dû par les conducteurs vertueux</td>
+                <td>Pas d'effet incitatif sur eux, coût non justifié</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Phase transition, intégration au salaire de base après 1 an, mais maintien incitatif</td>
+            </tr>
+            <tr>
+                <td><strong>ECO 02.3</strong></td>
+                <td>Risque financier pour l'entreprise sans partage assureur</td>
+                <td>Coût 2,88 M€/an sans retour</td>
+                <td>Dispositif non viable économiquement</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Modèle de financement : employeur 50% (1,44M€), assureur 30% (0,86M€), économies internes 20% (0,58M€) → reste à charge 0€</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Prime mensuelle calculée sur score sécurité (0-150 points) basé sur : jours sans accident (coeff 3, max 90), signalements near-miss (coeff 2, max 10), vérifications angles morts (coeff 0,1, max 10), formations (coeff 5, max 20), malus joker (-10 pts) et permis faible (-20). Seuils : 60-74 pts (50€), 75-89 pts (100€), 90-150 pts (150€). Bonus collectif équipe (10-30€) si objectifs atteints 75%.</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>📊 Indicateurs mensuels :</strong> Jours sans accident (coeff 3), signalements near-miss (coeff 2), vérifications angles morts (coeff 1), formations (coeff 1), malus joker/permis.<br>
+        <strong>🧮 Calcul automatisé :</strong> Score 0-150, seuils (60,75,90), prime 50/100/150€, bonus collectif 10-30€.<br>
+        <strong>💰 Versement :</strong> Intégré paie, ligne dédiée, mensuel, non-acquis.<br>
+        <strong>🏦 Financement :</strong> Employeur 50%, assureur 30% (baisse sinistralité), économies internes 20% (absentéisme, turnover).</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. MODÈLE ÉCONOMIQUE -->
+    <!-- ======================================================================== -->
+    <h1>4. MODÈLE ÉCONOMIQUE</h1>
+    <p><strong>Coût prime :</strong> Base (30% cond., 50€) → 15€/cond/mois, Intermédiaire (40%, 100€) → 40€/cond/mois, Excellence (30%, 150€) → 45€/cond/mois, Collectif (20€) → 20€/cond/mois. Coût total/cond : ~120€/mois = 1 440€/an. Pour 2 000 cond. : 2,88 M€/an.</p>
+    <p><strong>Économies générées :</strong> Accidents matériels -20% (120k€), corporels -20% (180k€), retards -30% (72k€), immobilisation -20% (50k€), absentéisme -15% (360k€), turnover -10% (160k€), contentieux -30% (60k€). Total ~1,0 M€.</p>
+    <p><strong>Financement :</strong> Employeur 1,44 M€ (50%), assureur 0,86 M€ (30%), économies internes 0,58 M€ (20%) → reste à charge 0€. ROI <12 mois.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Étude de faisabilité (6 mois) :</strong> Étude juridique (droit travail, IRP) 15k€, consultation assureurs (3) 5k€, modélisation économique 20k€, concertation sociale (CSE) 5k€, recommandation. <strong>Budget 45 k€.</strong></p>
+    <p><strong>PHASE 2 - Pilote (12 mois) :</strong> 1 entreprise pilote, négociation assureur, développement module calcul P3, communication/formation, expérimentation 6 mois, évaluation. <strong>Budget 55 k€ + primes pilote (50 k€).</strong></p>
+    <p><strong>PHASE 3 - Déploiement (24-36 mois) :</strong> Extension 3 entreprises, généralisation CDG, Orly, province, évaluation. <strong>Budget 165 k€ + primes.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS (hors primes) : 265 k€.</strong> Primes à la charge des entreprises (autofinancées).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    <h2>6.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Conducteurs éligibles</strong><span>Cible M36: 2 000</span></div>
+        <div class="indicator-item"><strong>Score sécurité moyen</strong><span>Cible M36: 80</span></div>
+        <div class="indicator-item"><strong>Accidents</strong><span>Baseline 61/an → Cible -30%</span></div>
+        <div class="indicator-item"><strong>Signalements near-miss</strong><span>Baseline 50/an → Cible +150%</span></div>
+        <div class="indicator-item"><strong>Satisfaction conducteurs (reconnaissance)</strong><span>Baseline 22% → Cible 70%</span></div>
+        <div class="indicator-item"><strong>Turnover</strong><span>Baseline 25% → Cible 19%</span></div>
+    </div>
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    <ul><li>Justice, visibilité, motivation, fidélisation, culture sécurité, dialogue social.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. RETOURS D'EXPÉRIENCE / 8. RISQUES / 9. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>7. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Michelin :</strong> Prime annuelle sécurité (500€), objectifs individuels+collectifs, -45% accidents en 5 ans, 92% satisfaits. Leçon : combiner individuel et collectif.</li>
+        <li><strong>SNCF :</strong> Intéressement lié sécurité pour conducteurs, critères transparents, culture sécurité renforcée. Leçon : transparence essentielle.</li>
+        <li><strong>Aéroport de Francfort (Safety Bonus) :</strong> Pilote 200 conducteurs (2024), prime mensuelle 150€, autofinancé, -28% accidents, ROI <12 mois. Leçon : le mensuel plus efficace que l'annuel.</li>
+    </ul>
+    
+    <h1>8. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Dérive financière (coût non maîtrisé)</td><td>Moyenne</td><td>Élevée</td><td>Plafond 150€, ajustement seuils, révision annuelle</td></tr>
+        <tr><td>Effet d'aubaine (ceux déjà exemplaires)</td><td>Élevée</td><td>Modérée</td><td>Phase transition, intégration salaire base après 1 an</td></tr>
+        <tr><td>Concurrence malsaine</td><td>Faible</td><td>Faible</td><td>Objectifs individuels ET collectifs</td></tr>
+        <tr><td>Contentieux (contestation calculs)</td><td>Moyenne</td><td>Élevée</td><td>Transparence totale, algorithme simple, commission recours</td></tr>
+        <tr><td>Opposition syndicale ("primes au mérite")</td><td>Élevée</td><td>Critique</td><td>Concertation amont, négociation collective, critères objectifs</td></tr>
+    </table>
+    
+    <h1>9. CONDITIONS DE RÉUSSITE</h1>
+    <h3>🔑 Facteurs clés</h3>
+    <ol>
+        <li>Transparence (règles publiées, accessibles, comprises)</li>
+        <li>Simplicité (3-4 indicateurs max, pas de formule complexe)</li>
+        <li>Équité (mêmes règles pour tous)</li>
+        <li>Progressivité (3 niveaux pour maintenir motivation)</li>
+        <li>Collectif (part collective pour éviter individualisme)</li>
+        <li>Dialogue (commission de suivi paritaire)</li>
+    </ol>
+    <h3>⚠️ Pièges à éviter</h3>
+    <ul>
+        <li>Trop d'indicateurs → 4 max</li>
+        <li>Oubli du collectif → 20% prime liée équipe</li>
+        <li>Communication négative → "Prime sécurité" vs "Malus accident"</li>
+        <li>Calcul opaque → affichage score temps réel P3</li>
+        <li>Iniquité → ajustement selon métiers</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 10. DÉCISION STRATÉGIQUE -->
+    <!-- ======================================================================== -->
+    <h1>10. DÉCISION STRATÉGIQUE</h1>
+    <p>Ce n'est pas une question technique, c'est une question de dialogue social. Sans accord social, cette piste est inapplicable. Avec accord social, elle peut transformer la culture sécurité.</p>
+    <p><strong>Recommandation :</strong> Étape 1 : étude faisabilité (45 k€, 6 mois). Étape 2 : concertation sociale (3 mois). Étape 3 : négociation assureurs (3 mois). Étape 4 : décision GO/NO-GO.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 11. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>11. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous demandons aux conducteurs d'être exemplaires. Nous les formons, nous les contrôlons, nous les sanctionnons. Mais nous ne les récompensons jamais. Un conducteur qui n'a pas eu d'accident depuis 10 ans a fait économiser à son entreprise des centaines de milliers d'euros. Il n'en a jamais vu la couleur. La prime dynamique sans accident, ce n'est pas un bonus. C'est une reconnaissance. C'est un partage des économies réalisées. C'est dire à ceux qui font bien leur travail : "Vous nous faites gagner de l'argent. Voici votre part." Ce n'est pas un coût. C'est un investissement rentable.
+        </p>
+        <p><strong>Le coût ?</strong> 45 k€ pour l'étude de faisabilité. <strong>Le bénéfice ?</strong> -30% accidents, +150% signalements, -20% turnover, 70% satisfaction.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>12. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer une étude de faisabilité (45 k€) pour valider le cadre juridique et le modèle économique.</li>
+        <li>Consulter 3 assureurs pour évaluer leur intérêt à co-financer le dispositif.</li>
+        <li>Négocier avec les organisations syndicales la mise en place d'une prime comportementale.</li>
+        <li>Préparer un pilote sur 200 conducteurs si l'étude est positive.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 51 - Prime dynamique sans accident (insurance-linked) | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

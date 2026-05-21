@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 36 - Nudge visuel 3D (marquages trompe-l'œil)</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 36</div>
+            <div class="document-subtitle">Nudge visuel 3D (marquages trompe-l'œil)</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        RALENTIR SANS Y PENSER
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Marquages au sol en trompe-l'œil pour créer un réflexe de ralentissement inconscient.
+    </p>
+    <p>
+        La vitesse excessive aux abords des hotspots est la première cause d'accidents évitables à CDG. Pourtant, les solutions actuelles (radars pédagogiques, panneaux, contrôles, sanctions) montrent leurs limites. 80% du traitement visuel est inconscient : un conducteur ralentit sans savoir pourquoi quand il perçoit un rétrécissement de la voie. La trente-sixième piste propose d'exploiter ce levier avec des nudges visuels 3D : des marquages au sol en trompe-l'œil créant une illusion de rétrécissement ou d'obstacle, incitant naturellement à ralentir. 0 électricité, 0 maintenance, 0 sanction, 24h/24.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> La vitesse excessive aux abords des hotspots est la première cause d'accidents évitables à CDG.</p>
+    
+    <table>
+        <thead><tr><th>Donnée</th><th>Valeur</th></tr></thead>
+        <tbody>
+            <tr><td>Accidents liés à la vitesse (2025)</td><td>15</td></tr>
+            <tr><td>Excès de vitesse constatés (estimation)</td><td>&gt;1 000 / jour</td></tr>
+            <tr><td>Zones critiques</td><td>Parking T2E, Zone Fret Nord, Taxiway B</td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Mais aujourd'hui :</strong> Radars pédagogiques ignorés après 2 passages, panneaux "30 km/h" devenus invisibles, contrôles ponctuels trop rares, sanctions après l'infraction.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Agir sur l'inconscient est plus efficace que d'agir sur la raison. Un conducteur qui voit une voie qui semble se rétrécir ralentit instinctivement. Le nudge visuel 3D, c'est une illusion d'optique, un réflexe de prudence inconscient, 0 électricité/maintenance/sanction, 24h/24.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 36) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque d'infrastructure</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>VIT 01.1</strong></td>
+                <td>Excès de vitesse en zone parking</td>
+                <td>Précipitation, pression temporelle, absence de perception du danger</td>
+                <td>Collision engin/avion, dommages matériels, blessures</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Marquages type A (entonnoir) créant une perception de rétrécissement, -20% à -30% vitesse</td>
+            </tr>
+            <tr>
+                <td><strong>VIT 01.2</strong></td>
+                <td>Vitesse excessive en approche de hotspot</td>
+                <td>Absence de signalétique dynamique, habituation aux panneaux statiques</td>
+                <td>Freinage tardif, collision, risque piéton</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Marquages type B (bandes sonores optiques) avec espacement décroissant, -25% vitesse</td>
+            </tr>
+            <tr>
+                <td><strong>VIT 01.3</strong></td>
+                <td>Non-respect des limitations aux hotspots critiques</td>
+                <td>Zone perçue comme non dangereuse, absence de répression</td>
+                <td>Accidents graves récurrents sur les mêmes zones</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Marquages type C (damier 3D) créant illusion de relief (dos d'âne virtuel), -30% à -40% vitesse</td>
+            </tr>
+            <tr>
+                <td><strong>VIT 01.4</strong></td>
+                <td>Habituation aux dispositifs de contrôle de vitesse</td>
+                <td>Radars pédagogiques ignorés après 2 passages, panneaux devenus invisibles</td>
+                <td>Efficacité temporaire, retour rapide aux excès</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Action sur l'inconscient, pas d'habituation (effet durable), rotation des motifs possible</td>
+            </tr>
+            <tr>
+                <td><strong>VIT 01.5</strong></td>
+                <td>Absence de perception du danger dans les zones denses</td>
+                <td>Conducteur focalisé sur sa tâche, ne perçoit pas le risque de co-activité</td>
+                <td>Heurt piéton, collision entre engins</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Marquages combinés (type B + C) en zone de co-activité (Fret Nord, Catering)</td>
+            </tr>
+            <tr>
+                <td><strong>INF 02.1</strong></td>
+                <td>Signalétique inefficace</td>
+                <td>Panneaux ignorés, non-perçus, trop nombreux, pas de hiérarchie</td>
+                <td>Conducteurs non informés des dangers, vitesse excessive</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Marquages agissant à un niveau pré-conscient, contournant la saturation cognitive</td>
+            </tr>
+            <tr>
+                <td><strong>INF 02.2</strong></td>
+                <td>Absence de signalétique adaptée aux conditions de nuit</td>
+                <td>Panneaux non rétroéclairés, visibilité réduite</td>
+                <td>Accidents de nuit liés à la vitesse</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Marquages en résine rétroréfléchissante, visibles de nuit, fonctionnant 24h/24</td>
+            </tr>
+            <tr>
+                <td><strong>HUM 07.1</strong></td>
+                <td>Décision consciente de non-respect des limitations</td>
+                <td>Choix délibéré de gagner du temps, sentiment d'impunité</td>
+                <td>Accidents évitables, comportements à risque</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Action sur l'inconscient, contourne la décision consciente, le conducteur ralentit sans y penser</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 03.1</strong></td>
+                <td>Accident lié à la vitesse dans une zone identifiée comme hotspot</td>
+                <td>Vitesse excessive, absence de mesure efficace, répétition des incidents</td>
+                <td>Collision, blessures, dommages matériels</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Réduction de -30% des accidents liés à la vitesse sur zones équipées (cible M36)</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 03.2</strong></td>
+                <td>Accident en zone de co-activité (piétons/engins) lié à la vitesse</td>
+                <td>Vitesse inadaptée, absence de réflexe de ralentissement</td>
+                <td>Heurt piéton, blessure grave</td>
+                <td>4 (Catastrophique)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Marquages spécifiques en zone Catering et Fret Nord, réduction des conflits</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Installer aux entrées des hotspots des marquages au sol en trompe-l'œil créant une illusion de rétrécissement de la voie ou d'obstacle visuel, incitant naturellement à ralentir.</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>3 TYPES DE MARQUAGES :</strong></p>
+        <ul>
+            <li><strong>Type A - Effet "entonnoir" (rétrécissement) :</strong> Lignes convergentes, pour entrée de zone parking. Efficacité -20% à -30%.</li>
+            <li><strong>Type B - Bandes sonores optiques :</strong> Bandes transversales rapprochées, pour ralentissement progressif. Efficacité -25%.</li>
+            <li><strong>Type C - Damier 3D (illusion de relief) :</strong> Illusion de bosse, pour hotspots critiques. Efficacité -30% à -40%.</li>
+        </ul>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. SÉLECTION DES ZONES PILOTES -->
+    <!-- ======================================================================== -->
+    <h1>4. SÉLECTION DES ZONES PILOTES</h1>
+    <ul>
+        <li><strong>Parking T2E :</strong> 15 accidents, vitesse excessive en approche → Type A + C (entonnoir + damier).</li>
+        <li><strong>Zone Fret Nord :</strong> 12 accidents, co-activité dense → Type B + C (bandes + damier).</li>
+        <li><strong>Zone Catering :</strong> 4 accidents, recul, angles morts → Type B (bandes rapprochées).</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT TECHNIQUE -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT TECHNIQUE</h1>
+    <p><strong>Spécifications :</strong> Résine polyuréthane antidérapante, épaisseur 2-3 mm, durée de vie 3-5 ans, adhérence SRT ≥ 65, couleur blanc/jaune rétroréfléchissant, pose à froid.</p>
+    <p><strong>Coûts détaillés (pilote 3 zones) :</strong> Conception visuelle 4 500€, préparation surface 3 000€, fourniture résine 7 500€, application 4 500€, signalétique 900€, mesure avant/après 3 000€. <strong>TOTAL PILOTE 23 400 €</strong> (8 000 €/zone). Entretien annuel 10%.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. MESURE D'IMPACT -->
+    <!-- ======================================================================== -->
+    <h1>6. MESURE D'IMPACT</h1>
+    <p><strong>Protocole :</strong> État initial (2 semaines, radars), pose (2 jours), état post-pose (2 semaines), suivi à 1, 3, 6 mois (radars + observations + entretiens).</p>
+    <p><strong>Indicateurs de succès :</strong> Réduction vitesse moyenne -15%, réduction V85 -20%, réduction excès vitesse (>15 km/h) -30%, accidents zone équipée -20% à 12 mois, satisfaction >70%, mémorisation inconsciente >80%.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>7. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (3 mois) :</strong> 3 zones (T2E, Fret, Catering), conception, application, mesure, évaluation. <strong>Budget 23 400 €.</strong></p>
+    <p><strong>PHASE 2 - Extension CDG (6-12 mois) :</strong> 15 hotspots prioritaires, conception visuels adaptés, application 12 zones supplémentaires, communication, évaluation. <strong>Budget 113 000 €.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Déploiement Orly (8 hotspots), province (20 aéroports), retour d'expérience, intégration au Code de la piste (P16). <strong>Budget 194 000 €.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 330 400 €.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>8. BÉNÉFICES ATTENDUS</h1>
+    <h2>8.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Zones équipées CDG</strong><span>Cible M36: 25</span></div>
+        <div class="indicator-item"><strong>Réduction vitesse moyenne</strong><span>Cible M36: -20%</span></div>
+        <div class="indicator-item"><strong>Réduction excès vitesse</strong><span>Cible M36: -45%</span></div>
+        <div class="indicator-item"><strong>Accidents liés à la vitesse</strong><span>Baseline 15/an → Cible -30%</span></div>
+        <div class="indicator-item"><strong>Coût par zone</strong><span>~8 000 €</span></div>
+    </div>
+    <h2>8.2 Bénéfices qualitatifs</h2>
+    <ul><li>Efficacité 24h/24, zéro sanction, action inconsciente, durable (5 ans), visible, acceptable.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. RETOURS D'EXPÉRIENCE / 10. RISQUES / 11. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>9. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>France - CERTU (2015-2020) :</strong> Marquages 3D sur 20 sites, -20% à -30% vitesse moyenne, effet durable (pas d'habituation à 2 ans). Leçon : effet immédiat et persistant.</li>
+        <li><strong>Royaume-Uni - Transport for London :</strong> Damiers 3D à l'approche de passages piétons, -47% accidents piétons, -37% vitesse moyenne. Leçon : l'illusion d'obstacle est plus efficace que l'information.</li>
+        <li><strong>Allemagne - Autoroutes :</strong> Bandes transversales rapprochées en approche de péage, -25% vitesse sur 500 m. Leçon : la progressivité est clé.</li>
+    </ul>
+    
+    <h1>10. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Usure prématurée</td><td>Moyenne</td><td>Modérée</td><td>Résine haute résistance, garantie 5 ans, inspection trimestrielle</td></tr>
+        <tr><td>Habituation (effet qui s'estompe)</td><td>Élevée</td><td>Élevée</td><td>Rotation des motifs (tous les 2 ans), mélange avec P24, effet inconscient = moins d'habituation</td></tr>
+        <tr><td>Dérive ludique ("je roule sur le damier")</td><td>Faible</td><td>Faible</td><td>Communication sur le sérieux du dispositif</td></tr>
+        <tr><td>Coût de déploiement</td><td>Faible</td><td>Faible</td><td>Mutualisation ADP, 8 000 € par zone</td></tr>
+        <tr><td>Non-conformité (normes piste)</td><td>Faible</td><td>Élevée</td><td>Validation ADP/DSAC avant déploiement</td></tr>
+    </table>
+    
+    <h1>11. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Co-conception avec les conducteurs</li><li>Progressivité (pilote puis extension)</li><li>Mesure d'impact rigoureuse (avant/après)</li><li>Intégration au Code de la piste (P16)</li><li>Communication positive (pas de sanction)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Marquages trop complexes → 3 types simples</li><li>Zones trop vastes → cibler les hotspots</li><li>Oublier la maintenance → inspection régulière</li><li>Négliger la nuit → résine rétroréfléchissante</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>12. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous avons dépensé des milliers d'euros en radars, en panneaux, en campagnes de sensibilisation. Rien n'a fait baisser la vitesse de manière durable. Parce que nous avons agi sur la raison, pas sur l'instinct. Le nudge visuel 3D, c'est l'inverse. Ce n'est pas un appel à la conscience, c'est un réflexe. Le conducteur ralentit sans y penser, sans effort, sans contestation. Et ça marche. 20% de vitesse en moins, 30% d'excès évités, pour 8 000 € par zone. Pas d'électricité, pas de maintenance, pas de sanction. Juste de la peinture intelligente.
+        </p>
+        <p><strong>Le coût ?</strong> 8 000 € par hotspot. <strong>Le bénéfice ?</strong> -20% accidents liés à la vitesse, -30% excès, 0 € de maintenance, 0 sanction.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 13. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>13. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Tester 3 types de marquages sur 3 hotspots (23 400 €).</li>
+        <li>Mesurer rigoureusement l'impact (vitesses avant/après, accidentologie).</li>
+        <li>Évaluer l'effet à 3 mois et 6 mois (pas d'habituation ?).</li>
+        <li>Préparer un déploiement CDG sur la base des résultats.</li>
+        <li>Intégrer au Code de la piste (P16) si l'évaluation est positive.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 36 - Nudge visuel 3D (marquages trompe-l'œil) | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

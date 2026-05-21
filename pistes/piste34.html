@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 34 - La "Boîte à outils du manager"</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 34</div>
+            <div class="document-subtitle">La "Boîte à outils du manager"</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        DONNER AUX MANAGERS LES MOYENS D'ANIMER LA SÉCURITÉ
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        10 fiches réflexes clé en main pour animer la sécurité au quotidien.
+    </p>
+    <p>
+        Les managers de proximité sont en première ligne sur la sécurité, mais ils sont laissés seuls face à leurs responsabilités. Aucune formation spécifique, aucun outil clé en main, pas de temps dédié. Anciens conducteurs devenus managers du jour au lendemain, ils manquent de légitimité et de méthode. La trente-quatrième piste propose de donner à chaque manager les moyens d'animer la sécurité avec une boîte à outils complète et clé en main : 10 fiches réflexes couvrant l'ensemble des situations, une formation de 2 jours, et une communauté de pratique. L'objectif : gagner du temps, gagner en légitimité, harmoniser les pratiques, et libérer du temps pour l'humain.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Les managers de proximité sont en première ligne, mais laissés seuls.</p>
+    
+    <table>
+        <thead><tr><th>Problème</th><th>Conséquence</th></tr></thead>
+        <tbody>
+            <tr><td>Aucune formation spécifique</td><td>Ils apprennent "sur le tas"</td></tr>
+            <tr><td>Pas d'outils clé en main</td><td>Ils doivent tout créer eux-mêmes</td></tr>
+            <tr><td>Pas de temps dédié</td><td>La sécurité est traitée "en plus"</td></tr>
+            <tr><td>Légitimité fragile</td><td>Anciens conducteurs devenus managers du jour au lendemain</td></tr>
+            <tr><td>Stress</td><td>"Je ne sais pas si je fais bien"</td></tr>
+            <tr><td>Hétérogénéité des pratiques</td><td>100 managers = 100 façons de faire</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Paradoxe :</strong> On forme les conducteurs 3 à 5 jours, mais pas leurs managers à animer la sécurité.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Un manager outillé est un manager efficace. Créer une boîte à outils complète et clé en main, c'est donner du temps (outils prêts à l'emploi), de la légitimité (méthodes éprouvées), de la confiance ("je sais quoi faire"), harmoniser les pratiques, et gagner en efficacité.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 34) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque managérial</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 34</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>MAN 04.1</strong></td>
+                <td>Managers non formés à l'animation sécurité</td>
+                <td>Absence de formation spécifique, apprentissage "sur le tas"</td>
+                <td>Pratiques hétérogènes, inefficacité, messages sécurité mal transmis</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Formation obligatoire 2 jours (rôle, animation, observation, outils)</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.2</strong></td>
+                <td>Absence d'outils standardisés</td>
+                <td>Chaque manager improvise, réinvente, perd du temps</td>
+                <td>Hétérogénéité, perte d'efficacité, stress</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>10 fiches réflexes clé en main (points quotidiens, réunions, accueil, observation, recadrage, incidents, entretien, exercices, conflits, carnet de bord)</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.3</strong></td>
+                <td>Manque de légitimité des nouveaux managers</td>
+                <td>Promotion interne sans préparation, manque de méthode</td>
+                <td>Difficulté à imposer les règles, stress, turnover</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Outils éprouvés, formation, guide du manager, communauté de pratique</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.4</strong></td>
+                <td>Absence de suivi des actions sécurité</td>
+                <td>Pas de traçabilité, pas de reporting, pas de mémoire</td>
+                <td>Actions non suivies d'effet, problèmes récurrents</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Carnet de bord du manager, grilles d'observation, trames d'entretien</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.5</strong></td>
+                <td>Gestion inefficace des incidents par les managers</td>
+                <td>Pas de procédure claire, stress de l'urgence, oublis</td>
+                <td>Aggravation des conséquences, erreurs dans le reporting</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Fiche "Conduite à tenir après un accident" (carte portefeuille), 5 étapes clés</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.6</strong></td>
+                <td>Mauvaise intégration des nouveaux conducteurs</td>
+                <td>Accueil non standardisé, informations manquantes</td>
+                <td>Nouveaux moins bien formés, risques accrus, turnover</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Fiche "Accueil d'un nouveau" (check-list administrative, visite, briefing, plan d'intégration)</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.7</strong></td>
+                <td>Correction inefficace des comportements à risque</td>
+                <td>Approche punitive ou maladroite, démobilisation</td>
+                <td>Non-correction durable, répétition des erreurs</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Fiche "Recadrage positif" (préparer, échanger, suivre), formulations types</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.8</strong></td>
+                <td>Absence d'observation terrain structurée</td>
+                <td>Observations informelles, subjectives, non tracées</td>
+                <td>Problèmes non détectés, absence de données pour progresser</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Grille d'observation terrain (vérifications, conduite, équipements), carnet 50 grilles</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.9</strong></td>
+                <td>Réunions sécurité inefficaces</td>
+                <td>Pas de structure, trop longues, objectifs flous</td>
+                <td>Perte de temps, désengagement, messages non retenus</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-green">VERT</td>
+                <td>Fiches "Point quotidien" (5 min) et "Réunion hebdomadaire" (15 min), trames structurées</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 04.10</strong></td>
+                <td>Conflits non gérés au sein des équipes</td>
+                <td>Absence de méthode, escalade, ambiance dégradée</td>
+                <td>Stress, baisse de vigilance, accidents</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Fiche "Gestion d'un conflit" (méthode DESC)</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 08.1</strong></td>
+                <td>Absence de formation continue des managers</td>
+                <td>Formation initiale unique, pas de mise à jour</td>
+                <td>Compétences obsolètes, non-évolution des pratiques</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Revue annuelle des outils, mise à jour collaborative, communauté de pratique</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Créer une <strong>boîte à outils physique ET numérique</strong> pour les managers de proximité, avec : fiches réflexes, supports d'animation, outils d'observation, trames d'entretien, formation dédiée (2 jours), communauté de pratique.</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>🧰 4 DOMAINES :</strong> (1) Animer au quotidien (points, réunions) | (2) Accueillir et former (nouveaux, binômes) | (3) Observer et corriger (grille, recadrage) | (4) Gérer les incidents (conduite, débrief, rapport).</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. LES 10 OUTILS PRIORITAIRES -->
+    <!-- ======================================================================== -->
+    <h1>4. LES 10 OUTILS PRIORITAIRES</h1>
+    <ul>
+        <li><strong>Outil 1 - Fiche "Point sécurité quotidien" :</strong> 5 min, trame (rappel, actualité, défi, tour de table). Format A5 plastifié.</li>
+        <li><strong>Outil 2 - Fiche "Réunion sécurité hebdomadaire" :</strong> 15 min, retour sur semaine, chiffre clé, sujet, échanges, conclusion.</li>
+        <li><strong>Outil 3 - Fiche "Accueil d'un nouveau" :</strong> Check-list administrative, présentation équipe, visite plateforme, briefing sécurité, plan d'intégration.</li>
+        <li><strong>Outil 4 - Grille d'observation terrain :</strong> Vérifications pré-poste, conduite, équipements, commentaires. Carnet 50 grilles + version tablette.</li>
+        <li><strong>Outil 5 - Fiche "Recadrage positif" :</strong> Méthode 3 étapes (préparer, échanger, suivre), formulations types.</li>
+        <li><strong>Outil 6 - Fiche "Conduite à tenir après un accident" :</strong> Carte portefeuille, 5 étapes : sécuriser, alerter, constater, déclarer, analyser.</li>
+        <li><strong>Outil 7 - Trame "Entretien annuel - module sécurité" :</strong> Bilan, auto-évaluation, objectifs N+1, souhaits formation.</li>
+        <li><strong>Outil 8 - Fiche "Animation d'un exercice" :</strong> Déroulé type pour exercice sécurité (évacuation, incendie).</li>
+        <li><strong>Outil 9 - Fiche "Gestion d'un conflit" :</strong> Méthode DESC (Décrire, Exprimer, Suggérer, Conclure).</li>
+        <li><strong>Outil 10 - Carnet de bord du manager :</strong> 100 pages, format A5, pour tracer actions sécurité.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. LA FORMATION (2 JOURS) -->
+    <!-- ======================================================================== -->
+    <h1>5. LA FORMATION DES MANAGERS (2 JOURS)</h1>
+    <p><strong>J1 - Fondamentaux :</strong> Rôle du manager sécurité, animer la sécurité (points, réunions), observer et corriger (grille, recadrage), atelier pratique.<br>
+    <strong>J2 - Outils et pratiques :</strong> Gérer les incidents (conduite, débrief, rapport), accueillir et former (intégration, suivi buddy), présentation détaillée des 10 outils, atelier final (cas complet + évaluation).</p>
+    <p><strong>Supports :</strong> Guide du manager (50 p.), boîte à outils physique (classeur 10 fiches), plateforme numérique (templates, vidéos, quiz), certificat de formation (valable 3 ans).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BUDGET ESTIMÉ -->
+    <!-- ======================================================================== -->
+    <h1>6. BUDGET ESTIMÉ</h1>
+    <p><strong>Conception des outils :</strong> 30 k€ (pédagogie 8k€, design 5k€, plateforme 10k€, guide 7k€).<br>
+    <strong>Formation :</strong> 31 k€ (programme 5k€, formateurs 6k€, kits 100x50€=5k€, 10 sessions 15k€).<br>
+    <strong>Déploiement :</strong> Phase 1 (pilote 20 mgr) 15 k€, Phase 2 (CDG 100 mgr) 46 k€, Phase 3 (extension) 40 k€.<br>
+    <strong>BUDGET TOTAL 3 ANS : 162 k€</strong> (coût par manager formé ~1 000 €).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>7. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Conception & pilote (6 mois) :</strong> Groupe de travail, conception 10 outils, guide, plateforme, sélection 20 managers pilotes, formation 2 jours, expérimentation 2 mois, évaluation. <strong>Budget 52 k€.</strong></p>
+    <p><strong>PHASE 2 - Déploiement CDG (12 mois) :</strong> Formation formateurs (4 pers), déploiement 80 managers supplémentaires, fabrication kits, évaluation. <strong>Budget 49 k€.</strong></p>
+    <p><strong>PHASE 3 - Extension (24-36 mois) :</strong> Déploiement Orly (30 mgr), province (50 mgr), mise à jour outils V2, évaluation. <strong>Budget 56 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 162 k€.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>8. BÉNÉFICES ATTENDUS</h1>
+    <h2>8.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Managers formés</strong><span>Cible M36: 180</span></div>
+        <div class="indicator-item"><strong>Outils déployés</strong><span>Cible M36: 10/10</span></div>
+        <div class="indicator-item"><strong>Points sécurité quotidiens réalisés</strong><span>Baseline 30% → Cible 90%</span></div>
+        <div class="indicator-item"><strong>Observations terrain / mois / manager</strong><span>Baseline 0,5 → Cible 6</span></div>
+        <div class="indicator-item"><strong>Temps gagné / semaine / manager</strong><span>Cible 3h</span></div>
+        <div class="indicator-item"><strong>Satisfaction managers</strong><span>Baseline 35% → Cible 85%</span></div>
+    </div>
+    <h2>8.2 Bénéfices qualitatifs</h2>
+    <ul><li>Gain de temps, légitimité, confiance, harmonisation des pratiques, professionnalisation, sérénité.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. RETOURS D'EXPÉRIENCE / 10. RISQUES / 11. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>9. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Airbus (Manager Safety Kit) :</strong> 15 outils, formation 2 jours, 1 200 managers formés, -30% accidents, 92% satisfaction. Leçon : outiller, c'est responsabiliser.</li>
+        <li><strong>SNCF (Coffret sécurité du manager) :</strong> Coffret physique + application, 20 fiches réflexes, 3 000 coffrets, temps gagné 2h/semaine. Leçon : le support physique est important.</li>
+        <li><strong>Michelin (Management Safety System) :</strong> Programme certifiant, outils standardisés, communauté de pratique. Leçon : la formation continue est indispensable.</li>
+    </ul>
+    
+    <h1>10. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Outils non utilisés (prennent la poussière)</td><td>Élevée</td><td>Critique</td><td>Formation obligatoire, utilisation intégrée au rituel, audits aléatoires</td></tr>
+        <tr><td>Rejet des managers expérimentés ("je sais déjà faire")</td><td>Élevée</td><td>Élevée</td><td>Co-conception avec eux, valorisation de leur expertise, adaptation</td></tr>
+        <tr><td>Obsolescence</td><td>Moyenne</td><td>Modérée</td><td>Revue annuelle, mise à jour collaborative</td></tr>
+        <tr><td>Coût de déploiement</td><td>Moyenne</td><td>Modérée</td><td>Mutualisation CSCA, déploiement progressif</td></tr>
+        <tr><td>Formation insuffisante</td><td>Faible</td><td>Élevée</td><td>2 jours minimum, évaluation post-formation</td></tr>
+    </table>
+    
+    <h1>11. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Simplicité (10 outils max, 1 page par outil)</li><li>Accessibilité (papier + numérique)</li><li>Formation (2 jours obligatoires)</li><li>Légitimité (co-conception avec managers)</li><li>Évolution (mise à jour annuelle)</li><li>Communauté (réseau des managers formés)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Trop d'outils → 10 pas plus</li><li>Outils trop complexes → 1 fiche = 1 situation = 1 solution</li><li>Formation trop courte → 2 jours minimum</li><li>Oubli du suivi → réunion trimestrielle des managers</li><li>Version papier uniquement → dématérialisation obligatoire</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>12. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            La boîte à outils du manager est la piste de la professionnalisation et de l'efficacité. Ce n'est pas un gadget. C'est un accélérateur de compétences, un gain de temps, un facteur de sérénité. Ce que nous proposons, c'est d'arrêter de laisser les managers se débrouiller seuls. C'est de leur donner les mêmes armes, le même langage, les mêmes repères. C'est de faire du management de la sécurité un métier qui s'apprend.
+        </p>
+        <p><strong>Le coût ?</strong> 1 000 € par manager formé. <strong>Le bénéfice ?</strong> Un manager qui gagne 3 heures par semaine. 3 heures pour observer le terrain. 3 heures pour écouter ses équipes. 3 heures pour prévenir, plutôt que guérir.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 13. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>13. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Concevoir 10 outils prioritaires avec des managers volontaires.</li>
+        <li>Tester le kit avec 20 managers pilotes (formation 2 jours + expérimentation 2 mois).</li>
+        <li>Ajuster les outils sur la base des retours terrain.</li>
+        <li>Déployer sur l'ensemble des managers CDG (100 personnes).</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 34 - La "Boîte à outils du manager" | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

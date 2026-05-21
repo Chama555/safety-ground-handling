@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 55 - Prédiction de hotspots futurs (algorithme spatio-temporel)</title>
+    <style>
+        /* Styles généraux pour l'impression - Standard professionnel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        /* Simulation de prédiction */
+        .prediction-box {
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        
+        .prediction-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+        }
+        
+        .prediction-content {
+            background-color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .hotspot-rank {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #e67e22;
+        }
+        
+        .probability-bar {
+            height: 20px;
+            background-color: #FF0000;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 55</div>
+            <div class="document-subtitle">Prédiction de hotspots futurs (algorithme spatio-temporel)</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        VOIR L'ACCIDENT AVANT QU'IL N'ARRIVE
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Algorithme de machine learning fusionnant 5 ans de données pour prédire où et quand les accidents vont survenir.
+    </p>
+    
+    <p>
+        Aujourd'hui, nous traitons les hotspots après les accidents. Ce processus réactif est trop lent et trop partiel. 
+        Pourtant, nous avons des années de données d'accidents, de trafic, de météo, d'horaires. Nous avons des algorithmes 
+        capables d'apprendre de ces données. Cette piste propose de passer du réactif au proactif en construisant un modèle 
+        prédictif spatio-temporel qui identifie, des mois à l'avance, les zones à risque.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Aujourd'hui, nous traitons les hotspots APRÈS les accidents.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Étape</th>
+                <th>Délai</th>
+                <th>Problème</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Accident</td><td>J0</td><td>1 blessé, 45 000 € de coût</td></tr>
+            <tr><td>Constat</td><td>J+1 à J+7</td><td>Rapport, enquête</td></tr>
+            <tr><td>Analyse</td><td>J+15 à J+30</td><td>Identification du hotspot</td></tr>
+            <tr><td>Action corrective</td><td>J+30 à J+90</td><td>Marquage, signalétique, formation</td></tr>
+            <tr><td>Prochain accident</td><td>Variable</td><td>Le hotspot était connu... trop tard</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Paradoxe :</strong>
+        <ul>
+            <li>Nous avons <strong>des années de données</strong> d'accidents, de trafic, de météo, d'horaires.</li>
+            <li>Nous avons <strong>des algorithmes</strong> capables d'apprendre de ces données.</li>
+            <li><strong>Nous ne prédisons pas où et quand le prochain accident aura lieu.</strong></li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> L'accident n'est pas aléatoire. Il est prévisible. En fusionnant 5 ans de données, 
+        un algorithme de machine learning peut identifier les configurations à risque et prédire les hotspots futurs.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 55) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque informationnel</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque de modélisation</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 55</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>HOT 01.1</strong></td>
+                <td>Non-identification des hotspots émergents</td>
+                <td>Analyse purement réactive, absence d'anticipation des zones à risque futures.</td>
+                <td>Accidents dans des zones non surveillées, actions correctives trop tardives.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Modèle prédictif spatio-temporel identifiant les hotspots 3 à 12 mois à l'avance.</td>
+            </tr>
+            <tr>
+                <td><strong>HOT 01.2</strong></td>
+                <td>Récurrence des accidents sur les mêmes zones</td>
+                <td>Absence d'analyse systémique, actions correctives non ciblées ou inefficaces.</td>
+                <td>Plateaux accidentogènes persistants, sentiment d'impuissance.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Identification des facteurs de risque locaux. Actions préventives ciblées.</td>
+            </tr>
+            <tr>
+                <td><strong>DON 01.1</strong></td>
+                <td>Silos de données entre les acteurs</td>
+                <td>Données d'accidents (Gendarmerie), trafic (ADP), géoloc (handlers) non fusionnées.</td>
+                <td>Vision parcellaire des risques, modèle prédictif impossible à entraîner.</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Convention de partage de données (anonymisées). Plateforme de données centralisée (P6).</td>
+            </tr>
+            <tr>
+                <td><strong>DON 01.2</strong></td>
+                <td>Données historiques insuffisantes ou de mauvaise qualité</td>
+                <td>Manque de fiabilité des déclarations, données manquantes, périodes trop courtes.</td>
+                <td>Modèle non fiable, biais algorithmiques, fausses prédictions.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Phase de collecte et nettoyage dédiée (20 k€). Utilisation de 5 ans de données minimum.</td>
+            </tr>
+            <tr>
+                <td><strong>MOD 01.1</strong></td>
+                <td>Modèle trop complexe et non interprétable (boîte noire)</td>
+                <td>Utilisation d'algorithmes type Deep Learning sans couche d'explication.</td>
+                <td>Méfiance des opérationnels, refus d'utiliser les prédictions, décisions non justifiées.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-purple">VIOLET</td>
+                <td>Commencer par XGBoost, très interprétable. Utilisation de SHAP values pour expliquer.</td>
+            </tr>
+            <tr>
+                <td><strong>MOD 01.2</strong></td>
+                <td>Surapprentissage (overfitting) du modèle</td>
+                <td>Modèle trop complexe qui apprend le bruit des données plutôt que les vraies tendances.</td>
+                <td>Prédictions fausses sur de nouvelles données, perte de confiance.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Validation croisée temporelle stricte. Équipe data scientist expérimentée.</td>
+            </tr>
+            <tr>
+                <td><strong>MOD 01.3</strong></td>
+                <td>Biais algorithmique (zones sous-représentées)</td>
+                <td>Données déséquilibrées, le modèle apprend mal les zones à faible densité.</td>
+                <td>Iniquité de la prévention, zones oubliées.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Audit du modèle. Équilibrage des données. Sur-échantillonnage des zones peu denses.</td>
+            </tr>
+            <tr>
+                <td><strong>ACT 01.1</strong></td>
+                <td>Non-utilisation des prédictions (prévoir sans agir)</td>
+                <td>Absence de processus décisionnel lié aux prédictions, manque de coordination.</td>
+                <td>Investissement inutile, aucun gain de sécurité, frustration.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Comité de suivi mensuel. Lien formel avec les porteurs d'actions (aménagement, contrôle, formation).</td>
+            </tr>
+            <tr>
+                <td><strong>ACT 01.2</strong></td>
+                <td>Délai trop long entre prédiction et action</td>
+                <td>Processus de décision et de déploiement des actions trop lourd.</td>
+                <td>L'action arrive après la période critique, inefficace.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Actions préventives simples et rapides à déployer (marquages P36, contrôles P2).</td>
+            </tr>
+            <tr>
+                <td><strong>EVA 01.1</strong></td>
+                <td>Absence de mesure de l'impact des actions préventives</td>
+                <td>On ne sait pas si les actions ont réellement évité les accidents prédits.</td>
+                <td>Impossible d'améliorer le modèle ou de justifier l'investissement.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Mesure de l'impact par ENAC. Calcul du ROI et de la précision du modèle.</td>
+            </tr>
+            <tr>
+                <td><strong>TEC 01.1</strong></td>
+                <td>Obsolescence rapide du modèle</td>
+                <td>Changements dans l'infrastructure, le trafic, les comportements non intégrés.</td>
+                <td>Prédictions de moins en moins justes avec le temps.</td>
+                <td>1 (Négligeable)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Ré-entraînement annuel du modèle avec les nouvelles données. Version 2 (LSTM) après pilote.</td>
+            </tr>
+            <tr>
+                <td><strong>CONF 01.1</strong></td>
+                <td>Confiance excessive dans le modèle (fausse sécurité)</td>
+                <td>Les équipes se reposent trop sur les prédictions et relâchent la vigilance.</td>
+                <td>Accidents dans des zones non prédites, perte de culture de prévention.</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Communication claire : une prédiction n'est pas une certitude. Le modèle est une aide, pas un substitut.</td>
+            </tr>
+            <tr>
+                <td><strong>COU 01.1</strong></td>
+                <td>Non-couverture de tous les types de risques</td>
+                <td>Le modèle ne prédit que certains types d'accidents (vitesse, densité) mais pas d'autres (fatigue, alcool).</td>
+                <td>Aveuglement partiel, accidents non anticipés.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Intégration de données variées (météo, planning, near-miss). Complémentarité avec P11, P2, P8.</td>
+            </tr>
+            <tr>
+                <td><strong>ROI 01.1</strong></td>
+                <td>Coût jugé trop élevé pour un bénéfice incertain</td>
+                <td>Difficulté à prouver l'efficacité avant le déploiement, réticence à investir.</td>
+                <td>Abandon de la piste, retour au réactif.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Phase pilote à coût maîtrisé (115 k€). ROI démontré par backtesting. 6 accidents évités = ROI.</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    
+    <h2>3.1 Principe général</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 15px 0;">
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>1. COLLECTE</strong><br>(5 ans de données)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>2. MODÈLE</strong><br>(XGBoost)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>3. PRÉDICTION</strong><br>(Top 10 hotspots)
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>4. ACTION</strong><br>(Prévention ciblée)
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 4. EXEMPLE DE PRÉDICTION -->
+    <!-- ======================================================================== -->
+    <h1>4. EXEMPLE DE PRÉDICTION</h1>
+    
+    <div class="prediction-box">
+        <div class="prediction-header">PRÉDICTION HOTSPOTS - JUIN 2026</div>
+        <div class="prediction-content">
+            <p><span class="hotspot-rank">RANG 1 - PARKING T2E STAND 47</span></p>
+            <div class="probability-bar" style="width: 78%;">Probabilité d'accident : 78%</div>
+            <p><strong>Période critique :</strong> 15 juin - 15 juillet, 08h-10h, 18h-20h</p>
+            <p><strong>Facteurs :</strong> vague AF, 3 near-miss en mai, conducteurs juniors</p>
+            <p><strong>Action recommandée :</strong> marquages 3D (P36) + contrôles renforcés (P2)</p>
+            <p style="margin-top: 10px;"><span class="hotspot-rank">RANG 2 - ZONE FRET NORD</span></p>
+            <div class="probability-bar" style="width: 65%; background-color: #FFA500;">Probabilité d'accident : 65%</div>
+            <p><strong>Période critique :</strong> juillet-août, 14h-16h</p>
+            <p><strong>Facteurs :</strong> forte chaleur, trafic fret en hausse</p>
+            <p><strong>Action recommandée :</strong> campagne de sensibilisation (P31)</p>
+        </div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. BUDGET DÉTAILLÉ</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Phase</th>
+                <th>Actions</th>
+                <th>Coût</th>
+                <th>Livrable</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Phase 1 - Pilote</strong></td><td>Groupe de travail, collecte données, développement XGBoost, interface, backtesting, évaluation ENAC</td><td>115 k€</td><td>Modèle V1, interface, backtesting</td></tr>
+            <tr><td><strong>Phase 2 - Expérimentation</strong></td><td>Déploiement production, prédictions mensuelles, comité de suivi, mesure d'impact ENAC</td><td>60 k€ + 15 k€/an</td><td>Prédictions opérationnelles, premiers retours</td></tr>
+            <tr><td><strong>Phase 3 - Généralisation</strong></td><td>Développement V2 (LSTM), intégration P6, extension Orly & province, évaluation</td><td>122 k€</td><td>Modèle prédictif avancé</td></tr>
+            <tr><td><strong>TOTAL 3 ANS</strong></td><td></td><td><strong>297 k€ + 15 k€/an</strong></td><td></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Coût annuel de fonctionnement (régime permanent) :</strong> 40 k€</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>6.1 Bénéfices mesurables</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Indicateur</th>
+                <th>Baseline</th>
+                <th>Cible M12</th>
+                <th>Cible M24</th>
+                <th>Cible M36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Précision du modèle (top 10)</td><td>-</td><td>50%</td><td>65%</td><td>75%</td></tr>
+            <tr><td>Hotspots anticipés</td><td>0</td><td>3</td><td>8</td><td>15</td></tr>
+            <tr><td>Actions préventives ciblées</td><td>0</td><td>5</td><td>15</td><td>30</td></tr>
+            <tr><td>Accidents évités (estimation)</td><td>-</td><td>2</td><td>8</td><td>15</td></tr>
+            <tr><td>Réduction accidents hotspots</td><td>-</td><td>-15%</td><td>-25%</td><td>-35%</td></tr>
+            <tr><td>ROI (économies / coût)</td><td>-</td><td>1,5x</td><td>3x</td><td>5x</td></tr>
+        </tbody>
+    </table>
+    
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    
+    <ul>
+        <li><strong>Proactivité :</strong> Agir avant l'accident, pas après.</li>
+        <li><strong>Optimisation des ressources :</strong> Cibler les actions là où elles sont le plus nécessaires.</li>
+        <li><strong>Objectivation :</strong> Sortir de l'intuition, entrer dans la donnée.</li>
+        <li><strong>Mémoire longue :</strong> Capitaliser 5 ans d'expérience.</li>
+        <li><strong>Complémentarité :</strong> Avec P6, P8, P39.</li>
+        <li><strong>Innovation :</strong> CDG précurseur dans la maintenance prédictive de la sécurité.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>7. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous avons 5 ans de données d'accidents. Nous savons précisément où, quand, comment et pourquoi ils se sont produits. 
+            Pourtant, nous continuons à les subir comme s'ils étaient imprévisibles. La prédiction de hotspots futurs, ce n'est 
+            pas de la science-fiction. C'est du machine learning appliqué à un problème concret. 297 000 € sur 3 ans, c'est le 
+            prix de 6 accidents. Si nous en évitons ne serait-ce que 3, le pari est gagné.
+        </p>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 8. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>8. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer un projet pilote de 12 mois (115 k€) pour développer un prototype.</li>
+        <li>Mobiliser un data scientist dédié pendant 6 mois.</li>
+        <li>Tester le modèle sur 3 zones à risque connu (backtesting).</li>
+        <li>Intégrer les prédictions au jumeau numérique (P6).</li>
+        <li>Décider de la généralisation sur la base des résultats.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 55 - Prédiction de hotspots futurs | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

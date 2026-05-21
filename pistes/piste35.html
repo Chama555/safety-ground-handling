@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 35 - Le "Radar des bons comportements"</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 35</div>
+            <div class="document-subtitle">Le "Radar des bons comportements"</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        MESURER CE QUI VA BIEN, PAS SEULEMENT CE QUI VA MAL
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Tableau de bord des comportements positifs pour valoriser l'exemplarité.
+    </p>
+    <p>
+        Nos indicateurs sécurité sont tous négatifs : ils mesurent l'échec, pas la réussite. 365 jours sans accident = aucun indicateur. 10 000 vérifications d'angles morts = aucune mesure. Cette approche a des conséquences lourdes : seuls les problèmes sont visibles, les bons comportements sont ignorés, la culture devient punitive. La trente-cinquième piste propose d'inverser cette logique avec le radar des bons comportements : un système de mesure et de visualisation des comportements positifs (10 indicateurs de progrès) pour valoriser ceux qui font bien, encourager les autres à les imiter, et créer une dynamique vertueuse où la sécurité devient une performance et une fierté.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Nos indicateurs sécurité sont tous négatifs. Ils mesurent l'échec, pas la réussite.</p>
+    
+    <table>
+        <thead><tr><th>Indicateur actuel</th><th>Ce qu'il mesure</th><th>Signal</th></tr></thead>
+        <tbody>
+            <tr><td>Nombre d'accidents</td><td>Ce qui a mal tourné</td><td>🔴 Négatif</td></tr>
+            <tr><td>Taux de gravité</td><td>La sévérité des échecs</td><td>🔴 Négatif</td></tr>
+            <tr><td>Coût des accidents</td><td>Le prix des erreurs</td><td>🔴 Négatif</td></tr>
+            <tr><td>Arrêts de travail</td><td>Les conséquences des blessures</td><td>🔴 Négatif</td></tr>
+            <tr><td>Near-miss</td><td>Ce qui aurait pu mal tourner</td><td>🟡 Négatif</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Paradoxe et conséquences :</strong> Seule l'erreur est visible → sécurité associée à la sanction. Bons comportements ignorés → pas de reconnaissance. Indicateurs démotivants ("on n'atteindra jamais zéro"). Progrès invisibles. Culture punitive.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> Ce que l'on mesure influence ce que l'on fait. Si nous mesurons les comportements positifs, nous valorisons ceux qui font bien, encourageons l'imitation, démontrons que le progrès est possible, changeons le regard sur la sécurité, et créons une dynamique vertueuse.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 35) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque culturel / motivationnel</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 35</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>CUL 07.1</strong></td>
+                <td>Culture sécurité punitive</td>
+                <td>Focus exclusif sur les incidents, absence de mesure des comportements positifs</td>
+                <td>Démotivation, peur de la sanction, non-signalement des erreurs</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Mesure et valorisation des comportements positifs, changement de regard</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 07.2</strong></td>
+                <td>Invisibilité des comportements exemplaires</td>
+                <td>Pas de reconnaissance, pas de visibilité sur les réussites</td>
+                <td>Conducteurs exemplaires non valorisés, perte de modèles</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Radar individuel et collectif, affichage des scores, "héros du mois"</td>
+            </tr>
+            <tr>
+                <td><strong>CUL 07.3</strong></td>
+                <td>Démotivation des conducteurs vertueux</td>
+                <td>Absence de retour positif, seul le négatif est communiqué</td>
+                <td>Baisse d'engagement, sentiment d'injustice, turnover</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Reconnaissance visible (badges, palmarès), satisfaction en hausse</td>
+            </tr>
+            <tr>
+                <td><strong>COM 08.1</strong></td>
+                <td>Indicateurs démotivants</td>
+                <td>Objectifs perçus comme inatteignables (zéro accident), absence de mesure des progrès</td>
+                <td>Résignation, "on n'atteindra jamais zéro", baisse d'efforts</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Indicateurs de progrès, objectifs intermédiaires, visualisation de la progression</td>
+            </tr>
+            <tr>
+                <td><strong>COM 08.2</strong></td>
+                <td>Absence de communication sur les réussites</td>
+                <td>Focus médiatique sur les incidents, pas de partage des bonnes pratiques</td>
+                <td>Mauvaise image interne et externe, démotivation</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Affichage des résultats positifs, communication régulière sur les progrès</td>
+            </tr>
+            <tr>
+                <td><strong>MAN 05.1</strong></td>
+                <td>Manque de reconnaissance des équipes par les managers</td>
+                <td>Pas d'outil pour mesurer et valoriser le travail bien fait</td>
+                <td>Équipes peu motivées, absence de feedback positif</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Radar équipe, comparaison positive, objectifs collectifs, célébration des paliers</td>
+            </tr>
+            <tr>
+                <td><strong>PER 02.1</strong></td>
+                <td>Baisse de motivation liée à l'absence de reconnaissance</td>
+                <td>Efforts non visibles, non valorisés, sentiment d'inutilité</td>
+                <td>Désengagement, baisse de vigilance, accidents</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Valorisation des contributions (signalements, vérifications, formations)</td>
+            </tr>
+            <tr>
+                <td><strong>PER 02.2</strong></td>
+                <td>Absence d'émulation positive entre pairs</td>
+                <td>Pas de comparaison constructive, pas de défis collectifs</td>
+                <td>Chacun travaille dans son coin, pas de dynamique de groupe</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Classements équipes, objectifs collectifs, émulation saine</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 09.1</strong></td>
+                <td>Non-remontée des besoins de formation</td>
+                <td>Absence de mesure des compétences, pas d'identification des axes de progrès</td>
+                <td>Formations non adaptées, compétences en décalage</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Indicateur "formations suivies", identification des besoins par les écarts</td>
+            </tr>
+            <tr>
+                <td><strong>INN 03.1</strong></td>
+                <td>Faible contribution à l'innovation sécurité</td>
+                <td>Pas de mesure des propositions, pas de valorisation</td>
+                <td>Idées non remontées, perte d'opportunités</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Indicateur "propositions d'amélioration", lien avec P33</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 01.7</strong></td>
+                <td>Accidents liés à la démotivation et au désengagement</td>
+                <td>Absence de reconnaissance, perte de sens, baisse de vigilance</td>
+                <td>Accidents évitables, coûts humains et matériels</td>
+                <td>3 (Majeure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Maintien de la motivation par la reconnaissance continue des efforts</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Créer un <strong>système de mesure et de visualisation des comportements positifs</strong> avec : 10 indicateurs de progrès, radar de performance, objectifs collectifs, suivi individuel, valorisation, communication.</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>📊 10 INDICATEURS :</strong> Vérifications angles morts | Signalements near-miss | Conduite sans incident | Buddys actifs | Points sécurité réalisés | Jokers utilisés | Formations suivies | Propositions | Ancienneté sécurité | Satisfaction conducteurs.</p>
+        <p><strong>📈 VISUALISATION :</strong> Radar graphique (toile d'araignée), jauges de progression, comparaison temporelle.</p>
+        <p><strong>🎯 ACTIONS :</strong> Objectifs collectifs, célébration des réussites, axes de progrès, valorisation.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. LES 10 INDICATEURS DE PROGRÈS (synthèse) -->
+    <!-- ======================================================================== -->
+    <h1>4. LES 10 INDICATEURS DE PROGRÈS</h1>
+    <ul>
+        <li><strong>1. Vérifications angles morts :</strong> Nb signalé/mois, cible 1 000/entreprise, source P3, poids 10 pts.</li>
+        <li><strong>2. Signalements near-miss :</strong> Nb validés/mois, cible 50/entreprise, source P3, poids 15 pts.</li>
+        <li><strong>3. Conduite sans incident :</strong> Jours consécutifs sans accident, cible 365, source registre accidents, poids 20 pts.</li>
+        <li><strong>4. Buddys actifs :</strong> % buddies/effectif, cible 15%, source RH, poids 10 pts.</li>
+        <li><strong>5. Points sécurité réalisés :</strong> % points quotidiens réalisés, cible 90%, source P34, poids 10 pts.</li>
+        <li><strong>6. Jokers utilisés :</strong> Nb utilisés/mois, cible 20/entreprise, source managers, poids 10 pts.</li>
+        <li><strong>7. Formations suivies :</strong> % conducteurs formés/an, cible 80%, source registre formations, poids 10 pts.</li>
+        <li><strong>8. Propositions d'amélioration :</strong> Nb idées déposées/trimestre, cible 20/entreprise, source P33, poids 5 pts.</li>
+        <li><strong>9. Ancienneté sécurité :</strong> % conducteurs >5 ans sans accident, cible 30%, source RH, poids 5 pts.</li>
+        <li><strong>10. Satisfaction conducteurs :</strong> Score enquête annuelle, cible 4,5/5, source CSCA, poids 5 pts.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT PAR NIVEAUX -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT PAR NIVEAUX</h1>
+    <ul>
+        <li><strong>Niveau 1 - Radar individuel :</strong> Application P3, suivi personnel (jours sans accident, signalements, vérifications, badges, niveau).</li>
+        <li><strong>Niveau 2 - Radar équipe :</strong> Management visuel (P13) + dashboard, indicateurs agrégés, comparaison équipes, objectif collectif.</li>
+        <li><strong>Niveau 3 - Radar entreprise :</strong> Comité direction, rapport annuel, synthèse 10 indicateurs, radar global, tendances.</li>
+        <li><strong>Niveau 4 - Radar plateforme :</strong> CSCA, rencontres trimestrielles, classement inter-entreprises, benchmark, objectifs communs.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>6. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Conception & pilote (6 mois) :</strong> GT indicateurs (experts + conducteurs), définition 10 indicateurs, développement module V1, test 1 équipe (15 pers.), évaluation. <strong>Budget 22 k€.</strong></p>
+    <p><strong>PHASE 2 - Déploiement CDG (12 mois) :</strong> Développement V2 (dashboard entreprises), déploiement 5 entreprises, formation managers, intégration management visuel, évaluation. <strong>Budget 37 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Déploiement CDG généralisé, extension Orly et province, développement V3 (IA prédictive), évaluation. <strong>Budget 70 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 129 k€</strong> (coût annuel fonctionnement 10 k€).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>7. BÉNÉFICES ATTENDUS</h1>
+    <h2>7.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Conducteurs avec suivi individuel</strong><span>Cible M36: 2 500</span></div>
+        <div class="indicator-item"><strong>Équipes avec radar collectif</strong><span>Cible M36: 60</span></div>
+        <div class="indicator-item"><strong>Entreprises participantes</strong><span>Cible M36: 20</span></div>
+        <div class="indicator-item"><strong>Vérifications angles morts / mois</strong><span>Cible M36: 5 000</span></div>
+        <div class="indicator-item"><strong>Signalements near-miss / mois</strong><span>Baseline 50 → Cible 300</span></div>
+        <div class="indicator-item"><strong>Satisfaction conducteurs (être reconnu)</strong><span>Baseline 22% → Cible 65%</span></div>
+    </div>
+    <h2>7.2 Bénéfices qualitatifs</h2>
+    <ul><li>Changement de regard, reconnaissance, motivation, émulation, cohésion, culture sécurité positive.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. RETOURS D'EXPÉRIENCE / 9. RISQUES / 10. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>8. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Aviation (Safety Leading Indicators) :</strong> Indicateurs avancés, mesure des comportements préventifs, meilleure anticipation des risques. Leçon : les indicateurs positifs sont plus prédictifs que les négatifs.</li>
+        <li><strong>Danone (Positive Safety Index) :</strong> 8 indicateurs de comportements sécuritaires, affichage usines, -45% accidents en 3 ans, 90% employés "reconnus". Leçon : la reconnaissance est plus puissante que la sanction.</li>
+        <li><strong>Aéroport de Heathrow (Safety Scorecard) :</strong> Tableau de bord équilibré, objectifs sur comportements, forte adhésion. Leçon : le radar crée une dynamique collective.</li>
+    </ul>
+    
+    <h1>9. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Indicateurs mal calibrés</td><td>Élevée</td><td>Élevée</td><td>Co-conception avec conducteurs, test pilote prolongé, ajustements progressifs</td></tr>
+        <tr><td>Effet "course au chiffre"</td><td>Élevée</td><td>Critique</td><td>Pondération indicateurs, contrôle qualité données, sanction du faux signalement</td></tr>
+        <tr><td>Comparaison malsaine</td><td>Moyenne</td><td>Élevée</td><td>Valoriser la progression, pas le niveau absolu ; catégories par taille ; objectifs personnalisés</td></tr>
+        <tr><td>Surcharge de collecte</td><td>Moyenne</td><td>Modérée</td><td>Automatisation maximale (P3), indicateurs déjà disponibles</td></tr>
+        <tr><td>Obsolescence</td><td>Faible</td><td>Faible</td><td>Revue annuelle, groupe de travail permanent</td></tr>
+    </table>
+    
+    <h1>10. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Simplicité (10 indicateurs max, compréhensibles en 30s)</li><li>Automatisation (collecte intégrée aux outils)</li><li>Visibilité (affiché, partagé, commenté)</li><li>Équité (objectifs adaptés à chaque niveau)</li><li>Progressivité (commencer petit, affiner)</li><li>Célébration (chaque palier est une victoire)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Trop d'indicateurs → 10 max</li><li>Indicateurs non actionnables → chaque indicateur doit pouvoir être amélioré</li><li>Oubli du contexte → pondérer selon taille/activité</li><li>Comparaison toxique → valoriser la progression</li><li>Absence de suivi → revue mensuelle</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 11. POSITIONNEMENT STRATÉGIQUE -->
+    <!-- ======================================================================== -->
+    <h1>11. POSITIONNEMENT STRATÉGIQUE</h1>
+    <h2>11.1 Complémentarité avec les indicateurs classiques</h2>
+    <table>
+        <tr><th>Critère</th><th>Indicateurs classiques</th><th>Radar des bons comportements</th></tr>
+        <tr><td>Nature</td><td>Négatifs (accidents)</td><td>Positifs (prévention)</td></tr>
+        <tr><td>Temporalité</td><td>Passée (après l'accident)</td><td>Présente (pendant l'action)</td></tr>
+        <tr><td>Objectif</td><td>Sanction</td><td>Reconnaissance</td></tr>
+        <tr><td>Cible</td><td>Collectif</td><td>Individuel + collectif</td></tr>
+        <tr><td>Effet</td><td>Peur</td><td>Fierté</td></tr>
+    </table>
+    <p><strong>Complémentarité :</strong> Les deux sont nécessaires. L'un mesure les échecs, l'autre mesure les succès.</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>12. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Nous avons 50 ans d'habitude de mesurer les accidents. Nous avons 0 an d'habitude de mesurer les comportements vertueux. Pourtant, c'est en mesurant ce qui va bien que nous pourrons le reproduire, le développer, le célébrer. Le radar des bons comportements, ce n'est pas un outil de plus. C'est un changement de paradigme. C'est passer d'une culture de la peur à une culture de la fierté. C'est dire à un conducteur qui vérifie ses angles morts 20 fois par jour : "On vous voit. Merci."
+        </p>
+        <p><strong>Le coût ?</strong> 129 000 € sur 3 ans, soit 25 € par conducteur. <strong>Le bénéfice ?</strong> Un conducteur qui sait qu'on le regarde quand il fait bien. Et qui, parce qu'on le regarde, continue de faire bien. Et qui, parce qu'on le remercie, le fait avec fierté.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 13. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>13. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Définir 10 indicateurs de progrès avec un groupe de conducteurs et managers.</li>
+        <li>Développer un module radar intégré à l'application Safety Hub (15 k€).</li>
+        <li>Tester sur une équipe pilote (2 mois).</li>
+        <li>Déployer progressivement sur CDG.</li>
+        <li>Intégrer le radar au management visuel et aux rituels de reconnaissance.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 35 - Le "Radar des bons comportements" | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

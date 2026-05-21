@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 33 - Le "Prix de la meilleure idée sécurité"</title>
+    <style>
+        /* Styles généraux pour l'impression */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        /* Styles pour l'impression PDF */
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 33</div>
+            <div class="document-subtitle">Le "Prix de la meilleure idée sécurité"</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        RÉCOMPENSER L'INNOVATION VENUE DU TERRAIN
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- DESCRIPTION INTRODUCTIVE -->
+    <!-- ======================================================================== -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Concours annuel récompensant l'innovation venue du terrain.
+    </p>
+    <p>
+        Les meilleures idées viennent souvent du terrain. Ceux qui conduisent les engins sont les mieux placés pour identifier les problèmes et proposer des solutions. Pourtant, aucun dispositif structuré ne permet de capter cette intelligence. Les entreprises dépensent des fortunes en consultants, ignorant les 100 000 heures d'expérience cumulée de leurs propres conducteurs. La trente-troisième piste propose d'inverser cette logique en créant un prix annuel de la meilleure idée sécurité : un concours pour capter l'intelligence du terrain, valoriser ceux qui proposent, évaluer objectivement les idées, déployer les meilleures solutions, et créer une culture d'amélioration continue.
+    </p>
+    
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Les meilleures idées viennent du terrain, mais aucun dispositif ne permet de les capter.</p>
+    
+    <table>
+        <thead><tr><th>Problème</th><th>Conséquence</th></tr></thead>
+        <tbody>
+            <tr><td>Pas de dispositif structuré</td><td>Les idées restent dans les vestiaires</td></tr>
+            <tr><td>Pas de valorisation</td><td>Le conducteur qui a une idée n'est pas reconnu</td></tr>
+            <tr><td>Pas de processus d'évaluation</td><td>On ne sait pas si l'idée est bonne, applicable</td></tr>
+            <tr><td>Pas de déploiement</td><td>Même les bonnes idées ne sont pas mises en œuvre</td></tr>
+            <tr><td>Démotivation</td><td>"À quoi bon proposer, de toute façon ils n'écoutent pas"</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Paradoxe :</strong> Les entreprises dépensent des fortunes en consultants, mais ignorent les 100 000 heures d'expérience cumulée de leurs propres conducteurs.</p>
+    
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> L'innovation ne descend pas, elle remonte. Créer un prix annuel de la meilleure idée sécurité, c'est capter l'intelligence du terrain, valoriser ceux qui proposent, évaluer objectivement les idées, déployer les meilleures solutions, et créer une culture d'amélioration continue.
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 33) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque d'innovation/culture</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 33</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>INN 02.1</strong></td>
+                <td>Non-remontée des idées du terrain</td>
+                <td>Absence de dispositif structuré, culture de "ça ne sert à rien"</td>
+                <td>Perte d'opportunités d'amélioration, innovations non captées</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Appel à idées annuel structuré, formulaire simplifié, canaux multiples (papier, appli)</td>
+            </tr>
+            <tr>
+                <td><strong>INN 02.2</strong></td>
+                <td>Démotivation des conducteurs</td>
+                <td>Absence de reconnaissance, sentiment d'inutilité, non-écoute</td>
+                <td>Baisse de vigilance, désengagement, turnover</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Valorisation des idées, dotations, trophées, cérémonie publique</td>
+            </tr>
+            <tr>
+                <td><strong>INN 02.3</strong></td>
+                <td>Absence d'évaluation objective des idées</td>
+                <td>Pas de critères, pas de comité d'experts, décisions arbitraires</td>
+                <td>Bonnes idées non retenues, mauvaises idées déployées, perte de crédibilité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Étude technique par comité d'experts (pertinence, faisabilité, impact, originalité)</td>
+            </tr>
+            <tr>
+                <td><strong>INN 02.4</strong></td>
+                <td>Idées non déployées</td>
+                <td>Absence de suivi, pas de budget, pas d'accompagnement</td>
+                <td>Frustration des lauréats, perte de confiance, arrêt des propositions</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Accompagnement 12 mois, mentorat, budget prototypage (2 000-5 000€), suivi évaluation</td>
+            </tr>
+            <tr>
+                <td><strong>INN 02.5</strong></td>
+                <td>Manque de diversité des innovations</td>
+                <td>Focus sur un seul type d'idées (technique), absence de catégories</td>
+                <td>Domaines d'innovation négligés (orga, pédagogie), perte d'opportunités</td>
+                <td>1 (Négligeable)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>4 catégories : technique, organisationnelle, pédagogique, coup de cœur du jury</td>
+            </tr>
+            <tr>
+                <td><strong>INN 02.6</strong></td>
+                <td>Faible participation des conducteurs</td>
+                <td>Manque de communication, processus trop complexe, absence d'incitation</td>
+                <td>Peu d'idées, dispositif peu représentatif</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Communication intensive (vestiaires, appli), relais buddies, simplification du formulaire</td>
+            </tr>
+            <tr>
+                <td><strong>INN 02.7</strong></td>
+                <td>Jalousie ou frustration des non-lauréats</td>
+                <td>Manque de transparence, critères flous, absence de valorisation des finalistes</td>
+                <td>Ambiance dégradée, moins de participation l'année suivante</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Transparence des critères, valorisation des 20 finalistes (diplôme, dotation 300€), remise des prix publique</td>
+            </tr>
+            <tr>
+                <td><strong>COM 07.1</strong></td>
+                <td>Absence de partage des bonnes idées</td>
+                <td>Innovations non communiquées, pas de capitalisation</td>
+                <td>Solutions existantes non réutilisées, perte d'efficacité</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Communication des idées lauréates (intranet, application, affichage), partage des retours d'expérience</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 07.1</strong></td>
+                <td>Manque de culture de l'amélioration continue</td>
+                <td>Absence de processus, pas de valorisation de l'innovation</td>
+                <td>Stagnation, non-évolution des pratiques, accidents évitables</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Création d'un rituel annuel, émulation, suivi des idées déployées, mesure des économies générées</td>
+            </tr>
+            <tr>
+                <td><strong>ECO 01.1</strong></td>
+                <td>Coût d'opportunité des idées non exploitées</td>
+                <td>Idées existantes mais non mises en œuvre</td>
+                <td>Manque à gagner en sécurité et en performance</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Économies générées par les idées déployées : objectif 500 k€/an à M36</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    <div class="cotation-grid">
+        <div class="cotation-box"><h4>Gravité</h4><ul><li>1 - Négligeable</li><li>2 - Mineure</li><li>3 - Majeure</li><li>4 - Catastrophique</li></ul></div>
+        <div class="cotation-box"><h4>Probabilité</h4><ul><li>A - Fréquent (quotidien)</li><li>B - Occasionnel (hebdo/mensuel)</li><li>C - Rare (annuel)</li><li>D - Très rare (>1 an)</li><li>E - Extrêmement rare</li></ul></div>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    <h2>3.1 Principe général</h2>
+    <p>Créer un <strong>concours annuel</strong> ouvert à tous les conducteurs, pour récompenser les meilleures idées d'amélioration de la sécurité.</p>
+    <p><strong>Composantes :</strong> Appel à idées (3 mois), jury mixte, 4 catégories, dotations individuelles et pour l'entreprise, accompagnement des lauréats, cérémonie pendant la Semaine Sécurité (P31).</p>
+    
+    <h2>3.2 Architecture du dispositif</h2>
+    <div style="background-color: #f0f0f0; border:1px solid #ccc; padding:10px;">
+        <p><strong>📅 4 PHASES :</strong> (1) Appel à idées (3 mois) → (2) Sélection (vote pairs + étude technique, 2 mois) → (3) Jury et remise des prix (1 mois) → (4) Déploiement (12 mois).</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 4. LES 4 CATÉGORIES -->
+    <!-- ======================================================================== -->
+    <h1>4. LES 4 CATÉGORIES</h1>
+    <ul>
+        <li><strong>Innovation technique :</strong> Équipement, outil, dispositif technique. Jury experts (CSAE, constructeurs). Dotation 1 500 €.</li>
+        <li><strong>Innovation organisationnelle :</strong> Organisation, procédures, management. Jury experts (CSCA, ENAC). Dotation 1 500 €.</li>
+        <li><strong>Innovation pédagogique :</strong> Formation, sensibilisation, transmission. Jury experts (formateurs, ENAC). Dotation 1 500 €.</li>
+        <li><strong>Prix spécial "Coup de cœur" :</strong> Idée originale, décalée, créative. Jury (président). Dotation 1 000 €.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. PROCESSUS DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. LE PROCESSUS DÉTAILLÉ</h1>
+    <ul>
+        <li><strong>Phase 1 - Appel à idées (3 mois) :</strong> Formulaire 1 page (problème, solution, bénéfices). Dépôt papier, QR code, application P3.</li>
+        <li><strong>Phase 2 - Sélection (2 mois) :</strong> Vote pairs (top 20/catégorie) → étude technique (pertinence 30%, faisabilité 30%, impact 30%, originalité 10%) → 20 finalistes (5 par catégorie).</li>
+        <li><strong>Phase 3 - Jury et remise des prix (1 mois) :</strong> Jury mixte (3 cond., 2 managers, 3 experts, 2 direction). Audition 10 min + 5 min Q&A. 4 lauréats + 1 coup de cœur. Cérémonie pendant P31.</li>
+        <li><strong>Phase 4 - Déploiement (12 mois) :</strong> Prototypage (3 mois) → Expérimentation (3 mois) → Évaluation (1 mois) → Industrialisation (3 mois) → Suivi (2 mois). Accompagnement : mentor, budget 2 000-5 000€, appui technique, visibilité CSCA.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. DOTATIONS ET RÉCOMPENSES -->
+    <!-- ======================================================================== -->
+    <h1>6. DOTATIONS ET RÉCOMPENSES</h1>
+    <p><strong>Individuelles :</strong> Lauréats : 1 500 € + trophée (4) / Coup de cœur : 1 000 € + trophée. Finalistes : 300 € + diplôme (16). Total 6 400 €.<br>
+    <strong>Entreprises :</strong> Lauréat : 1 000 € / Finaliste : 300 €. Total 4 900 €.<br>
+    <strong>Trophées :</strong> 150 € × 4 = 600 €.<br>
+    <strong>Communication :</strong> 2 000 €.<br>
+    <strong>Organisation :</strong> 1 500 €.<br>
+    <strong>Accompagnement :</strong> 4 × 2 500 € = 10 000 €.<br>
+    <strong>TOTAL ANNUEL : 25 400 €.</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>7. DÉPLOIEMENT PAR PHASES</h1>
+    <p><strong>PHASE 1 - Pilote (12 mois) :</strong> 1re édition CDG, 20 finalistes, 4 lauréats, accompagnement. <strong>Budget 28 k€.</strong></p>
+    <p><strong>PHASE 2 - Pérennisation CDG (12 mois) :</strong> 2e édition, processus rodé. <strong>Budget 30,4 k€.</strong></p>
+    <p><strong>PHASE 3 - Généralisation (24-36 mois) :</strong> Édition 3 CDG, édition 1 Orly, édition 1 province. <strong>Budget 60,4 k€.</strong></p>
+    <p><strong>BUDGET TOTAL 3 ANS : 118,8 k€</strong> (coût annuel permanent ~30 k€).</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 8. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>8. BÉNÉFICES ATTENDUS</h1>
+    <h2>8.1 Bénéfices mesurables</h2>
+    <div class="indicator-box">
+        <div class="indicator-item"><strong>Idées déposées / an</strong><span>Cible M36: 150</span></div>
+        <div class="indicator-item"><strong>Conducteurs participants</strong><span>Cible M36: 120</span></div>
+        <div class="indicator-item"><strong>Entreprises participantes</strong><span>Cible M36: 25</span></div>
+        <div class="indicator-item"><strong>Idées déployées / an</strong><span>Cible M36: 12</span></div>
+        <div class="indicator-item"><strong>Économies générées</strong><span>Cible M36: 500 k€</span></div>
+        <div class="indicator-item"><strong>Satisfaction participants</strong><span>Cible M36: 92%</span></div>
+    </div>
+    <h2>8.2 Bénéfices qualitatifs</h2>
+    <ul><li>Valorisation des conducteurs, culture d'innovation, amélioration continue, fierté individuelle, rayonnement, émulation.</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 9. RETOURS D'EXPÉRIENCE / 10. RISQUES / 11. CONDITIONS -->
+    <!-- ======================================================================== -->
+    <h1>9. RETOURS D'EXPÉRIENCE</h1>
+    <ul>
+        <li><strong>Toyota (Creative Idea Suggestion System) :</strong> 10 000 idées/an/usine, 85% implémentation, 1 M€ économies/an. Leçon : l'innovation est une routine.</li>
+        <li><strong>SNCF (Challenge Innovation) :</strong> 500 candidatures/an, 30 projets incubés, ROI > 500%. Leçon : l'accompagnement est aussi important que la récompense.</li>
+        <li><strong>Aéroport de Heathrow (Safety Innovation Award) :</strong> 80 candidatures en 2025, 5 projets déployés, forte adhésion. Leçon : la reconnaissance par les pairs est plus motivante que la dotation.</li>
+    </ul>
+    
+    <h1>10. RISQUES ET MESURES DE MITIGATION</h1>
+    <table><thead><tr><th>Risque</th><th>Prob.</th><th>Grav.</th><th>Plan d'action</th></tr></thead>
+        <tr><td>Faible participation</td><td>Élevée</td><td>Critique</td><td>Communication intensive, relais buddies, témoignages lauréats, simplification formulaire</td></tr>
+        <tr><td>Idées non abouties</td><td>Élevée</td><td>Modérée</td><td>Accompagnement à la rédaction, mentors disponibles, ateliers "comment proposer une idée"</td></tr>
+        <tr><td>Jalousie / frustration</td><td>Moyenne</td><td>Modérée</td><td>Transparence critères, valorisation finalistes, remise des prix publique</td></tr>
+        <tr><td>Coût de déploiement</td><td>Moyenne</td><td>Élevée</td><td>Budget prototypage intégré, mutualisation CSCA, ROI démontré</td></tr>
+        <tr><td>Essoufflement</td><td>Moyenne</td><td>Élevée</td><td>Renouvellement catégories, événement annuel attendu, succès stories</td></tr>
+    </table>
+    
+    <h1>11. CONDITIONS DE RÉUSSITE</h1>
+    <h3>Facteurs clés</h3>
+    <ol><li>Simplicité (formulaire 1 page, dépôt 15 min)</li><li>Visibilité (communication omniprésente)</li><li>Légitimité (jury représentatif, processus transparent)</li><li>Accompagnement (ne pas laisser les lauréats seuls)</li><li>Reconnaissance (cérémonie publique, trophée)</li><li>Suivi (mesurer l'impact des idées déployées)</li></ol>
+    <h3>Pièges à éviter</h3>
+    <ul><li>Dossier trop complexe → 1 page max</li><li>Jury trop "direction" → 1/3 conducteurs</li><li>Oublier les finalistes → tous reçoivent diplôme</li><li>Déploiement trop lent → accompagnement dédié, objectif 12 mois</li><li>Effet "trophée" sans suite → suivi à 1 an, 3 ans</li></ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 12. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>12. EN RÉSUMÉ</h1>
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le prix de la meilleure idée sécurité est la piste de l'intelligence collective. Ce n'est pas une dépense, c'est un investissement. Investissement dans la reconnaissance : dire merci à ceux qui proposent. Investissement dans l'innovation : capter 5 000 forces de proposition. Investissement dans la culture : faire de l'amélioration continue une habitude. Investissement dans la fierté : montrer que le terrain est écouté.
+        </p>
+        <p><strong>Le coût ?</strong> 28 000 € par an, soit 5,60 € par conducteur. <strong>Le bénéfice ?</strong> Des centaines d'idées gratuites. Des innovations venues du terrain. Des conducteurs fiers d'être écoutés.</p>
+    </div>
+    
+    <!-- ======================================================================== -->
+    <!-- 13. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>13. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Lancer la 1re édition en 2026 (appel à idées janvier-mars).</li>
+        <li>Budget : 28 k€ incluant l'accompagnement des lauréats.</li>
+        <li>Mobiliser toutes les entreprises via le réseau CSCA.</li>
+        <li>Remise des prix pendant la Semaine Sécurité (P31).</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 33 - Le "Prix de la meilleure idée sécurité" | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

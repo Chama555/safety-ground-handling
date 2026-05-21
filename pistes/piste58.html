@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 58 - Interopérabilité IATA IGOM</title>
+    <style>
+        /* Styles généraux pour l'impression - Standard professionnel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 58</div>
+            <div class="document-subtitle">Interopérabilité IATA IGOM</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        CDG LEADER MONDIAL, PAS SUIVEUR
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Alignement des procédures sur le standard mondial IGOM de l'IATA.
+    </p>
+    
+    <p>
+        Chaque aéroport a ses propres procédures. Un conducteur formé à CDG doit tout réapprendre s'il travaille à Marseille ou à Nice. 
+        L'aviation commerciale est globalisée : mêmes avions, mêmes règles de vol. L'assistance en escale, elle, reste locale. 
+        Cette piste propose d'aligner CDG sur les standards mondiaux avec l'interopérabilité IATA IGOM, pour faire de CDG un leader, pas un suiveur.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Chaque aéroport a ses propres procédures. Chaque pays a ses propres règles. Chaque culture a ses propres habitudes.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Situation</th>
+                <th>Conséquence</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Un conducteur CDG en mission à FRA</td><td>Doit réapprendre les procédures</td></tr>
+            <tr><td>Un équipage étranger à CDG</td><td>Ne comprend pas nos marquages</td></tr>
+            <tr><td>Une compagnie internationale</td><td>Doit s'adapter à 20 standards différents</td></tr>
+            <tr><td>Un incident transfrontalier</td><td>Difficulté d'analyse comparative</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Paradoxe :</strong>
+        <ul>
+            <li>L'aviation commerciale est <strong>globalisée</strong> (mêmes avions, mêmes règles de vol).</li>
+            <li>L'assistance en escale est <strong>locale</strong> (chaque plateforme fait sa cuisine).</li>
+            <li><strong>CDG est le 2e aéroport d'Europe. Nous devons être LEADER, pas suiveur.</strong></li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> L'interopérabilité n'est pas une contrainte. C'est un avantage concurrentiel. 
+        L'alignement sur IGOM et la certification ISAGO sont des stratégies de rayonnement.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 58) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque informationnel</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque normatif</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 58</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>NOR 01.1</strong></td>
+                <td>Procédures locales non alignées sur les standards internationaux</td>
+                <td>Absence de référentiel commun, culture du "faire maison", manque de veille normative.</td>
+                <td>Conducteurs non opérationnels sur d'autres plateformes, incompréhension des équipages étrangers, incidents évitables.</td>
+                <td>3 (Majeure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-purple">VIOLET</td>
+                <td>Alignement sur IGOM (International Ground Operations Manual). Cartographie des écarts. Harmonisation des 20 procédures critiques.</td>
+            </tr>
+            <tr>
+                <td><strong>NOR 01.2</strong></td>
+                <td>Multiplicité des standards entre aéroports</td>
+                <td>Absence d'harmonisation nationale et internationale, chaque plateforme fait sa cuisine.</td>
+                <td>Mobilité professionnelle impossible, perte de temps en adaptation, risques liés à la méconnaissance.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Adoption du standard unique IGOM. Certification ISAGO.</td>
+            </tr>
+            <tr>
+                <td><strong>NOR 01.3</strong></td>
+                <td>Non-reconnaissance mutuelle des certifications</td>
+                <td>Pas de label commun, chaque handler est audité séparément par chaque compagnie.</td>
+                <td>Multiplication des audits, coûts élevés, perte de temps.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Certification IATA ISAGO, reconnue par 150+ compagnies aériennes.</td>
+            </tr>
+            <tr>
+                <td><strong>COM 01.1</strong></td>
+                <td>Communication non standardisée équipage/sol</td>
+                <td>Écart majeur CDG/IGOM, procédure push-back non alignée.</td>
+                <td>Risque de collision, mauvaise interprétation des consignes, stress.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Harmonisation de la procédure push-back (signal visuel "thumbs up", stop intermédiaire à 45°, vitesse 8 km/h).</td>
+            </tr>
+            <tr>
+                <td><strong>SIG 01.1</strong></td>
+                <td>Signalisation piste non normalisée</td>
+                <td>Écart majeur CDG/IGOM, marquages spécifiques à CDG incompréhensibles pour les équipages étrangers.</td>
+                <td>Erreurs de circulation, incursions sur piste, collisions.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Alignement de la signalisation sur les standards IGOM (via P16 - Code de la piste).</td>
+            </tr>
+            <tr>
+                <td><strong>REX 01.1</strong></td>
+                <td>Absence de partage d'expérience transfrontalier</td>
+                <td>Silos nationaux, pas de base de données commune des incidents.</td>
+                <td>Chaque aéroport apprend seul de ses erreurs, les incidents se reproduisent ailleurs.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-blue">BLEU</td>
+                <td>Base de données transfrontalière des incidents significatifs (format IATA) avec FRA, LHR, MUC, AMS, MAD.</td>
+            </tr>
+            <tr>
+                <td><strong>REX 01.2</strong></td>
+                <td>Benchmark impossible entre plateformes</td>
+                <td>Données non comparables, définitions différentes des indicateurs.</td>
+                <td>Impossible de se situer par rapport aux pairs, pas d'objectif de progression externe.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Standardisation des données via taxonomie IATA. Benchmark objectif.</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 01.1</strong></td>
+                <td>Conducteurs non formés aux standards internationaux</td>
+                <td>Formation basée uniquement sur les procédures locales.</td>
+                <td>Conducteurs non opérationnels hors de leur plateforme, mobilité impossible.</td>
+                <td>2 (Mineure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Formation IGOM pour tous les conducteurs (objectif 2 000 conducteurs formés en 3 ans).</td>
+            </tr>
+            <tr>
+                <td><strong>FOR 01.2</strong></td>
+                <td>Formateurs non habilités aux standards internationaux</td>
+                <td>Pas de formation des formateurs à IGOM.</td>
+                <td>Mauvaise transmission des bonnes pratiques, perpétuation des écarts.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Formation des formateurs (20 personnes) par des experts IATA.</td>
+            </tr>
+            <tr>
+                <td><strong>ECH 01.1</strong></td>
+                <td>Isolement des équipes sécurité</td>
+                <td>Pas d'échange avec les pairs européens, absence de réseau.</td>
+                <td>Manque d'idées nouvelles, difficulté à innover, enfermement culturel.</td>
+                <td>1 (Négligeable)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Programme d'échanges de safety delegates (4 échanges/an avec FRA, LHR, MUC).</td>
+            </tr>
+            <tr>
+                <td><strong>ACC 01.1</strong></td>
+                <td>Incidents liés aux écarts de procédure</td>
+                <td>Différence entre procédure locale et attente des équipages internationaux.</td>
+                <td>Collisions, dommages, retards, mécontentement des compagnies.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Réduction de -35% des incidents liés aux écarts de procédure (cible M36).</td>
+            </tr>
+            <tr>
+                <td><strong>MAR 01.1</strong></td>
+                <td>Perte de compétitivité face aux aéroports certifiés ISAGO</td>
+                <td>Absence de certification, non-reconnaissance par les compagnies premium.</td>
+                <td>Détournement du trafic vers d'autres plateformes, perte de parts de marché.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Certification ISAGO de 7 handlers à M36 (objectif 10 en 2030).</td>
+            </tr>
+            <tr>
+                <td><strong>MAR 01.2</strong></td>
+                <td>Image de CDG comme aéroport "suiveur"</td>
+                <td>Pas d'initiative d'harmonisation internationale, CDG perçu comme conservateur.</td>
+                <td>Attractivité réduite pour les compagnies innovantes, image de marque dégradée.</td>
+                <td>2 (Mineure)</td>
+                <td>D (Très rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Positionnement comme leader européen de l'adoption IGOM. Rayonnement international.</td>
+            </tr>
+            <tr>
+                <td><strong>COU 01.1</strong></td>
+                <td>Coût de certification jugé trop élevé</td>
+                <td>Réticence des petits handlers à investir dans la certification ISAGO.</td>
+                <td>Inégalité de traitement entre handlers, risque de concurrence déloyale.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Mutualisation CSCA. Phasage progressif (3 puis 4 handlers). ROI démontré (retour sur investissement en 18 mois à FRA).</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    
+    <h2>3.1 Principe général</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 15px 0;">
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>1. ALIGNEMENT</strong><br>Procédures IGOM
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>2. CERTIFICATION</strong><br>ISAGO
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>3. BASE DE DONNÉES</strong><br>Transfrontalière
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>4. DÉLÉGUÉS</strong><br>Safety delegates
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 4. ANALYSE DES ÉCARTS -->
+    <!-- ======================================================================== -->
+    <h1>4. ANALYSE DES ÉCARTS</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Procédure</th>
+                <th>Écart CDG</th>
+                <th>Impact</th>
+                <th>Effort</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>Positionnement passerelle</td><td>Mineur</td><td>🟡 Faible</td><td>🟢 Faible</td></tr>
+            <tr><td>2</td><td>Accostage escalier</td><td>Mineur</td><td>🟡 Faible</td><td>🟢 Faible</td></tr>
+            <tr><td>3</td><td>Déchargement/chargement soute</td><td>Modéré</td><td>🟠 Moyen</td><td>🟡 Moyen</td></tr>
+            <tr><td>4</td><td><strong>Opérations push-back</strong></td><td><strong>Majeur</strong></td><td>🔴 Fort</td><td>🔴 Fort</td></tr>
+            <tr><td>5</td><td>Avitaillement</td><td>Mineur</td><td>🟡 Faible</td><td>🟢 Faible</td></tr>
+            <tr><td>6</td><td>Dégivrage</td><td>Modéré</td><td>🟠 Moyen</td><td>🟠 Moyen</td></tr>
+            <tr><td>7</td><td><strong>Communication équipage</strong></td><td><strong>Majeur</strong></td><td>🔴 Fort</td><td>🔴 Fort</td></tr>
+            <tr><td>8</td><td><strong>Signalisation piste</strong></td><td><strong>Majeur</strong></td><td>🔴 Fort</td><td>🔴 Fort</td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Total écarts majeurs : 3</strong> | Total écarts modérés : 2 | Total écarts mineurs : 3</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>5. BUDGET DÉTAILLÉ</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Phase</th>
+                <th>Description</th>
+                <th>Coût</th>
+                <th>Livrable</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Phase 1 (6 mois)</strong></td><td>Diagnostic, analyse comparative, rédaction procédures, évaluation</td><td>30 k€</td><td>Référentiel CDG aligné IGOM v1.0</td></tr>
+            <tr><td><strong>Phase 2 (12 mois)</strong></td><td>Formation, déploiement, audits 3 handlers, base données, échanges</td><td>152 k€</td><td>3 handlers certifiés ISAGO, base opérationnelle</td></tr>
+            <tr><td><strong>Phase 3 (24-36 mois)</strong></td><td>Extension certification (4), base 6 aéroports, 8 échanges/an, Orly, province</td><td>247 k€</td><td>7 handlers certifiés, réseau européen</td></tr>
+            <tr><td><strong>TOTAL 3 ANS</strong></td><td></td><td><strong>429 k€</strong></td><td></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>Coût annuel de fonctionnement (régime permanent) : 80 k€</strong></p>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>6.1 Bénéfices mesurables</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Indicateur</th>
+                <th>Baseline</th>
+                <th>Cible M12</th>
+                <th>Cible M24</th>
+                <th>Cible M36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Procédures alignées IGOM</td><td>0%</td><td>50%</td><td>80%</td><td>100%</td></tr>
+            <tr><td>Handlers certifiés ISAGO</td><td>0</td><td>0</td><td>3</td><td>7</td></tr>
+            <tr><td>Incidents liés aux écarts de procédure</td><td>-</td><td>-15%</td><td>-25%</td><td>-35%</td></tr>
+            <tr><td>Base de données transfrontalière</td><td>0</td><td>50 incidents</td><td>200 incidents</td><td>500 incidents</td></tr>
+            <tr><td>Échanges de delegates</td><td>0</td><td>2</td><td>6</td><td>8</td></tr>
+            <tr><td>Conducteurs formés IGOM</td><td>0</td><td>200</td><td>800</td><td>2 000</td></tr>
+        </tbody>
+    </table>
+    
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    
+    <ul>
+        <li><strong>Rayonnement international :</strong> CDG identifié comme leader européen.</li>
+        <li><strong>Attractivité :</strong> Les compagnies internationales préfèrent CDG.</li>
+        <li><strong>Mobilité des conducteurs :</strong> Opérationnels immédiatement sur les plateformes IGOM.</li>
+        <li><strong>Réduction des erreurs :</strong> Procédures claires, standardisées, éprouvées.</li>
+        <li><strong>Mutualisation :</strong> Audits partagés, économies d'échelle.</li>
+        <li><strong>Benchmark :</strong> Comparaison objective avec les pairs.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>7. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            L'interopérabilité IATA IGOM est la piste du rayonnement international. Ce n'est pas une normalisation administrative. 
+            C'est une stratégie de positionnement. Elle fait de CDG un leader, pas un suiveur. Elle donne à nos conducteurs une 
+            qualification internationale. Elle rassure les compagnies sur la qualité de nos opérations.
+        </p>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 8. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>8. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Créer un comité de pilotage IGOM associant CSCA, ADP et handlers volontaires.</li>
+        <li>Financer une analyse comparative CDG / IGOM (15 k€).</li>
+        <li>Harmoniser les 10 procédures critiques d'ici fin 2026.</li>
+        <li>Lancer la certification ISAGO de 3 handlers pilotes (75 k€).</li>
+        <li>Développer la base de données transfrontalière avec FRA, LHR, MUC.</li>
+        <li>Initier le programme d'échanges de safety delegates (2 missions en 2026).</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 58 - Interopérabilité IATA IGOM | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>

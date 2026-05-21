@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PISTE 61 - Partenariat académique « Safety Lab »</title>
+    <style>
+        /* Styles généraux pour l'impression - Standard professionnel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: white;
+            font-size: 10.5pt;
+            margin: 0;
+            padding: 15px;
+        }
+        
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* En-tête du document */
+        .document-header {
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .document-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .document-subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .document-meta {
+            text-align: right;
+            color: #7f8c8d;
+            font-size: 10pt;
+        }
+        
+        .tagline {
+            background-color: #ecf0f1;
+            padding: 8px 15px;
+            border-left: 5px solid #e67e22;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        
+        /* Typographie */
+        h1 {
+            font-size: 18pt;
+            color: #2c3e50;
+            margin: 25px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #bdc3c7;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            padding-left: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        h3 {
+            font-size: 12pt;
+            color: #555;
+            margin: 15px 0 8px 0;
+            font-weight: bold;
+        }
+        
+        h4 {
+            font-size: 11pt;
+            color: #666;
+            margin: 12px 0 5px 0;
+            font-weight: bold;
+        }
+        
+        p {
+            margin-bottom: 8px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin: 8px 0 12px 25px;
+        }
+        
+        li {
+            margin-bottom: 3px;
+        }
+        
+        /* Boîtes d'information */
+        .encadre {
+            border: 1px solid #bdc3c7;
+            padding: 12px;
+            background-color: #f9f9f9;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .important {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 8px 12px;
+            margin: 12px 0;
+        }
+        
+        .hypothese {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 8px 12px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+        
+        /* Tableaux */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 18px 0;
+            font-size: 9.5pt;
+        }
+        
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: bold;
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #34495e;
+        }
+        
+        td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Tableau de cartographie des risques avec couleurs */
+        .risk-table td:nth-child(7) {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-orange {
+            background-color: #FFA500 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-red {
+            background-color: #FF0000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-yellow {
+            background-color: #FFFF00 !important;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-green {
+            background-color: #008000 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-blue {
+            background-color: #0000FF !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .risk-purple {
+            background-color: #800080 !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Grille de cotation */
+        .cotation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .cotation-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .cotation-box h4 {
+            background-color: #2c3e50;
+            color: white;
+            padding: 4px 8px;
+            margin: -8px -8px 8px -8px;
+            font-size: 11pt;
+        }
+        
+        /* Pied de page */
+        .footer {
+            margin-top: 25px;
+            padding-top: 8px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 9pt;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* Indicateurs */
+        .indicator-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .indicator-item {
+            flex: 1 1 200px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .indicator-item strong {
+            display: block;
+            font-size: 10.5pt;
+            color: #2c3e50;
+        }
+        
+        .indicator-item span {
+            font-size: 9pt;
+            color: #555;
+        }
+        
+        /* Légende des couleurs */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        
+        /* Texte centré */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Badge */
+        .badge {
+            background-color: #e67e22;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <!-- En-tête du document -->
+    <div class="document-header">
+        <div>
+            <div class="document-title">PISTE 61</div>
+            <div class="document-subtitle">Partenariat académique « Safety Lab »</div>
+        </div>
+        <div class="document-meta">
+            <div>Version 1.0</div>
+            <div>Mars 2026</div>
+            <div>CDG - CSCA</div>
+        </div>
+    </div>
+    
+    <!-- Tagline -->
+    <div class="tagline">
+        L'INNOVATION OUVERTE AU SERVICE DU TERRAIN
+    </div>
+
+    <!-- Description -->
+    <p style="font-size: 11pt; font-weight: bold; text-align: center; margin: 20px 0;">
+        Création d'un laboratoire d'innovation ouvert avec l'ENAC et les écoles partenaires.
+    </p>
+    
+    <p>
+        Nous innovons seuls, avec nos seules ressources, à notre seul rythme. Pourtant, l'intelligence académique est à nos portes : 
+        ENAC, écoles d'ingénieurs, universités, laboratoires de recherche. Cette piste propose d'ouvrir notre innovation à l'extérieur 
+        avec un partenariat académique : le Safety Lab, pour co-construire des solutions avec des regards neufs, prototyper rapidement 
+        à faible coût, et former nos futurs talents.
+    </p>
+
+    <!-- ======================================================================== -->
+    <!-- 1. PROBLÉMATIQUE ADRESSÉE -->
+    <!-- ======================================================================== -->
+    <h1>1. PROBLÉMATIQUE ADRESSÉE</h1>
+    
+    <p><strong>Constat fondamental :</strong> Nous innovons seuls, avec nos seules ressources, à notre seul rythme.</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Ressource</th>
+                <th>Disponibilité</th>
+                <th>Limite</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Ingénieurs sécurité</td><td>5-10 par entreprise</td><td>Capacité limitée</td></tr>
+            <tr><td>Data scientists</td><td>0-2 par entreprise</td><td>Rares, chers</td></tr>
+            <tr><td>Designers / ergonomes</td><td>0</td><td>Aucun</td></tr>
+            <tr><td>Chercheurs</td><td>0</td><td>Aucun</td></tr>
+            <tr><td>Budget R&D</td><td>0</td><td>Aucun</td></tr>
+        </tbody>
+    </table>
+    
+    <div class="important">
+        <strong>Paradoxe :</strong>
+        <ul>
+            <li>Nous avons des <strong>problèmes complexes</strong> (angles morts, fatigue, comportements).</li>
+            <li>Nous avons des <strong>idées nombreuses</strong> (60 pistes et plus).</li>
+            <li><strong>L'intelligence académique est à nos portes</strong> (ENAC, écoles d'ingénieurs, universités).</li>
+        </ul>
+    </div>
+
+    <div class="hypothese">
+        <strong>Notre hypothèse :</strong> L'innovation ne peut plus être un processus fermé. Le partenariat académique permet 
+        d'ouvrir nos problèmes à la recherche, d'associer étudiants et chercheurs, et de co-construire des solutions.
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 2. CARTOGRAPHIE DES RISQUES (MISE À JOUR POUR PISTE 61) -->
+    <!-- ======================================================================== -->
+    <h1>2. CARTOGRAPHIE DES RISQUES</h1>
+    
+    <!-- Légende des couleurs -->
+    <div class="color-legend">
+        <div class="legend-item"><div class="color-box" style="background-color: #FF0000;"></div> <strong>Rouge</strong> - Risque très élevé (intolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFA500;"></div> <strong>Orange</strong> - Risque élevé (actions nécessaires)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #FFFF00;"></div> <strong>Jaune</strong> - Risque moyen (tolérable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #008000;"></div> <strong>Vert</strong> - Risque faible (acceptable)</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #0000FF;"></div> <strong>Bleu</strong> - Risque informationnel</div>
+        <div class="legend-item"><div class="color-box" style="background-color: #800080;"></div> <strong>Violet</strong> - Risque partenarial</div>
+    </div>
+    
+    <table class="risk-table">
+        <thead>
+            <tr>
+                <th>Réf.</th>
+                <th>Danger</th>
+                <th>Causes</th>
+                <th>Conséquences</th>
+                <th>Gravité</th>
+                <th>Probabilité</th>
+                <th>Criticité</th>
+                <th>Barrières Piste 61</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>R&D 01.1</strong></td>
+                <td>Capacité d'innovation interne insuffisante</td>
+                <td>Ressources limitées (ingénieurs, data scientists, designers), budget R&D nul.</td>
+                <td>Impossible de développer les 60 pistes identifiées, retard sur les enjeux de sécurité.</td>
+                <td>3 (Majeure)</td>
+                <td>A (Fréquent)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Ouverture à la recherche académique. Multiplication par 10 de la capacité R&D sans embauche.</td>
+            </tr>
+            <tr>
+                <td><strong>R&D 01.2</strong></td>
+                <td>Solutions non testées faute de moyens</td>
+                <td>Absence de budget prototypage, pas de vivier de compétences pour évaluer les idées.</td>
+                <td>Idées prometteuses abandonnées, innovations non déployées, perte de chances de progrès.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Défis étudiants avec prototypage rapide (8-12 semaines). Budget test (10 k€/défi).</td>
+            </tr>
+            <tr>
+                <td><strong>R&D 01.3</strong></td>
+                <td>Absence de regard neuf sur les problèmes</td>
+                <td>Innovation en circuit fermé, pas d'apport extérieur, pas de remise en cause.</td>
+                <td>Solutions standardisées, non adaptées, absence de disruption.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Ateliers de co-construction avec étudiants, designers, chercheurs. Regards neufs garantis.</td>
+            </tr>
+            <tr>
+                <td><strong>PAR 01.1</strong></td>
+                <td>Déconnexion terrain des solutions académiques</td>
+                <td>Recherche trop théorique, méconnaissance du réel, absence de tests terrain.</td>
+                <td>Solutions inadaptées, rejet par les opérationnels, gaspillage de ressources.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-purple">VIOLET</td>
+                <td>Living lab : terrain réel, données réelles, acteurs réels. Co-conduction systématique avec conducteurs.</td>
+            </tr>
+            <tr>
+                <td><strong>PAR 01.2</strong></td>
+                <td>Fuite de données sensibles / confidentialité</td>
+                <td>Données d'accidents, données personnelles, données opérationnelles partagées avec des partenaires externes.</td>
+                <td>Violation RGPD, perte de confiance, sanctions, avantage concurrentiel pour d'autres plateformes.</td>
+                <td>4 (Catastrophique)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Convention de confidentialité. Anonymisation systématique. Pas de données nominatives. Accès encadré.</td>
+            </tr>
+            <tr>
+                <td><strong>PAR 01.3</strong></td>
+                <td>Conflit de propriété intellectuelle</td>
+                <td>Inventions issues de collaborations non clarifiées, pas de clause de cession des droits.</td>
+                <td>Litiges, impossibilité de déployer les solutions, perte de contrôle sur l'innovation.</td>
+                <td>3 (Majeure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-red">ROUGE</td>
+                <td>Clause systématique dans les conventions. Cession des droits à CSCA.</td>
+            </tr>
+            <tr>
+                <td><strong>PAR 01.4</strong></td>
+                <td>Indisponibilité des conducteurs pour les ateliers</td>
+                <td>Pression production, manque de volontaires, horaires incompatibles.</td>
+                <td>Ateliers sans participants terrain, solutions hors-sol, échec du living lab.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Volontariat. Dédommagement. Implication dès la conception pour garantir l'adhésion.</td>
+            </tr>
+            <tr>
+                <td><strong>PAR 02.1</strong></td>
+                <td>Thèses trop théoriques, sans application terrain</td>
+                <td>Encadrement académique exclusif, pas de suivi entreprise, sujet déconnecté.</td>
+                <td>Doctorant formé mais problème non résolu, investissement perdu.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Thèses CIFRE avec co-encadrement académique + entreprise. Suivi terrain obligatoire.</td>
+            </tr>
+            <tr>
+                <td><strong>PAR 02.2</strong></td>
+                <td>Défis étudiants sans suite opérationnelle</td>
+                <td>Pas de budget de test/déploiement, idées lauréates non implémentées.</td>
+                <td>Démotivation des étudiants, perte de crédibilité du dispositif, innovation non aboutie.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-yellow">JAUNE</td>
+                <td>Budget de test intégré (10 k€/défi). Lien avec P33 pour déploiement.</td>
+            </tr>
+            <tr>
+                <td><strong>PAR 03.1</strong></td>
+                <td>Essoufflement du dispositif après lancement</td>
+                <td>Actions ponctuelles, pas de vision pluriannuelle, absence d'animation continue.</td>
+                <td>Safety Lab devient une coquille vide, partenaires se désengagent.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Programme pluriannuel (Phase 1,2,3). Calendrier fixe : 2 défis/an, 4 ateliers/an, thèses continues.</td>
+            </tr>
+            <tr>
+                <td><strong>ATTR 01.1</strong></td>
+                <td>Difficulté à recruter les meilleurs talents</td>
+                <td>Méconnaissance de CDG par les étudiants, image d'industrie traditionnelle.</td>
+                <td>Difficultés de recrutement, turn-over, perte de compétences.</td>
+                <td>2 (Mineure)</td>
+                <td>B (Occasionnelle)</td>
+                <td class="risk-orange">ORANGE</td>
+                <td>Safety Lab : CDG devient un cas d'étude académique, terrain d'expérimentation recherché. Attractivité renforcée.</td>
+            </tr>
+            <tr>
+                <td><strong>RAY 01.1</strong></td>
+                <td>Faible rayonnement académique de la plateforme</td>
+                <td>Pas de publications, pas de collaborations, pas de visibilité dans la recherche.</td>
+                <td>CDG absent des réseaux d'excellence, opportunités de financement R&D manquées.</td>
+                <td>1 (Négligeable)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Publications scientifiques issues des thèses et projets. Rayonnement national et international.</td>
+            </tr>
+            <tr>
+                <td><strong>FIN 01.1</strong></td>
+                <td>Coût jugé trop élevé</td>
+                <td>Budget total 385 k€ sur 3 ans, soit 8 100 €/an/entreprise.</td>
+                <td>Réticence à financer, risque de sous-dimensionnement.</td>
+                <td>2 (Mineure)</td>
+                <td>C (Rare)</td>
+                <td class="risk-green">VERT</td>
+                <td>Mutualisation CSCA. ROI démontré par retours d'expérience (Munich, SNCF, Airbus). Financements externes (ANR, Europe).</td>
+            </tr>
+            <tr>
+                <td><strong>BENCH 01.1</strong></td>
+                <td>Retour d'expérience positif des benchmarks</td>
+                <td>Munich : 5 thèses, 3 brevets, 12 solutions en 3 ans. SNCF : 20 projets/an, 30% déployés.</td>
+                <td>Preuve de concept existante, modèle éprouvé.</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="risk-green">VERT</td>
+                <td>Inspiration et adaptation des modèles munichois et SNCF à CDG.</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Échelle de cotation -->
+    <h3>Échelle de cotation utilisée</h3>
+    
+    <div class="cotation-grid">
+        <div class="cotation-box">
+            <h4>Gravité</h4>
+            <ul>
+                <li><strong>1</strong> - Négligeable</li>
+                <li><strong>2</strong> - Mineure</li>
+                <li><strong>3</strong> - Majeure</li>
+                <li><strong>4</strong> - Catastrophique</li>
+            </ul>
+        </div>
+        <div class="cotation-box">
+            <h4>Probabilité</h4>
+            <ul>
+                <li><strong>A</strong> - Fréquent (quotidien)</li>
+                <li><strong>B</strong> - Occasionnel (hebdo/mensuel)</li>
+                <li><strong>C</strong> - Rare (annuel)</li>
+                <li><strong>D</strong> - Très rare (>1 an)</li>
+                <li><strong>E</strong> - Extrêmement rare (jamais observé)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 3. CONCEPT D'ENSEMBLE -->
+    <!-- ======================================================================== -->
+    <h1>3. CONCEPT D'ENSEMBLE</h1>
+    
+    <h2>3.1 Principe général</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 15px 0;">
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>1. LIVING LAB</strong><br>Terrain réel
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>2. RECHERCHE</strong><br>Thèses CIFRE, ANR
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>3. DÉFIS</strong><br>Étudiants
+        </div>
+        <div style="border: 1px solid #ddd; padding: 8px; background-color: #f9f9f9; text-align: center;">
+            <strong>4. ATELIERS</strong><br>Co-construction
+        </div>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 4. BUDGET DÉTAILLÉ -->
+    <!-- ======================================================================== -->
+    <h1>4. BUDGET DÉTAILLÉ</h1>
+    
+    <h2>4.1 Investissement initial</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Détail</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Convention-cadre ENAC</td><td>Mise en place partenariat</td><td>5 k€</td></tr>
+            <tr><td>Montage de projets</td><td>ANR, Europe (ingénierie financière)</td><td>15 k€</td></tr>
+            <tr><td>Communication / branding</td><td>Identité Safety Lab, site web</td><td>10 k€</td></tr>
+            <tr><td>Événement de lancement</td><td>Séminaire partenaires</td><td>15 k€</td></tr>
+            <tr><td><strong>TOTAL INVESTISSEMENT</strong></td><td></td><td><strong>45 k€</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <h2>4.2 Coûts annuels de fonctionnement</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Poste</th>
+                <th>Détail</th>
+                <th>Coût</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Thèses CIFRE</td><td>2 × 35 k€ (salaire + fonctionnement)</td><td>70 k€</td></tr>
+            <tr><td>Défis étudiants</td><td>2 × 10 k€</td><td>20 k€</td></tr>
+            <tr><td>Ateliers co-construction</td><td>4 × 3 k€</td><td>12 k€</td></tr>
+            <tr><td>Coordination</td><td>0,5 ETP</td><td>35 k€</td></tr>
+            <tr><td>Événement annuel</td><td>Séminaire recherche</td><td>10 k€</td></tr>
+            <tr><td><strong>TOTAL ANNUEL</strong></td><td></td><td><strong>147 k€</strong></td></tr>
+        </tbody>
+    </table>
+    
+    <p><strong>BUDGET TOTAL 3 ANS : 45 k€ + (3 × 147 k€) = 486 k€</strong></p>
+    <p><strong>Coût mutualisable CSCA :</strong> 162 k€/an (réparti sur 20 entreprises → 8 100 €/an/entreprise)</p>
+    
+    <!-- ======================================================================== -->
+    <!-- 5. DÉPLOIEMENT PAR PHASES -->
+    <!-- ======================================================================== -->
+    <h1>5. DÉPLOIEMENT PAR PHASES</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Phase</th>
+                <th>Délai</th>
+                <th>Actions</th>
+                <th>Coût</th>
+                <th>Livrable</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Phase 1 - Fondations</strong></td><td>6 mois</td><td>Convention ENAC, 5 écoles, identité, 1er défi, 1er atelier, 1er projet ANR, évaluation ENAC</td><td>48 k€</td><td>Réseau académique, 1 défi, 1 atelier</td></tr>
+            <tr><td><strong>Phase 2 - Développement</strong></td><td>12 mois</td><td>2 thèses CIFRE, 2 défis, 4 ateliers, extension 10 écoles, séminaire, évaluation</td><td>123 k€</td><td>2 doctorants, 3 défis, 6 ateliers, 10 écoles</td></tr>
+            <tr><td><strong>Phase 3 - Pérennisation</strong></td><td>24-36 mois</td><td>3 thèses supplémentaires, 2 défis/an, 4 ateliers/an, extension Orly & province, évaluation</td><td>214 k€</td><td>Safety Lab institutionnalisé</td></tr>
+            <tr><td><strong>TOTAL 3 ANS</strong></td><td></td><td></td><td><strong>385 k€</strong> (optimisation)</td><td></td></tr>
+        </tbody>
+    </table>
+    
+    <!-- ======================================================================== -->
+    <!-- 6. BÉNÉFICES ATTENDUS -->
+    <!-- ======================================================================== -->
+    <h1>6. BÉNÉFICES ATTENDUS</h1>
+    
+    <h2>6.1 Bénéfices mesurables</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Indicateur</th>
+                <th>Baseline</th>
+                <th>Cible M12</th>
+                <th>Cible M24</th>
+                <th>Cible M36</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Écoles partenaires</td><td>0</td><td>5</td><td>10</td><td>15</td></tr>
+            <tr><td>Thèses CIFRE en cours</td><td>0</td><td>0</td><td>2</td><td>5</td></tr>
+            <tr><td>Défis étudiants réalisés</td><td>0</td><td>1</td><td>3</td><td>5</td></tr>
+            <tr><td>Ateliers co-construction</td><td>0</td><td>1</td><td>5</td><td>9</td></tr>
+            <tr><td>Projets financés (ANR, Europe)</td><td>0</td><td>0</td><td>1</td><td>2</td></tr>
+            <tr><td>Prototypes testés</td><td>0</td><td>1</td><td>4</td><td>8</td></tr>
+            <tr><td>Solutions déployées</td><td>0</td><td>0</td><td>2</td><td>5</td></tr>
+        </tbody>
+    </table>
+    
+    <h2>6.2 Bénéfices qualitatifs</h2>
+    
+    <ul>
+        <li><strong>Regard neuf :</strong> Des étudiants voient ce que nous ne voyons plus.</li>
+        <li><strong>Compétences externes :</strong> Design, sociologie, neurosciences.</li>
+        <li><strong>Capacité R&D :</strong> Multipliée par 10 sans embauche.</li>
+        <li><strong>Rayonnement :</strong> CDG devient un cas d'étude académique.</li>
+        <li><strong>Attractivité :</strong> Les meilleurs étudiants veulent travailler chez nous.</li>
+        <li><strong>Innovation frugale :</strong> Solutions low-tech, adaptées, peu coûteuses.</li>
+    </ul>
+    
+    <!-- ======================================================================== -->
+    <!-- 7. EN RÉSUMÉ -->
+    <!-- ======================================================================== -->
+    <h1>7. EN RÉSUMÉ</h1>
+    
+    <div class="encadre">
+        <p style="font-size: 12pt; font-style: italic;">
+            Le Safety Lab est la piste de l'innovation ouverte et du rayonnement académique. Ce n'est pas une dépense. 
+            C'est un investissement dans l'intelligence collective. Ce que nous proposons, c'est d'arrêter de considérer 
+            l'innovation comme un processus interne et coûteux. C'est ouvrir nos problèmes à ceux qui ont les compétences, 
+            le temps et l'envie de les résoudre. C'est transformer CDG en un campus vivant.
+        </p>
+    </div>
+
+    <!-- ======================================================================== -->
+    <!-- 8. CE QUE NOUS PROPOSONS CONCRÈTEMENT -->
+    <!-- ======================================================================== -->
+    <h1>8. CE QUE NOUS PROPOSONS CONCRÈTEMENT</h1>
+    
+    <ol style="font-weight: bold; font-size: 12pt;">
+        <li>Signer une convention-cadre avec l'ENAC (5 k€).</li>
+        <li>Lancer un premier défi étudiant sur un hotspot réel (10 k€).</li>
+        <li>Organiser un premier atelier de co-construction (3 k€).</li>
+        <li>Déposer un premier projet ANR (15 k€).</li>
+        <li>Préparer le lancement de 2 thèses CIFRE en 2027.</li>
+    </ol>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p>PISTE 61 - Partenariat académique « Safety Lab » | Version 1.0 | Mars 2026 | CDG - CSCA</p>
+    </div>
+</body>
+</html>
